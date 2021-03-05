@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'review.dart';
 import '../star_rating.dart';
 
-/*
- * ReviewCard is a widget containing the author, title, date, and content of a review.
- * A separate class like FlavorPage can construct a list of ReviewCards.
- * 
- * Written with help from https://www.youtube.com/watch?v=XIxahpXU_QE.
- */
+/// The [ReviewCard] widget contains the author, title, date, and content of a review.
+/// A separate widget, eg [FlavorPage], can construct a list of ReviewCards.
+/// Written with help from https://www.youtube.com/watch?v=XIxahpXU_QE.
 
 class ReviewCard extends StatelessWidget {
   final Review review;

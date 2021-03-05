@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// The [FlavorTitle] widget is a container that displays stylized text representing
+/// the flavor's name and brand.
+
 class FlavorTitle extends StatelessWidget {
   final String flavor; // Stateless Widget, so can't change text
   final String brand; // Stateless Widget, so can't change text
 
   FlavorTitle(this.flavor, this.brand);
-
 
   @override
   Widget build(BuildContext context) {

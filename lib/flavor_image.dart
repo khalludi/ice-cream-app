@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-/*
- * If given a pngFileName, displays the file.
- * Otherwise returns an empty widget which sizes itself to the smallest area possible.
- */
+/// The [FlavorImage] widget, if given a pngFileName, displays the file as an image.
+/// Otherwise returns an empty widget which sizes itself to the smallest area possible.
+ 
 class FlavorImage extends StatelessWidget {
   final String pngFileName;
   FlavorImage(this.pngFileName);

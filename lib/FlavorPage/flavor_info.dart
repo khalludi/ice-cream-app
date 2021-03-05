@@ -6,6 +6,12 @@ import 'flavor_title.dart';
 import 'review.dart';
 import 'review_card.dart';
 
+/// The [FlavorInfo] widget consists of the specific ice cream flavor's name, brand, image,
+/// average rating, and reviews. These items are laid out as a column and the 
+/// user can scroll to see all of them.
+///
+/// [FlavorInfo] does NOT include the floating action button and associated dialog.
+
 class FlavorInfo extends StatelessWidget {
   final String flavor;
   final String brand;
@@ -20,7 +26,6 @@ class FlavorInfo extends StatelessWidget {
     @required this.reviews,
     @required this.avgRating
   });
-
 
   /* 
    * Should return a Column. 

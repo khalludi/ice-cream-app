@@ -3,6 +3,13 @@ import 'review.dart';
 import 'review_dialog.dart';
 import 'flavor_info.dart';
 
+/// The [FlavorPage] widget describes the screen representing an ice cream flavor, all of its reviews, 
+/// and a floating action button. The floating action button triggers a fab which allows the user to
+/// add a review if they haven't done so yet, or edit the review they've already added.
+/// 
+/// Specifically, [FlavorPage] combines the [FlavorInfo] + [ReviewDialog] widgets.
+/// See example_flavor_page, an example of how to combine [FlavorPage] with the rest of an application.
+
 class FlavorPage extends StatelessWidget {
   const FlavorPage({
     Key key,

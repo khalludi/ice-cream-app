@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:project/star_rating.dart';
 
-/*
- * If given a pngFileName, displays the file.
- * Otherwise returns an empty widget which sizes itself to the smallest area possible.
- */
+/// The [ReviewDialog] widget displays a dialog to add or edit a review.
+/// Widgets like [AddReviewDialog] and [EditReviewDialog] widgets should extend this class.
+
 class ReviewDialog extends StatefulWidget {
     final BuildContext context;
 
     ReviewDialog({this.context});
     @override
      State<StatefulWidget> createState() => ReviewDialogState();
-  }
-
+}
 
 class ReviewDialogState extends State<ReviewDialog> {
   final TextEditingController customController = TextEditingController();

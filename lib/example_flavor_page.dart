@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'FlavorPage/flavor_page.dart';
 
-/* 
- *
- * This class is used for testing our product page widget.
- * This file should not be used by itself, but rather incorporated into
- * the file for the main app.
- * 
- */
+/// This class is used for testing our flavor page widget.
+/// This file should not be used by itself, but rather incorporated into
+/// the file for the main app.
+
 void main() {
   runApp(MyApp());
 }

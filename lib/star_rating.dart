@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// The [StarRating] widget displays five star icons, where 1-5 (inclusive) stars are filled to represent
+/// the given rating.
+/// 
+/// This code is from: https://stackoverflow.com/questions/46637566/how-to-create-rating-star-bar-properlyr
+
 typedef void RatingChangeCallback(double rating);
-
-/* from https://stackoverflow.com/questions/46637566/how-to-create-rating-star-bar-properlyr
- *
- */
-
-
 class StarRating extends StatelessWidget {
   final int starCount;
   final double rating;
