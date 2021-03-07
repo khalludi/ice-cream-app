@@ -35,8 +35,8 @@ class FlavorPage extends StatelessWidget {
         return Scaffold(
         backgroundColor: Colors.grey[300],
         appBar: AppBar(
-          title: Text('CS411 final project')
-          ,), 
+          title: Text('CS411 final project'),
+        ), 
         body: FlavorInfo(
           flavor: flavorName, 
           brand: brand, 
