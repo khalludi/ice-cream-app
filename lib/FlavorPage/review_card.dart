@@ -51,18 +51,18 @@ class ReviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-              review.title,
-              style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.lightBlue,
-              )
+                review.title,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.lightBlue,
+                )
               ),
               Text(
-              getFormattedDate(review.date),
-              style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.black,
-              )
+                getFormattedDate(review.date),
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.black,
+                )
               ),
             ],
           
