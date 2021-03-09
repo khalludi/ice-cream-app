@@ -32,6 +32,13 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
 
+resource "google_vpc_access_connector" "connector" {
+  provider      = google-beta
+  name          = "vpc-con"
+  ip_cidr_range = "10.8.0.0/28"
+  network       = google_compute_network.private_network.name
+}
+
 ######
 #
 # MAKE DATABASE
@@ -55,6 +62,7 @@ resource "google_sql_database_instance" "instance" {
 }
 
 resource "google_sql_user" "users" {
+  provider = google-beta
   name     = "testuser"
   instance = google_sql_database_instance.instance.name
   password = "testuser"
@@ -88,7 +96,7 @@ resource "google_cloudfunctions_function" "function" {
   description = "My function"
   runtime     = "nodejs10"
 
-  vpc_connector         = google_compute_global_address.private_ip_address.id
+  vpc_connector         = google_vpc_access_connector.connector.id
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.archive.name
@@ -105,6 +113,10 @@ resource "google_cloudfunctions_function_iam_binding" "binding" {
   members = [
     "allUsers",
   ]
+}
+
+output "function_url" {
+  value = google_cloudfunctions_function.function.https_trigger_url
 }
 
 ######

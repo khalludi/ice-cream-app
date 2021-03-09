@@ -49,7 +49,7 @@ const createPool = async () => {
 
 let pool;
 
-exports.reviewsGET = (req, res) => {
+exports.reviewsGET = async (req, res) => {
   pool = await createPool();
   res.send("Connected to Database!");
 }
