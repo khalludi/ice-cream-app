@@ -12,8 +12,8 @@ const createTcpPool = async config => {
   return await mysql.createPool({
     user: "testuser", // e.g. 'my-db-user'
     password: "testuser", // e.g. 'my-db-password'
-    database: "ice-cream-db", // e.g. 'my-database'
-    host: '127.0.0.1', // e.g. '127.0.0.1'
+    database: "icecreamdb", // e.g. 'my-database'
+    host: '10.91.0.3', // e.g. '127.0.0.1'
     port: '3306', // e.g. '3306'
     // ... Specify additional properties here.
     ...config,
@@ -51,5 +51,7 @@ let pool;
 
 exports.reviewsGET = async (req, res) => {
   pool = await createPool();
-  res.send("Connected to Database!");
+  const talentiQuery = pool.query('SELECT * FROM talenti_products LIMIT 10');
+  const output = await talentiQuery;
+  res.send(JSON.parse(JSON.stringify(output)));
 }
