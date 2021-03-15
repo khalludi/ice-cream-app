@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'dart:developer';
 
 import '../avg_rating.dart';
 import '../flavor_image.dart';
@@ -10,37 +12,75 @@ import 'review_card.dart';
 /// average rating, and reviews. These items are laid out as a column and the 
 /// user can scroll to see all of them.
 ///
-/// [FlavorInfo] does NOT include the floating action button and associated dialog.
+/// [FlavorInfo] does NOT include the floating action button and associated dialog
 
-class FlavorInfo extends StatelessWidget {
+int buildNumber = 0;
+
+class FlavorInfo extends StatefulWidget {
   final String flavor;
   final String brand;
   final String flavorImageUrl;
-  final List<Review> reviews;
-  final int avgRating;
+  final List<Review> passedReviews;
+  final double avgRating;
 
   FlavorInfo({
     @required this.flavor,
     @required this.brand,
     @required this.flavorImageUrl,
-    @required this.reviews,
-    @required this.avgRating
+    @required this.passedReviews,
+    @required this.avgRating,
   });
 
-  /* 
-   * Should return a Column. 
-   * This widget is used as the body of a Scaffold widget.
-   */
+  @override
+  _FlavorInfoState createState() => _FlavorInfoState();
+}
+
+class _FlavorInfoState extends State<FlavorInfo> {
+  List<Review> reviews;
+
+  @override initState() {
+    reviews = widget.passedReviews;
+    log("reviews length: " + reviews.length.toString());
+    super.initState();
+  }
+
+  @override void didUpdateWidget(covariant FlavorInfo oldWidget) {
+    log("reviews length: " + reviews.length.toString());
+    reviews = widget.passedReviews;
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
-        return ListView(children: 
-        [ 
-          FlavorTitle(flavor, brand),
-          FlavorImage(flavorImageUrl),
-          AvgRating(avgRating: avgRating,),
-         // We use the spread operator (...) to extract the elements from a list,
-         // because children requires a list, and not extracting would result in List(FlavorTitle, FlavorImage, List).
-        ...reviews.map((review) => ReviewCard(review: review)).toList(),
-       ]);
+    buildNumber += 1;
+    log("Rebuild FlavorInfo: $buildNumber times");
+    // ListView builder only creates items when the user reaches them
+      return ListView.builder(
+        itemCount: reviews.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Column(
+              children: <Widget>[
+                FlavorTitle(widget.flavor, widget.brand),
+                FlavorImage(widget.flavorImageUrl),
+                  Center(child: 
+                    SmoothStarRating(
+                      allowHalfRating: false,
+                      onRated: (v) {},
+                      starCount: 5,
+                      rating: widget.avgRating,
+                      size: 40.0,
+                      isReadOnly:true,
+                      color: Colors.green,
+                      borderColor: Colors.green,
+                      spacing:0.0, 
+                      ),
+                    ),
+                  ],
+            );
+          }
+          return ReviewCard(review: reviews[index-1]);
+        }
+    );
   }
 }
