@@ -17,10 +17,10 @@ class Review {
   String title;
   String date;
   String text;
-
   double reviewStars;
   int helpfulYes;
   int helpfulNo;
+  bool isEditable;
 
   Review({
     this.author,
@@ -29,6 +29,7 @@ class Review {
     this.text,
     this.reviewStars,
     this.helpfulYes,
-    this.helpfulNo
+    this.helpfulNo,
+    this.isEditable
   });
 }

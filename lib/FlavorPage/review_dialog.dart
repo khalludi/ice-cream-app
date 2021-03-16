@@ -13,18 +13,29 @@ import 'package:intl/intl.dart';
 
 class ReviewDialog extends StatefulWidget {
     final BuildContext context;
+    final Review review;
 
-    ReviewDialog({this.context});
+    ReviewDialog({
+      @required this.context,
+      this.review
+      });
     @override
      State<StatefulWidget> createState() => ReviewDialogState();
 }
 
 class ReviewDialogState extends State<ReviewDialog> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController authorController = TextEditingController();
-  final TextEditingController textController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController authorController = TextEditingController();
+  TextEditingController textController = TextEditingController();
   double rating = 3;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override void initState() {
+    titleController.text = widget.review != null ? widget.review.title : "";
+    authorController.text = widget.review != null ? widget.review.author : "";
+    textController.text = widget.review != null ? widget.review.text : "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +54,9 @@ class ReviewDialogState extends State<ReviewDialog> {
                 allowHalfRating: true,
                 onRated: (v) {this.rating = v;},
                 starCount: 5,
-                rating: rating,
+                rating: widget.review != null ? widget.review.reviewStars : 5.0,
                 size: 40.0,
-                isReadOnly:false,
+                isReadOnly: false,
                 color: Colors.green,
                 borderColor: Colors.green,
                 spacing:0.0, 
@@ -69,7 +80,7 @@ class ReviewDialogState extends State<ReviewDialog> {
           actions: <Widget>[
             MaterialButton(
               elevation: 5.0,
-              child: Text('Add Review'),
+              child: widget.review == null ? Text('Add Review') : Text('Edit Review'),
               onPressed: (){ 
                 if (_formKey.currentState.validate()) {
                     var currentTime = new DateTime.now();
@@ -83,6 +94,7 @@ class ReviewDialogState extends State<ReviewDialog> {
                       helpfulYes: 0,
                       helpfulNo: 0,
                       date: formattedDate,
+                      isEditable: true
                   );
                   Navigator.pop(context, newReview);
                 }
