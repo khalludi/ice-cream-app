@@ -59,14 +59,23 @@ resource "google_sql_database_instance" "instance" {
       private_network = google_compute_network.private_network.id
     }
   }
+
+  deletion_protection = true
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = all
+  }
 }
 
-resource "google_sql_user" "users" {
-  provider = google-beta
-  name     = "testuser"
-  instance = google_sql_database_instance.instance.name
-  password = "testuser"
-}
+# resource "google_sql_user" "users" {
+#   provider = google-beta
+#   name     = "testuser"
+#   instance = google_sql_database_instance.instance.name
+#   password = "testuser"
+#   lifecycle {
+#     ignore_changes = []"*"
+#   }
+# }
 
 ######
 #
