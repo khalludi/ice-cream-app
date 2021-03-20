@@ -1,6 +1,6 @@
-# ice_cream_social
+# ice_cream_social_app
 
-Explore different ice creams with this app.
+A new Flutter application.
 
 ## Getting Started
 
