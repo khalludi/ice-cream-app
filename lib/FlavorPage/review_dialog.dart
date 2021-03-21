@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/star_rating.dart';
+import '../star_rating.dart';
 
 /// The [ReviewDialog] widget displays a dialog to add or edit a review.
 /// Widgets like [AddReviewDialog] and [EditReviewDialog] widgets should extend this class.
