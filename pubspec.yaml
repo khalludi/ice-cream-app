@@ -1,5 +1,5 @@
--name: ice_cream_social
--description: Explore different ice creams with this app.
+name: ice_cream_social
+description: Explore different ice creams with this app.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -21,6 +21,9 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_rating_bar: ^4.0.0
+  flappy_search_bar: 1.4.1
+  filter_list: ^0.0.6
   flutter:
     sdk: flutter
 
@@ -73,3 +76,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Black.ttf
