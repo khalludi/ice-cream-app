@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'HomePage/filter.dart';
+import 'HomePage/placeholder_widget.dart';
 
 void main() {
   runApp(new MyApp());
@@ -23,14 +24,12 @@ class _HomePageState extends State<HomePage>{
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
   /**Bottom navigation drawer.**/
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
+  static final List<Widget> _widgetOptions = <Widget>[
+    PlaceholderWidget(
+      Colors.pink
     ),
-    Text(
-      'Index 1: Account',
-      style: optionStyle,
+    PlaceholderWidget(
+      Colors.purpleAccent
     ),
   ];
   void _onItemTapped(int index) {
@@ -43,24 +42,25 @@ class _HomePageState extends State<HomePage>{
     return MaterialApp(
       home: Scaffold(
         appBar: _buildBar(context),
-        body: Center(
-          child: new Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /**Allow users to search for products.**/
-              Flexible(
-                  child: SearchBar()
-              ),
-              /**Allow users to filter products.**/
-              Container(
-                child: IconButton(icon: Icon(Icons.filter_list), onPressed: (){
-                  navigateToFilter(context);
-                }),
-              ),
-            ],
-          ),
-        ),
+        body: _widgetOptions[_selectedIndex],
+        // body: Center(
+        //   child: new Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       /**Allow users to search for products.**/
+        //       Flexible(
+        //           child: SearchBar()
+        //       ),
+        //       /**Allow users to filter products.**/
+        //       Container(
+        //         child: IconButton(icon: Icon(Icons.filter_list), onPressed: (){
+        //           navigateToFilter(context);
+        //         }),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
