@@ -9,6 +9,14 @@
 .history
 .svn/
 
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.hcl
+
 # IntelliJ related
 *.iml
 *.ipr
