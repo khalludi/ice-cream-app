@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../avg_rating.dart';
-import '../flavor_image.dart';
+import '../OldFlavorMain/avg_rating.dart';
+import '../OldFlavorMain/flavor_image.dart';
 import 'flavor_title.dart';
 import 'review.dart';
 import 'review_card.dart';

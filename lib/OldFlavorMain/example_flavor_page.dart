@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'FlavorPage/flavor_page.dart';
+import '../FlavorPage/flavor_page.dart';
 
 /// This class is used for testing our flavor page widget.
 /// This file should not be used by itself, but rather incorporated into

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'review.dart';
-import '../star_rating.dart';
+import '../OldFlavorMain/star_rating.dart';
 
 /// The [ReviewCard] widget contains the author, title, date, and content of a review.
 /// A separate widget, eg [FlavorPage], can construct a list of ReviewCards.
