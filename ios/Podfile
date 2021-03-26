@@ -40,5 +40,7 @@ post_install do |installer|
   end
 end
 
+pod 'Firebase/Analytics'
+
 # add pods for desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
