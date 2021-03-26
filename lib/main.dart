@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
 import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
@@ -9,8 +10,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: new HomePage());
+    return new MaterialApp(home: new HomePage());
   }
 }
 
@@ -18,11 +18,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   int loginChanged = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
   /**Bottom navigation drawer.**/
   List<Widget> _widgetOptions;
@@ -40,9 +40,8 @@ class _HomePageState extends State<HomePage>{
   }
 
   Widget build(BuildContext context) {
-    _widgetOptions.add(PlaceholderWidget(
-      Colors.pink
-    ));
+    _widgetOptions = [];
+    _widgetOptions.add(SearchWidget());
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
     ));
@@ -51,29 +50,13 @@ class _HomePageState extends State<HomePage>{
     return MaterialApp(
       home: Scaffold(
         appBar: _buildBar(context),
-        body: _selectedIndex == 0 ? _widgetOptions[_selectedIndex] :
-              _selectedIndex == 1 && loginChanged == 0 ? _widgetOptions[1] :
-              _selectedIndex == 1 && loginChanged == 1 ? _widgetOptions[2] :
-              _widgetOptions[_selectedIndex],
-        // TODO: Move the below code to HomePage/search.dart
-        // body: Center(
-        //   child: new Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       /**Allow users to search for products.**/
-        //       Flexible(
-        //           child: SearchBar()
-        //       ),
-        //       /**Allow users to filter products.**/
-        //       Container(
-        //         child: IconButton(icon: Icon(Icons.filter_list), onPressed: (){
-        //           navigateToFilter(context);
-        //         }),
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        body: _selectedIndex == 0
+            ? _widgetOptions[_selectedIndex]
+            : _selectedIndex == 1 && loginChanged == 0
+                ? _widgetOptions[1]
+                : _selectedIndex == 1 && loginChanged == 1
+                    ? _widgetOptions[2]
+                    : _widgetOptions[_selectedIndex],
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -94,25 +77,17 @@ class _HomePageState extends State<HomePage>{
     );
   }
 
-  /**Navigate to Filter Page.**/
-  Future navigateToFilter(context) async{
-    Navigator.push(context, MaterialPageRoute(builder: (context) => FilterPage()));
-  }
-
   Widget _buildBar(BuildContext context) {
     return new AppBar(
       centerTitle: true,
-      title: Text('ICE CREAM SOCIAL', style:TextStyle(fontFamily: 'Lato', fontSize: 30)),
+      title: Text('ICE CREAM SOCIAL',
+          style: TextStyle(fontFamily: 'Lato', fontSize: 30)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.purple,
-                  Colors.blue
-                ])
-        ),
+                colors: <Color>[Colors.purple, Colors.blue])),
       ),
       //backgroundColor: Color(0x9C4FF2),
     );
