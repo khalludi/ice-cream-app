@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:ice_cream_social/login/login_screen.dart';
 import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
 
@@ -20,29 +20,42 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>{
   int _selectedIndex = 0;
+  int loginChanged = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
   /**Bottom navigation drawer.**/
-  static final List<Widget> _widgetOptions = <Widget>[
-    PlaceholderWidget(
-      Colors.pink
-    ),
-    PlaceholderWidget(
-      Colors.purpleAccent
-    ),
-  ];
+  List<Widget> _widgetOptions;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  void updateLoginChanged(int newId) {
+    setState(() {
+      loginChanged = newId;
+    });
+  }
+
   Widget build(BuildContext context) {
+    _widgetOptions.add(PlaceholderWidget(
+      Colors.pink
+    ));
+    _widgetOptions.add(LoginScreen(
+      onLoginChanged: updateLoginChanged,
+    ));
+    _widgetOptions.add(PlaceholderWidget(Colors.green));
+
     return MaterialApp(
       home: Scaffold(
         appBar: _buildBar(context),
-        body: _widgetOptions[_selectedIndex],
+        body: _selectedIndex == 0 ? _widgetOptions[_selectedIndex] :
+              _selectedIndex == 1 && loginChanged == 0 ? _widgetOptions[1] :
+              _selectedIndex == 1 && loginChanged == 1 ? _widgetOptions[2] :
+              _widgetOptions[_selectedIndex],
+        // TODO: Move the below code to HomePage/search.dart
         // body: Center(
         //   child: new Row(
         //     mainAxisSize: MainAxisSize.min,

@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/HomePage/placeholder_widget.dart';
 import 'authentication.dart';
 
+typedef void IntCallback(int id);
+
 class LoginScreen extends StatefulWidget {
+  final IntCallback onLoginChanged;
+  LoginScreen({ @required this.onLoginChanged });
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(onLoginChanged);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -19,6 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController txtPassword = TextEditingController();
 
   Authentication auth;
+
+  IntCallback onLoginChanged;
+  _LoginScreenState(IntCallback onLoginChanged) {
+    this.onLoginChanged = onLoginChanged;
+  }
+
   @override
   void initState() {
     auth = Authentication();
@@ -57,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding (
         padding: EdgeInsets.only(top: 20),
         child: Text(
-            'Login',
+            _isLogin ? 'Login' : 'New User',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -89,14 +101,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget passwordInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 0),
+        padding: EdgeInsets.only(top: 20, left: 20, right: 20),
         child: TextFormField(
           controller: txtPassword,
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
           decoration: InputDecoration(
-            hintText: 'password',
-            // icon: Icon(Icons.enhanced_encryption),
+            filled: true,
+            fillColor: Color(0xFFF0F0F0),
+            contentPadding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15, right: 15),
+            isDense: true,
+            labelText: 'Password',
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
           ),
           validator: (text) => text.isEmpty ? 'Password is required' : '',
         )
@@ -106,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget mainButton() {
     String buttonText = _isLogin ? 'Login' : 'Sign up';
     return Padding(
-        padding: EdgeInsets.only(top: 0),
+        padding: EdgeInsets.only(top: 20),
         child: Container(
             height: 50,
             child: RaisedButton(
@@ -157,9 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
         _userId = await auth.signUp(txtEmail.text, txtPassword.text);
         print('Sign up for user $_userId');
       }
-      // if (_userId != null) {
-      //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventScreen(_userId)));
-      // }
+      if (_userId != null) {
+        onLoginChanged(1);
+        // Navigator.replace(context, PlaceholderWidget(Colors.blueGrey));
+      }
     } catch (e) {
       print('Error: $e');
       setState(() {
