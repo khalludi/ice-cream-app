@@ -1,5 +1,5 @@
 provider "google-beta" {
-  project = "test-sql-project-305022"
+  project = "ice-cream-project-308820"
   region  = "us-central1"
 }
 
@@ -47,8 +47,9 @@ resource "google_vpc_access_connector" "connector" {
 resource "google_sql_database_instance" "instance" {
   provider = google-beta
 
-  name   = "ice-cream-db"
+  name   = "icecreamdb-tf"
   region = "us-central1"
+  database_version = "MYSQL_8_0"
 
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
@@ -62,7 +63,7 @@ resource "google_sql_database_instance" "instance" {
 
   deletion_protection = true
   lifecycle {
-    prevent_destroy = true
+    # prevent_destroy = true
     ignore_changes = all
   }
 }
@@ -115,8 +116,6 @@ resource "google_cloudfunctions_function" "function" {
 
 resource "google_cloudfunctions_function_iam_binding" "binding" {
   provider = google-beta
-  # project = google_cloudfunctions_function.function.project
-  # region = google_cloudfunctions_function.function.region
   cloud_function = google_cloudfunctions_function.function.name
   role = "roles/cloudfunctions.invoker"
   members = [

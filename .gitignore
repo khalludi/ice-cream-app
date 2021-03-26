@@ -57,3 +57,5 @@ app.*.map.json
 # IOS Ignore
 /ios/build/*
 /ios/*.lock
+
+backend/index.json
