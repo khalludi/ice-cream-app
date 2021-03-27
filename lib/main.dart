@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
+import 'package:ice_cream_social/login/profile.dart';
 import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
 
@@ -39,24 +40,32 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget chooseWidget() {
+    if (_selectedIndex == 0) {
+      return _widgetOptions[_selectedIndex];
+    } else if (_selectedIndex == 1 && loginChanged == 0) {
+      return _widgetOptions[1];
+    } else if (_selectedIndex == 1 && loginChanged == 1) {
+      return _widgetOptions[2];
+    } else {
+      return _widgetOptions[_selectedIndex];
+    }
+  }
+
   Widget build(BuildContext context) {
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
     ));
-    _widgetOptions.add(PlaceholderWidget(Colors.green));
+    _widgetOptions.add(Profile(
+      onLoginChanged: updateLoginChanged,
+    ));
 
     return MaterialApp(
       home: Scaffold(
-        appBar: _buildBar(context),
-        body: _selectedIndex == 0
-            ? _widgetOptions[_selectedIndex]
-            : _selectedIndex == 1 && loginChanged == 0
-                ? _widgetOptions[1]
-                : _selectedIndex == 1 && loginChanged == 1
-                    ? _widgetOptions[2]
-                    : _widgetOptions[_selectedIndex],
+        // appBar: _buildBar(context),
+        body: chooseWidget(),
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -81,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     return new AppBar(
       centerTitle: true,
       title: Text('ICE CREAM SOCIAL',
-          style: TextStyle(fontFamily: 'Lato', fontSize: 30)),
+          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(

@@ -52,6 +52,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - lib/flavor_images/
+      - assets/img/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -81,4 +82,17 @@ flutter:
   fonts:
     - family: Lato
       fonts:
-        - asset: fonts/Lato-Black.ttf
+        - asset: assets/fonts/Lato/Lato-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Lato/Lato-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Lato/Lato-Regular.ttf
+        - asset: assets/fonts/Lato/Lato-Italic.ttf
+          style: italic
+
+    - family: Nexa
+      fonts:
+        - asset: assets/fonts/Nexa-Light.otf
+        - asset: assets/fonts/Nexa-Bold.otf
+          weight: 700

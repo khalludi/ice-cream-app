@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ice_cream_social/HomePage/placeholder_widget.dart';
 import 'authentication.dart';
 
 typedef void IntCallback(int id);
@@ -21,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email;
   String _message = "";
 
+  final TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
 
@@ -41,8 +41,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: Text('Login'),),
+        backgroundColor: Color(0xFFcfcfcf),
         body: Container(
-            padding: EdgeInsets.all(24),
+            // color: Color(),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/img/img1.jpg",
+                ),
+                colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                scale: 2,
+                repeat: ImageRepeat.repeat,
+              )
+            ),
+            padding: EdgeInsets.all(30),
             child: Center(
                 child: Card (
                     shape: RoundedRectangleBorder(
@@ -50,19 +62,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Form(child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        header(),
-                        emailInput(),
-                        passwordInput(),
-                        mainButton(),
-                        secondaryButton(),
-                        validationMessage(),
-                      ],
-                    ))
-                )
+                      children: children()
+                    ),),
             )
         )
+      )
     );
+  }
+
+  List<Widget> children() {
+    List<Widget> ret = [
+      header(),
+      emailInput(),
+      passwordInput(),
+      mainButton(),
+      secondaryButton(),
+      validationMessage(),
+      attribution(),
+    ];
+
+    if (!_isLogin) {
+      ret.insert(1, usernameInput());
+    }
+
+    return ret;
   }
 
   Widget header() {
@@ -71,9 +94,31 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text(
             _isLogin ? 'Login' : 'New User',
             style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Nexa',
+              fontSize: 35,
+              fontWeight: FontWeight.w700,
             )
+        )
+    );
+  }
+
+  Widget usernameInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+        child: TextFormField(
+          controller: txtUsername,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Color(0xFFF0F0F0),
+            contentPadding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15, right: 15),
+            isDense: true,
+            labelText: 'Username',
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
+          ),
+          validator: (text) => text.isEmpty && !_isLogin ? 'Username is required' : '',
         )
     );
   }
@@ -89,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
             fillColor: Color(0xFFF0F0F0),
             contentPadding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15, right: 15),
             isDense: true,
-            labelText: 'Username/Email',
+            labelText: 'Email',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50))
             ),
@@ -159,6 +204,19 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Colors.red,
           fontWeight: FontWeight.bold,
         )
+    );
+  }
+
+  Widget attribution() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Text(
+        "Pattern vector created by macrovector - www.freepik.com",
+        style: TextStyle(
+          fontFamily: "Lato",
+          fontSize: 10,
+        ),
+      )
     );
   }
 
