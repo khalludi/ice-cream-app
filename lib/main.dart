@@ -39,6 +39,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget chooseWidget() {
+    if (_selectedIndex == 0) {
+      return _widgetOptions[_selectedIndex];
+    } else if (_selectedIndex == 1 && loginChanged == 0) {
+      return _widgetOptions[1];
+    } else if (_selectedIndex == 1 && loginChanged == 1) {
+      return _widgetOptions[2];
+    } else {
+      return _widgetOptions[_selectedIndex];
+    }
+  }
+
   Widget build(BuildContext context) {
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
@@ -50,13 +62,7 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: _buildBar(context),
-        body: _selectedIndex == 0
-            ? _widgetOptions[_selectedIndex]
-            : _selectedIndex == 1 && loginChanged == 0
-                ? _widgetOptions[1]
-                : _selectedIndex == 1 && loginChanged == 1
-                    ? _widgetOptions[2]
-                    : _widgetOptions[_selectedIndex],
+        body: chooseWidget(),
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
