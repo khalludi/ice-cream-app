@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
 
     return MaterialApp(
       home: Scaffold(
-        appBar: _buildBar(context),
+        // appBar: _buildBar(context),
         body: chooseWidget(),
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
     return new AppBar(
       centerTitle: true,
       title: Text('ICE CREAM SOCIAL',
-          style: TextStyle(fontFamily: 'Lato', fontSize: 30)),
+          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(

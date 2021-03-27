@@ -82,3 +82,9 @@ flutter:
     - family: Lato
       fonts:
         - asset: fonts/Lato-Black.ttf
+
+    - family: Nexa
+      fonts:
+        - asset: fonts/Nexa-Light.otf
+        - asset: fonts/Nexa-Bold.otf
+          weight: 700

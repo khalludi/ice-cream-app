@@ -41,8 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: Text('Login'),),
+        backgroundColor: Color(0xFFcfcfcf),
         body: Container(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.all(30),
             child: Center(
                 child: Card (
                     shape: RoundedRectangleBorder(
@@ -71,8 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text(
             _isLogin ? 'Login' : 'New User',
             style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Nexa',
+              fontSize: 35,
+              fontWeight: FontWeight.w700,
             )
         )
     );
