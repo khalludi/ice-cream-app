@@ -43,6 +43,17 @@ class _LoginScreenState extends State<LoginScreen> {
       // appBar: AppBar(title: Text('Login'),),
         backgroundColor: Color(0xFFcfcfcf),
         body: Container(
+            // color: Color(),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/img/img1.jpg",
+                ),
+                colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                scale: 2,
+                repeat: ImageRepeat.repeat,
+              )
+            ),
             padding: EdgeInsets.all(30),
             child: Center(
                 child: Card (
@@ -66,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
       passwordInput(),
       mainButton(),
       secondaryButton(),
-      validationMessage()
+      validationMessage(),
+      attribution(),
     ];
 
     if (!_isLogin) {
@@ -192,6 +204,19 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Colors.red,
           fontWeight: FontWeight.bold,
         )
+    );
+  }
+
+  Widget attribution() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Text(
+        "Pattern vector created by macrovector - www.freepik.com",
+        style: TextStyle(
+          fontFamily: "Lato",
+          fontSize: 10,
+        ),
+      )
     );
   }
 

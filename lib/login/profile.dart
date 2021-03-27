@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'package:ice_cream_social/login/search_users.dart';
 
 typedef void IntCallback(int id);
 
@@ -216,10 +218,11 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget _buildBar(BuildContext context) {
+    final Authentication auth = new Authentication();
     return new AppBar(
       centerTitle: true,
       title: Text('user_bobby',
-          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
+          style: TextStyle(fontFamily: 'Nexa', fontSize: 28, fontWeight: FontWeight.w700)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -227,6 +230,27 @@ class _ProfileState extends State<Profile> {
                 end: Alignment.bottomRight,
                 colors: <Color>[Colors.purple, Colors.blue])),
       ),
+      leading: IconButton(
+        icon: Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) => SearchUsers()));
+        },
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+              Icons.logout,
+              color: Colors.white
+          ),
+          onPressed: () {
+            auth.signOut();
+            onLoginChanged(0);
+          },
+        ),
+      ],
       //backgroundColor: Color(0x9C4FF2),
     );
   }
