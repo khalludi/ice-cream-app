@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
+import 'package:ice_cream_social/login/profile.dart';
 import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
 
@@ -57,7 +58,9 @@ class _HomePageState extends State<HomePage> {
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
     ));
-    _widgetOptions.add(PlaceholderWidget(Colors.green));
+    _widgetOptions.add(Profile(
+      onLoginChanged: updateLoginChanged,
+    ));
 
     return MaterialApp(
       home: Scaffold(

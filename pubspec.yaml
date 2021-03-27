@@ -81,7 +81,14 @@ flutter:
   fonts:
     - family: Lato
       fonts:
-        - asset: fonts/Lato-Black.ttf
+        - asset: fonts/Lato/Lato-Black.ttf
+          weight: 900
+        - asset: fonts/Lato/Lato-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: fonts/Lato/Lato-Regular.ttf
+        - asset: fonts/Lato/Lato-Italic.ttf
+          style: italic
 
     - family: Nexa
       fonts:
