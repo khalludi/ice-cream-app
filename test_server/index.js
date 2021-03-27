@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// mysql.server stop
 const secrets = require('./secrets.json');
 const mysql = require('promise-mysql');
 
@@ -50,8 +51,11 @@ const createPool = async () => {
 
 let pool;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.get('/', async (req, res) => {
+  pool = await createPool();
+  const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
+  const output = await talentiQuery;
+  res.send(JSON.parse(JSON.stringify(output)));
 })
 
 app.listen(port, () => {
