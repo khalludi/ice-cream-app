@@ -1,28 +1,57 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
+import 'package:http/http.dart' as http;
 
 typedef void IntCallback(int id);
 
 class Profile extends StatefulWidget {
   final IntCallback onLoginChanged;
-  Profile({ @required this.onLoginChanged });
+  Authentication auth;
+  Profile({ @required this.onLoginChanged, this.auth });
 
   @override
-  _ProfileState createState() => _ProfileState(onLoginChanged);
+  _ProfileState createState() => _ProfileState(onLoginChanged, auth);
 }
 
 class _ProfileState extends State<Profile> {
 
-  final TextEditingController txtUsername = TextEditingController();
+  Authentication auth;
+
+  Future<String> username;
+  Future<String> email;
+
+  TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
   // final TextEditingController txtPassword = TextEditingController();
 
   IntCallback onLoginChanged;
-  _ProfileState(IntCallback onLoginChanged) {
+  _ProfileState(IntCallback onLoginChanged, Authentication auth) {
     this.onLoginChanged = onLoginChanged;
+    this.auth = auth;
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   txtUsername.text = "Loading ...";
+  //   txtEmail.text = "Loading ...";
+  //   auth = Authentication();
+  //   email = auth.getEmail();
+  //   username = getUsername(auth.getEmail());
+  // }
+
+  Future<String> getUsername(Future<String> email) async {
+    var queryParameters = {
+      "email" : await email,
+    };
+    var response = await http.get(Uri.http('127.0.0.1:3000', 'get-profile', queryParameters));
+    var obj = jsonDecode(response.body) as List;
+
+    return obj[0]["username"];
   }
 
   @override
@@ -78,6 +107,7 @@ class _ProfileState extends State<Profile> {
               children: <Widget>[
                 editHeader('     Username'),
                 usernameInput(),
+                // futureUsernameInput(),
                 editHeader('     Email'),
                 emailInput(),
                 mainButton()
@@ -105,8 +135,24 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  // Widget futureUsernameInput() {
+  //   return FutureBuilder<String>(
+  //     future: username,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         // return TextField(
+  //         //     controller: txtUsername,
+  //         // );
+  //       } else if (snapshot.hasError) {
+  //         return Text("${snapshot.error}");
+  //       }
+  //
+  //       return CircularProgressIndicator();
+  //     }
+  //   );
+  // }
+
   Widget usernameInput() {
-    txtUsername.text = "user_bobby";
     return Padding(
         padding: EdgeInsets.only(top: 10, left: 20, right: 20),
         child: TextFormField(
@@ -128,7 +174,6 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget emailInput() {
-    txtEmail.text = "bobby@gmail.com";
     return Padding(
         padding: EdgeInsets.only(top: 10, left: 20, right: 20),
         child: TextFormField(
@@ -218,7 +263,6 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget _buildBar(BuildContext context) {
-    final Authentication auth = new Authentication();
     return new AppBar(
       centerTitle: true,
       title: Text('user_bobby',

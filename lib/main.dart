@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
 import 'package:ice_cream_social/login/profile.dart';
+import 'package:ice_cream_social/login/authentication.dart';
 import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
+
 
 void main() {
   runApp(new MyApp());
@@ -53,13 +55,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
+      auth: auth,
     ));
     _widgetOptions.add(Profile(
       onLoginChanged: updateLoginChanged,
+      auth: auth,
     ));
 
     return MaterialApp(

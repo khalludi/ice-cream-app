@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'authentication.dart';
 
 typedef void IntCallback(int id);
 
 class LoginScreen extends StatefulWidget {
   final IntCallback onLoginChanged;
-  LoginScreen({ @required this.onLoginChanged });
+  Authentication auth;
+  LoginScreen({ @required this.onLoginChanged, this.auth });
 
   @override
-  _LoginScreenState createState() => _LoginScreenState(onLoginChanged);
+  _LoginScreenState createState() => _LoginScreenState(onLoginChanged, auth);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -27,14 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Authentication auth;
 
   IntCallback onLoginChanged;
-  _LoginScreenState(IntCallback onLoginChanged) {
+  _LoginScreenState(IntCallback onLoginChanged, Authentication auth) {
     this.onLoginChanged = onLoginChanged;
-  }
-
-  @override
-  void initState() {
-    auth = Authentication();
-    super.initState();
+    this.auth = auth;
   }
 
   @override
@@ -230,8 +229,13 @@ class _LoginScreenState extends State<LoginScreen> {
         _userId = await auth.login(txtEmail.text, txtPassword.text);
         print('Login for user $_userId');
       } else {
-        _userId = await auth.signUp(txtEmail.text, txtPassword.text);
-        print('Sign up for user $_userId');
+        var response = await createUser(txtUsername.text, txtEmail.text);
+        if (response.statusCode != 201) {
+          throw Exception('Username or email already exists');
+        } else {
+          _userId = await auth.signUp(txtEmail.text, txtPassword.text);
+          print('Sign up for user $_userId');
+        }
       }
       if (_userId != null) {
         onLoginChanged(1);
@@ -243,5 +247,18 @@ class _LoginScreenState extends State<LoginScreen> {
         _message = e.message;
       });
     }
+  }
+
+  Future<http.Response> createUser(String username, String email) {
+    return http.post(
+      Uri.http('127.0.0.1:3000', 'create-profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email
+      }),
+    );
   }
 }
