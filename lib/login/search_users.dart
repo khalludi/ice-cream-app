@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:convert';
 
 import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:flappy_search_bar/scaled_tile.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +20,6 @@ class User {
   factory User.fromJson(dynamic json) {
     return User(json['username'] as String, json['email'] as String);
   }
-
 }
 
 class _SearchUsersState extends State<SearchUsers> {
@@ -72,25 +70,17 @@ class _SearchUsersState extends State<SearchUsers> {
   }
 
   Future<http.Response> fetchAlbum(String searchTerm) {
-    return http.get(Uri.https('127.0.0.1:3000', 'user-search?search_term='+searchTerm));
+    var queryParameters = {
+      "search_term" : searchTerm,
+    };
+    return http.get(Uri.http('127.0.0.1:3000', 'user-search', queryParameters));
   }
 
   Future<List<User>> _getAllUsers(String text) async {
-    // await Future.delayed(Duration(seconds: text.length == 4 ? 10 : 1));
-    // if (text.length == 5) throw Error();
-    // if (text.length == 6) return [];
-    // List<User> posts = [];
-
     var response = await fetchAlbum(text);
-    var tagObjsJson = jsonDecode(response.body)['tags'] as List;
+    var tagObjsJson = jsonDecode(response.body) as List;
     List<User> tagObjs = tagObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
 
-
-    // var random = new Random();
-    // for (int i = 0; i < 10; i++) {
-    //   // posts.add(User("$text $i", "body random number : ${random.nextInt(100)}"));
-    //   posts.add(User("user_bobby", "dana.drow@gmail.com"));
-    // }
     return tagObjs;
   }
 
