@@ -5,6 +5,7 @@ const port = 3000
 // mysql.server stop
 const secrets = require('./secrets.json');
 const mysql = require('promise-mysql');
+const bodyParser = require('body-parser');
 
 const createTcpPool = async config => {
   // Extract host and port from socket address
@@ -51,9 +52,13 @@ const createPool = async () => {
 
 let pool;
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.get('/', async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
+  const talentiQuery = pool.query('SELECT DISTINCT email FROM Users');
+//  const talentiQuery = pool.query('SELECT email, count(username) as cnt FROM Users GROUP BY email ORDER BY cnt DESC LIMIT 30;');
 //  const talentiQuery = pool.query('SELECT u.email, drv.max_len FROM Users u JOIN (SELECT r.author as author, MAX(LENGTH(r.review_text)) as max_len FROM Reviews r GROUP BY r.author) as drv ON drv.author = u.username ORDER BY drv.max_len DESC LIMIT 15')
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
@@ -72,6 +77,13 @@ app.get('/user-search', async (req, res) => {
   const talentiQuery = pool.query("SELECT * FROM Users WHERE username LIKE '%" + req.query.search_term + "%'");
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
+})
+
+app.post('/edit-profile', async (req, res) => {
+  pool = await createPool();
+  const output = await pool.query("UPDATE Users SET username = '" + req.body.username +
+    "', email = '" + req.body.email + "' WHERE username = '" + req.body.oldUsername);
+  res.send("All Good!");
 })
 
 app.listen(port, () => {
