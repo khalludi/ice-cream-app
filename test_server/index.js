@@ -54,6 +54,7 @@ let pool;
 app.get('/', async (req, res) => {
   pool = await createPool();
   const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
+<<<<<<< HEAD
 //  const talentiQuery = pool.query('SELECT u.email, drv.max_len FROM Users u JOIN (SELECT r.author as author, MAX(LENGTH(r.review_text)) as max_len FROM Reviews r GROUP BY r.author) as drv ON drv.author = u.username ORDER BY drv.max_len DESC LIMIT 15')
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
@@ -70,6 +71,8 @@ app.get('/advanced-query', async (req, res) => {
 app.get('/user-search', async (req, res) => {
   pool = await createPool();
   const talentiQuery = pool.query("SELECT * FROM Users WHERE username LIKE '%" + req.query.search_term + "%' OR email LIKE '%" + req.query.search_term + "%' ");
+=======
+>>>>>>> 501eb35d0d1a908ee2fa688110a32f7ad75fd14f
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
 })
