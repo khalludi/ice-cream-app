@@ -13,16 +13,17 @@ class FlavorDescription extends StatelessWidget {
     return Container(
       color: Colors.white,
       width: double.infinity,
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
       padding: EdgeInsets.all(10),
-      child: Column (children: [
-        Text(
-          description, 
-          style: TextStyle(fontSize: 16),
-          textAlign: TextAlign.left,
-        ),
-      ],
-    ),
+      child: Column(
+        children: [
+          Text(
+            description,
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
     );
   }
 }

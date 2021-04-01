@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'review.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'review.dart';
 
 /// The [ReviewCard] widget contains the author, title, date, and content of a review.
 /// A separate widget, eg [FlavorPage], can construct a list of ReviewCards.
@@ -15,8 +15,8 @@ class ReviewCard extends StatefulWidget {
   ReviewCard({
     @required this.review,
     @required this.index,
-    this.createEditDialog
-    });
+    this.createEditDialog,
+  });
 
   @override
   _ReviewCardState createState() => _ReviewCardState();
@@ -24,18 +24,18 @@ class ReviewCard extends StatefulWidget {
 
 class _ReviewCardState extends State<ReviewCard> {
   final _months = const {
-      '01': 'Jan',
-      '02': 'Feb',
-      '03': 'March',
-      '04': 'April',
-      '05': 'May',
-      '06': 'June',
-      '07': 'July',
-      '08': 'Aug',
-      '09': 'Sept',
-      '10': 'Oct',
-      '11': 'Nov',
-      '12': 'Dec'
+    '01': 'Jan',
+    '02': 'Feb',
+    '03': 'March',
+    '04': 'April',
+    '05': 'May',
+    '06': 'June',
+    '07': 'July',
+    '08': 'Aug',
+    '09': 'Sept',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec'
   };
 
   String getFormattedDate(date) {
@@ -49,8 +49,8 @@ class _ReviewCardState extends State<ReviewCard> {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.grey[600], width: 1),
-      borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey[600], width: 1),
+        borderRadius: BorderRadius.circular(10),
       ),
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
       child: Padding(
@@ -58,74 +58,75 @@ class _ReviewCardState extends State<ReviewCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
                   child: Text(
-                  widget.review.title,
+                    widget.review.title,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+                Text(
+                  getFormattedDate(widget.review.date),
                   style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.lightBlue,
-                  )
+                    fontSize: 18.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.review.author,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.purple,
+                    ),
+                  ),
+                ),
+                SmoothStarRating(
+                  allowHalfRating: true,
+                  onRated: (v) {},
+                  starCount: 5,
+                  size: 20.0,
+                  rating: widget.review.reviewStars.toDouble(),
+                  isReadOnly: true,
+                  color: Colors.green,
+                  borderColor: Colors.green,
+                  spacing: 0.0,
+                ),
+              ],
+            ),
+            SizedBox(height: 6.0),
+            Text(
+              widget.review.text,
+              style: TextStyle(
+                fontSize: 14.0,
+              ),
+            ),
+            Align(
+              alignment: Alignment(0.8, -1.0),
+              heightFactor: 0.5,
+              child: Visibility(
+                visible: (widget.review.isEditable != null)
+                    ? widget.review.isEditable
+                    : true,
+                child: FloatingActionButton(
+                  onPressed: () => widget.createEditDialog(widget.index),
+                  child: Icon(Icons.edit),
                 ),
               ),
-              Text(
-              getFormattedDate(widget.review.date),
-              style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.black,
-              )
-              ),
-            ],
-          
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-              child: Text(
-                widget.review.author,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.purple,
-                )
-              )
-              ),
-                SmoothStarRating(
-                    allowHalfRating: true,
-                    onRated: (v) {},
-                    starCount: 5,
-                    size: 20.0,
-                    rating: widget.review.reviewStars.toDouble(),
-                    isReadOnly:true,
-                    color: Colors.green,
-                    borderColor: Colors.green,
-                    spacing:0.0, 
-                    ),
-              ]
             ),
-          SizedBox(height: 6.0),
-          Text(
-            widget.review.text,
-            style: TextStyle(
-              fontSize: 14.0,
-            ),
-          ),
-          Align(
-            alignment: Alignment(0.8, -1.0),
-            heightFactor: 0.5,
-            child: Visibility(
-              visible: (widget.review.isEditable != null) ? widget.review.isEditable : true,
-              child: FloatingActionButton(
-              onPressed: () => widget.createEditDialog(widget.index),
-              child: Icon(Icons.edit),
-              )
-            ),
-          ),
-        ],
+          ],
         ),
-      )
+      ),
     );
   }
 }

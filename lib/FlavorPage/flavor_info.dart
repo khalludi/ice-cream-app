@@ -1,21 +1,21 @@
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
-
-import '../OldFlavorMain/avg_rating.dart';
-import '../OldFlavorMain/flavor_image.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import '../OldFlavorMain/flavor_image.dart';
 import 'flavor_title.dart';
 import 'review.dart';
 import 'review_card.dart';
 import 'flavor_description.dart';
 
 /// The [FlavorInfo] widget consists of the specific ice cream flavor's name, brand, image,
-/// average rating, and reviews. These items are laid out as a column and the 
+/// average rating, and reviews. These items are laid out as a column and the
 /// user can scroll to see all of them.
 ///
 /// [FlavorInfo] does NOT include the floating action button and associated dialog
 
 int buildNumber = 0;
-typedef Callback =  Function(int);
+typedef Callback = Function(int);
+typedef Callback2 = Function(String);
 
 class FlavorInfo extends StatefulWidget {
   final String flavor;
@@ -25,16 +25,19 @@ class FlavorInfo extends StatefulWidget {
   final List<Review> passedReviews;
   final double avgRating;
   final Callback createEditDialog;
+  final Callback2 searchReviews;
+  final VoidCallback undoSearchReviews;
 
-  FlavorInfo({
-    @required this.flavor,
-    @required this.brand,
-    @required this.description,
-    @required this.flavorImageUrl,
-    @required this.passedReviews,
-    @required this.avgRating,
-    this.createEditDialog
-  });
+  FlavorInfo(
+      {@required this.flavor,
+      @required this.brand,
+      @required this.description,
+      @required this.flavorImageUrl,
+      @required this.passedReviews,
+      @required this.avgRating,
+      @required this.createEditDialog,
+      @required this.searchReviews,
+      @required this.undoSearchReviews});
 
   @override
   _FlavorInfoState createState() => _FlavorInfoState();
@@ -43,12 +46,14 @@ class FlavorInfo extends StatefulWidget {
 class _FlavorInfoState extends State<FlavorInfo> {
   List<Review> reviews;
 
-  @override initState() {
+  @override
+  initState() {
     reviews = widget.passedReviews;
     super.initState();
   }
 
-  @override void didUpdateWidget(covariant FlavorInfo oldWidget) {
+  @override
+  void didUpdateWidget(covariant FlavorInfo oldWidget) {
     reviews = widget.passedReviews;
     super.didUpdateWidget(oldWidget);
   }
@@ -58,37 +63,59 @@ class _FlavorInfoState extends State<FlavorInfo> {
     buildNumber += 1;
     // log("Rebuild FlavorInfo: $buildNumber times");
     // ListView builder only creates items when the user reaches them
-      return ListView.builder(
-        itemCount: reviews.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Column(
-              children: <Widget>[
-                FlavorTitle(widget.flavor, widget.brand),
-                FlavorImage(widget.flavorImageUrl),
-                Center(child: 
-                  SmoothStarRating(
-                    allowHalfRating: false,
-                    onRated: (v) {},
-                    starCount: 5,
-                    rating: widget.avgRating,
-                    size: 40.0,
-                    isReadOnly:true,
-                    color: Colors.green,
-                    borderColor: Colors.green,
-                    spacing:0.0, 
-                    ),
-                  ),
-                  FlavorDescription(widget.description),
-                ],
-            );
-          }
+    return ListView.builder(
+      itemCount: reviews.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Column(
+            children: <Widget>[
+              FlavorTitle(widget.flavor, widget.brand),
+              FlavorImage(widget.flavorImageUrl),
+              Center(
+                child: SmoothStarRating(
+                  allowHalfRating: false,
+                  onRated: (v) {},
+                  starCount: 5,
+                  rating: widget.avgRating,
+                  size: 40.0,
+                  isReadOnly: true,
+                  color: Colors.green,
+                  borderColor: Colors.green,
+                  spacing: 0.0,
+                ),
+              ),
+              FlavorDescription(widget.description),
+              Container(
+                color: Colors.lightBlue,
+                // margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width,
+                height: 20,
+                child: SearchBar(
+                  placeHolder: Text("search review content!"),
+                  onItemFound: (item, int index) {},
+                  onSearch: (String text) {
+                    widget.searchReviews(text);
+                  },
+                  onCancelled: () {
+                    widget.undoSearchReviews();
+                  },
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+              ),
+            ],
+          );
+        } else {
           return ReviewCard(
-            review: reviews[index-1], 
-            index: index-1,
-            createEditDialog: widget.createEditDialog
-            );
+            review: reviews[index - 1],
+            index: index - 1,
+            createEditDialog: widget.createEditDialog,
+          );
         }
+      },
     );
   }
 }
