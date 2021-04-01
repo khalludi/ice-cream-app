@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 
@@ -73,13 +74,26 @@ class _SearchUsersState extends State<SearchUsers> {
     var queryParameters = {
       "search_term" : searchTerm,
     };
-    return http.get(Uri.http('127.0.0.1:3000', 'user-search', queryParameters));
+    return http.get(Uri.http('10.0.2.2:3000', 'user-search', queryParameters));
   }
 
   Future<List<User>> _getAllUsers(String text) async {
-    var response = await fetchAlbum(text);
+    var response;
+    try {
+      response = await fetchAlbum(text);
+    } on SocketException catch (e) {
+      print('error ${e}');
+    } catch (e) {
+      //for other errors
+      print('error ${e.toString()}');
+    }
+
+    print(response);
+
     var tagObjsJson = jsonDecode(response.body) as List;
     List<User> tagObjs = tagObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
+
+    print(tagObjs);
 
     return tagObjs;
   }

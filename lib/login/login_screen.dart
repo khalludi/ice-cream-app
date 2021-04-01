@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/login/profile.dart';
 import 'authentication.dart';
 
 typedef void IntCallback(int id);
@@ -18,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  bool toProfile = false;
   bool _isLogin = true;
   String _userId;
   String _password;
@@ -38,7 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return toProfile ?
+      Profile(auth: auth)
+      : Scaffold(
       // appBar: AppBar(title: Text('Login'),),
         backgroundColor: Color(0xFFcfcfcf),
         body: Container(
@@ -238,7 +242,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
       if (_userId != null) {
-        onLoginChanged(1);
+        setState(() {
+          toProfile = true;
+        });
+        // onLoginChanged(1);
         // Navigator.replace(context, PlaceholderWidget(Colors.blueGrey));
       }
     } catch (e) {

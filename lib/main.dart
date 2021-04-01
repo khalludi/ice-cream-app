@@ -62,15 +62,15 @@ class _HomePageState extends State<HomePage> {
       onLoginChanged: updateLoginChanged,
       auth: auth,
     ));
-    _widgetOptions.add(Profile(
-      onLoginChanged: updateLoginChanged,
-      auth: auth,
-    ));
+    // _widgetOptions.add(Profile(
+    //   onLoginChanged: updateLoginChanged,
+    //   auth: auth,
+    // ));
 
     return MaterialApp(
       home: Scaffold(
         // appBar: _buildBar(context),
-        body: chooseWidget(),
+        body: _widgetOptions[_selectedIndex],
         /**Bottom navigation drawer.**/
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

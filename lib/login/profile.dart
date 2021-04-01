@@ -6,50 +6,47 @@ import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
 import 'package:http/http.dart' as http;
 
-typedef void IntCallback(int id);
-
 class Profile extends StatefulWidget {
-  final IntCallback onLoginChanged;
   Authentication auth;
-  Profile({ @required this.onLoginChanged, this.auth });
+  Profile({this.auth});
 
   @override
-  _ProfileState createState() => _ProfileState(onLoginChanged, auth);
+  _ProfileState createState() => _ProfileState(auth);
 }
 
 class _ProfileState extends State<Profile> {
-
   Authentication auth;
 
   Future<String> username;
   Future<String> email;
+  String title = '';
 
-  TextEditingController txtUsername = TextEditingController();
+  final TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
-  // final TextEditingController txtPassword = TextEditingController();
 
-  IntCallback onLoginChanged;
-  _ProfileState(IntCallback onLoginChanged, Authentication auth) {
-    this.onLoginChanged = onLoginChanged;
+  _ProfileState(Authentication auth) {
     this.auth = auth;
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   txtUsername.text = "Loading ...";
-  //   txtEmail.text = "Loading ...";
-  //   auth = Authentication();
-  //   email = auth.getEmail();
-  //   username = getUsername(auth.getEmail());
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getUsername(auth.getEmail());
+  }
 
   Future<String> getUsername(Future<String> email) async {
     var queryParameters = {
-      "email" : await email,
+      "email": await email,
     };
-    var response = await http.get(Uri.http('127.0.0.1:3000', 'get-profile', queryParameters));
+    var response = await http
+        .get(Uri.http('10.0.2.2:3000', 'get-profile', queryParameters));
     var obj = jsonDecode(response.body) as List;
+
+    setState(() {
+      txtUsername.text = obj[0]["username"];
+      txtEmail.text = queryParameters["email"];
+      title = obj[0]["username"];
+    });
 
     return obj[0]["username"];
   }
@@ -57,9 +54,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildBar(context),
-      body: SingleChildScrollView(
-        child: Center(
+        appBar: _buildBar(context),
+        body: SingleChildScrollView(
+            child: Center(
           child: Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 10)),
@@ -67,72 +64,60 @@ class _ProfileState extends State<Profile> {
               Padding(padding: EdgeInsets.only(top: 10)),
               editProfileCard(),
               Padding(padding: EdgeInsets.only(top: 14)),
-              deleteButton()
+              deleteButton(),
             ],
           ),
-        )
-      )
-    );
+        )));
   }
 
   Widget header() {
     return Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: //Center(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: //Center(
           Container(
               padding: EdgeInsets.only(left: 11, right: 10, top: 11, bottom: 8),
-              child: Text(
-                  'Edit Profile',
+              child: Text('Edit Profile',
                   style: TextStyle(
                     fontFamily: 'Nexa',
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                  )
-              )
-          ),
+                  ))),
     );
   }
 
   Widget editProfileCard() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
-      child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Form(child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+        padding: EdgeInsets.only(left: 10, right: 10),
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Form(
+              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 editHeader('     Username'),
                 usernameInput(),
                 // futureUsernameInput(),
                 editHeader('     Email'),
                 emailInput(),
                 mainButton()
-              ]
-          ),)
-      )
-    );
+              ]),
+            )));
   }
 
   Widget editHeader(String title) {
     return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding (
-          padding: EdgeInsets.only(top: 20),
-          child: Text(
-              title,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontFamily: 'Nexa',
-                fontSize: 25,
-                fontWeight: FontWeight.w700,
-              )
-          )
-      )
-    );
+        alignment: Alignment.centerLeft,
+        child: Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(title,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'Nexa',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                ))));
   }
 
   // Widget futureUsernameInput() {
@@ -162,15 +147,14 @@ class _ProfileState extends State<Profile> {
           decoration: InputDecoration(
             // filled: true,
             // fillColor: Color(0xFFF0F0F0),
-            contentPadding: EdgeInsets.only(top: 2.0, bottom: 2.0, left: 15, right: 15),
+            contentPadding:
+                EdgeInsets.only(top: 2.0, bottom: 2.0, left: 15, right: 15),
             // isDense: true,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
           ),
           validator: (text) => text.isEmpty ? 'Username is required' : '',
-        )
-    );
+        ));
   }
 
   Widget emailInput() {
@@ -180,20 +164,17 @@ class _ProfileState extends State<Profile> {
           controller: txtEmail,
           keyboardType: TextInputType.text,
           textAlign: TextAlign.center,
-
           decoration: InputDecoration(
             // filled: true,
             // fillColor: Color(0xFFF0F0F0),
-            contentPadding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15, right: 15),
+            contentPadding:
+                EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15, right: 15),
             // isDense: true,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
-
+                borderRadius: BorderRadius.all(Radius.circular(50))),
           ),
           validator: (text) => text.isEmpty ? 'Email is required' : '',
-        )
-    );
+        ));
   }
 
   Widget mainButton() {
@@ -205,13 +186,11 @@ class _ProfileState extends State<Profile> {
           child: Container(
             padding: EdgeInsets.only(top: 10, bottom: 8),
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: <Color>[Colors.green, Colors.lightBlueAccent]),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0)
-                ),
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Colors.green, Colors.lightBlueAccent]),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
             child: Center(
               child: Text(
@@ -225,8 +204,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 
   Widget deleteButton() {
@@ -242,9 +220,7 @@ class _ProfileState extends State<Profile> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: <Color>[Colors.pink, Colors.deepOrangeAccent]),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(20.0)
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
             child: Center(
               child: Text(
@@ -258,15 +234,15 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
       centerTitle: true,
-      title: Text('user_bobby',
-          style: TextStyle(fontFamily: 'Nexa', fontSize: 28, fontWeight: FontWeight.w700)),
+      title: Text(title == null || title.isEmpty ? "Profile" : title,
+          style: TextStyle(
+              fontFamily: 'Nexa', fontSize: 28, fontWeight: FontWeight.w700)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -280,18 +256,16 @@ class _ProfileState extends State<Profile> {
           color: Colors.white,
         ),
         onPressed: () {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) => SearchUsers()));
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => SearchUsers()));
         },
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(
-              Icons.logout,
-              color: Colors.white
-          ),
+          icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
             auth.signOut();
-            onLoginChanged(0);
+            // onLoginChanged(0);
           },
         ),
       ],
