@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:ice_cream_social/SettingsPage/ingredient.dart';
 import './ingredients_admin.dart';
 
-/// The [FlavorPage] widget describes the screen representing an ice cream flavor, all of its reviews,
+/// The [Settings] page widget describes the screen representing an ice cream flavor, all of its reviews,
 /// and a floating action button. The floating action button triggers a fab which allows the user to
 /// add a review if they haven't done so yet, or edit the review they've already added.
 ///
@@ -122,61 +122,81 @@ class _SettingsPageState extends State<SettingsPage> {
       'route': null,
     },
     {
-      'text': 'Log Out ',
+      'text': 'Log Out',
       'isTitle': false,
       'route': null,
     },
   ];
 
-  void handleRoute(Widget Function() route) {
-    if (route != null) {
-      // const durationMillisec = 20;
-      // Offset offset = const Offset(5, 0);
-      // Navigator.of(context).push(
-      //   new PageRouteBuilder(
-      //     opaque: true,
-      //     transitionDuration: const Duration(milliseconds: durationMillisec),
-      //     pageBuilder: (BuildContext context, _, __) {
-      //       return route();
-      //     },
-      //     transitionsBuilder:
-      //         (_, Animation<double> animation, __, Widget child) {
-      //       return new SlideTransition(
-      //         child: child,
-      //         position: new Tween<Offset>(
-      //           begin: offset,
-      //           end: Offset.zero,
-      //         ).animate(animation),
-      //       );
-      //     },
-      //   ),
-      // );
-      Navigator.push(context, CupertinoPageRoute(builder: (_) => route()));
+  void handleRoute(int index) {
+    Widget Function() route;
+
+    if (litems[index]['text'] == "Modify Ingredients")
+      route = routeIngredients;
+    else if (litems[index]['text'] == "Log Out") {
+      widget.signOut();
+      Navigator.pop(context);
     }
+    if (route != null)
+      Navigator.push(context, CupertinoPageRoute(builder: (_) => route()));
   }
 
   // routeIngredients returns
   Widget routeIngredients() {
     return IngredientsAdmin(
-      ingredients: ingredients,
+      passedIngredients: ingredients,
     );
   }
 
   Widget buildBody(BuildContext ctxt, int index) {
+    bool shouldIncludeIcon = litems[index]['text'] != 'Log Out';
     if (litems[index]['isTitle']) {
-      return Text(litems[index]['text']);
+      return Padding(
+        padding: const EdgeInsets.only(left: 20.0, top: 10.0),
+        child: Text(
+          litems[index]['text'],
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: 'Nexa',
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+      );
     } else {
-      return new Card(
-        child: ElevatedButton(
-          onPressed: () {
-            if (litems[index]['text'] == "Modify Ingredients")
-              handleRoute(routeIngredients);
-            else if (litems[index]['text'] == "Log Out") {
-              widget.signOut();
-              Navigator.pop(context);
-            }
-          },
-          child: Text(litems[index]['text']),
+      return Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        child: ButtonTheme(
+          padding: EdgeInsets.symmetric(
+            vertical: 0.0,
+          ), //adds padding inside the button
+          materialTapTargetSize: MaterialTapTargetSize
+              .shrinkWrap, //limits the touch area to the button area
+          minWidth: 0, //wraps child's width
+          height: 0, //wraps child's height
+          child: ElevatedButton(
+            onPressed: () => handleRoute(index),
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      litems[index]['text'],
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: shouldIncludeIcon
+                        ? Icon(Icons.arrow_forward_ios_rounded)
+                        : null,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       );
     }

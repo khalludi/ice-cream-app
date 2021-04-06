@@ -221,13 +221,15 @@ class _ProfileState extends State<Profile> {
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(
-              // Icons.logout,
-              Icons.more_horiz,
-              color: Colors.white),
+          icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
-            // auth.signOut();
-            // onLoginChanged(0);
+            auth.signOut();
+            onLoginChanged(0);
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.more_horiz, color: Colors.white),
+          onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(

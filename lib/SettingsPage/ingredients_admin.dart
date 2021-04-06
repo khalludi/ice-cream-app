@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'ingredient.dart';
+import 'search_ingredients.dart';
+import 'ingredient_dialog.dart';
 
 /// The [IngredientsAdmin] widget is a page that allows admin users to create, read, update, and delete (CRUD) ingredients.
 ///
@@ -12,154 +13,40 @@ import 'ingredient.dart';
 
 typedef Callback = Function(int);
 
-class Post {
-  final String title;
-  final String description;
-
-  Post(this.title, this.description);
-}
-
 class IngredientsAdmin extends StatefulWidget {
-  List<Ingredient> ingredients;
+  final List<Ingredient> passedIngredients;
   IngredientsAdmin({
-    @required this.ingredients,
+    Key key,
+    @required this.passedIngredients,
   });
 
   @override
   _IngredientsAdminState createState() => _IngredientsAdminState();
-
-  Future<List<Ingredient>> search(String search) async {
-    await Future.delayed(Duration(seconds: 2));
-    return List.generate(search.length, (int index) {
-      return ingredients[index];
-    });
-  }
 }
 
 class _IngredientsAdminState extends State<IngredientsAdmin> {
-  List<Object> listItems;
-  List<TextEditingController> controllers;
-  List<TextFormField> textFields;
-
+  List<Ingredient> ingredients;
   @override
-  initState() {
-    controllers = [];
-    textFields = [];
-    widget.ingredients.insert(
-        0,
-        Ingredient(
-          id: -1,
-          name: "",
-        ));
+  void initState() {
+    // TODO: implement initState
+    ingredients = widget.passedIngredients;
     super.initState();
   }
 
   @override
-  void dispose() {
-    controllers.forEach((controller) {
-      controller.dispose();
-    });
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // make dynamic list of TextEditingControllers
-    widget.ingredients.forEach(
-      (ingredient) {
-        var textEditingController =
-            new TextEditingController(text: ingredient.name);
-        controllers.add(textEditingController);
-        return textFields.add(
-          new TextFormField(
-            controller: textEditingController,
-            autovalidateMode: AutovalidateMode.always,
-            validator: (value) {
-              return value.isNotEmpty ? null : 'Invalid field';
-            },
-            // remove underlines
-            decoration: new InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                contentPadding:
-                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                hintText: ingredient.name == "" ? "add new ingredient" : null),
-          ),
-        );
-      },
-    );
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(
-        child: SearchBar<Ingredient>(
-          searchBarPadding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          listPadding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          suggestions: widget.ingredients,
-          hintText: "search for ingredients",
-          shrinkWrap: true,
-          onSearch: search,
-          onItemFound: (Ingredient ingredient, int index) {
-            if (index == 0) {
-              return getAddIngredientWidget(index);
-            } else {
-              return getIngredientWidget(ingredient, index);
-            }
-          },
+        child: SearchIngredients(
+          ingredients: widget.passedIngredients,
         ),
       ),
-    );
-  }
-
-  Future<List<Ingredient>> search(String search) async {
-    await Future.delayed(Duration(seconds: 2));
-    return widget.ingredients.sublist(1, 3);
-  }
-
-  void addIngredient(Ingredient ingredient) {
-    widget.ingredients.add(ingredient);
-    setState(() {});
-  }
-
-  void deleteIngredient(int index) {
-    widget.ingredients.removeAt(index);
-    setState(() {});
-  }
-
-  void updateIngredient(Ingredient editedIngredient, int index) {
-    widget.ingredients[index] = editedIngredient;
-    setState(() {});
-  }
-
-  Widget getIngredientWidget(Ingredient ingredient, int index) {
-    return Card(
-      child: ListTile(
-        title: textFields[index],
-        trailing: Icon(
-          Icons.remove_circle,
-          color: Colors.red,
-        ),
-      ),
-    );
-  }
-
-  Widget getAddIngredientWidget(index) {
-    return new Card(
-      child: ListTile(
-        title: textFields[index],
-        trailing: IconButton(
-          icon: new Icon(Icons.add_circle, color: Colors.green),
-          onPressed: () {
-            addIngredient(Ingredient(id: -1, name: controllers[index].text));
-          },
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton(
+          onPressed: launchAddDialog,
+          child: Icon(Icons.add),
+          backgroundColor: Colors.purple,
         ),
       ),
     );
@@ -186,5 +73,19 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         ),
       ),
     );
+  }
+
+  void launchAddDialog() async {
+    List<Object> result = await showDialog(
+      context: context,
+      builder: (_) => IngredientDialog(context: context),
+    );
+    Ingredient ingredient = result[0];
+    if (ingredient != null) addIngredient(ingredient);
+  }
+
+  void addIngredient(Ingredient ingredient) {
+    ingredients.add(ingredient);
+    setState(() {});
   }
 }

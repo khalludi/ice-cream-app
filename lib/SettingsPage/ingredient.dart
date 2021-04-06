@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// The [Ingredient] class describes an ice cream ingredient.
 /// It is not a widget.
 ///
@@ -12,7 +14,7 @@ class Ingredient {
   int id;
 
   Ingredient({
-    this.name,
+    @required this.name,
     this.id,
   });
 }
