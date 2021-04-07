@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ice_cream_social/SettingsPage/ingredient.dart';
 import './ingredients_admin.dart';
+import './statistics.dart';
 
 /// The [Settings] page widget describes the screen representing an ice cream flavor, all of its reviews,
 /// and a floating action button. The floating action button triggers a fab which allows the user to
@@ -136,6 +137,8 @@ class _SettingsPageState extends State<SettingsPage> {
     else if (litems[index]['text'] == "Log Out") {
       widget.signOut();
       Navigator.pop(context);
+    } else if (litems[index]['text'] == "View Statistics") {
+      route = routeStatistics;
     }
     if (route != null)
       Navigator.push(context, CupertinoPageRoute(builder: (_) => route()));
@@ -146,6 +149,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return IngredientsAdmin(
       passedIngredients: ingredients,
     );
+  }
+
+  // routeIngredients returns
+  Widget routeStatistics() {
+    return StatisticsPage();
   }
 
   Widget buildBody(BuildContext ctxt, int index) {
