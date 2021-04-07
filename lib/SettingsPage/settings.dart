@@ -6,12 +6,11 @@ import 'package:ice_cream_social/SettingsPage/ingredient.dart';
 import './ingredients_admin.dart';
 import './statistics.dart';
 
-/// The [Settings] page widget describes the screen representing an ice cream flavor, all of its reviews,
-/// and a floating action button. The floating action button triggers a fab which allows the user to
-/// add a review if they haven't done so yet, or edit the review they've already added.
+/// The [Settings] page widget enables the user to change their system preferences.
+/// Admin users can access the modify ingredients page and statistics page.
 ///
-/// Specifically, [FlavorPage] combines the [FlavorInfo] + [ReviewDialog] widgets.
-/// See example_flavor_page, an example of how to combine [FlavorPage] with the rest of an application.
+/// Note: the ingredients and litems lists are used for testing purposes but they
+/// will be removed once SQL integration is set up.
 
 int buildNumber = 0;
 typedef Callback = Function(int);
@@ -70,7 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
     ),
   ];
 
-  // TODO: add logout
   List<Map<String, Object>> litems = [
     {
       'text': "Admin",

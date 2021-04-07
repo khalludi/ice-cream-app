@@ -5,6 +5,9 @@ import 'ingredient.dart';
 import 'ingredient_dialog.dart';
 import 'ingredient_textfield.dart';
 
+/// The [SearchIngredients] widget uses the FlappySearchBar so that the user can search, edit, and
+/// delete ingredients.
+
 class SearchIngredients extends StatefulWidget {
   final List<Ingredient> ingredients;
   final scaffoldKey;
@@ -34,19 +37,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     isUsingSearchBar = false;
 
     super.initState();
-  }
-
-  @override
-  didUpdateWidget(covariant SearchIngredients oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    log("old key: " +
-        oldWidget.key.toString() +
-        ", new key: " +
-        widget.key.toString());
-    if (oldWidget != widget) {
-      log("DIFFERENT WIDGET");
-      setState(() {});
-    }
   }
 
   Widget getIngredientWidget(Ingredient ingredient, int index) {

@@ -5,12 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:ice_cream_social/SettingsPage/ingredient.dart';
 import './ingredients_admin.dart';
 
-/// The [Settings] page widget describes the screen representing an ice cream flavor, all of its reviews,
-/// and a floating action button. The floating action button triggers a fab which allows the user to
-/// add a review if they haven't done so yet, or edit the review they've already added.
-///
-/// Specifically, [FlavorPage] combines the [FlavorInfo] + [ReviewDialog] widgets.
-/// See example_flavor_page, an example of how to combine [FlavorPage] with the rest of an application.
+/// The [Statistics] page allows admin users to view statistics about the ice cream data.
+/// Currently it supports two advanced SQL queries.
 
 class StatisticsPage extends StatefulWidget {
   StatisticsPage({signOut});
@@ -20,6 +16,7 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  // Used for testing. Will be deleted once SQL integration is set up.
   List<Object> listItems = [
     "cat",
     "dog",

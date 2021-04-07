@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'ingredient.dart';
 import 'dart:developer';
 
-/// [IngredientTextField] is a custom TextField widget.
-/// It represents the name of an ingredient. Users can click
-/// to edit the name of an ingredient, and if their change is valid,
-/// their change will be updated in the front-end and in the SQL
-/// database.
+/// [IngredientTextField] is a custom TextField widget that represents the name of an ingredient.
+/// Users can click to edit the name of an ingredient, and if their change is valid,
+/// their change will be updated in the front-end and in the SQL database.
 
 class IngredientTextField extends StatefulWidget {
   final Ingredient ingredient;
   final int index;
-  Function(Ingredient, int) updateIngredient;
+  final Function(Ingredient, int) updateIngredient;
   final scaffoldKey;
 
   IngredientTextField({
