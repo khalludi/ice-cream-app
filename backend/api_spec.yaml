@@ -17,3 +17,102 @@ paths:
       responses:
         200:
           description: OK
+  /add_ingredient:
+    post:
+        summary: adds an ingredient.
+        operationId: addIngredient
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-addIngredients
+        responses:
+          200:
+            description: OK
+  /add_review:
+    post:
+        summary: adds a review.
+        operationId: addReview
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-addReviews
+        responses:
+          200:
+            description: OK
+  /delete_ingredients:
+     post:
+        summary: deletes an ingredient.
+        operationId: deleteIngredient
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-deleteIngredients
+        responses:
+          200:
+            description: OK
+  /delete_reviews:
+      post:
+        summary: deletes a review.
+        operationId: deleteReview
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-deleteReviews
+        responses:
+          200:
+            description: OK
+  /update_ingredients:
+      post:
+        summary: updates an ingredient.
+        operationId: updateIngredient
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-updateIngredients
+        responses:
+          200:
+            description: OK
+  /update_reviews:
+      post:
+        summary: updates a review.
+        operationId: updateReviews
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-updateReviews
+        responses:
+          200:
+            description: OK
+  /all_ingredients:
+       get:
+        summary: Returns a list of all ingredients.
+        operationId: getAllIngredients
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-getAllIngredients
+        responses:
+          200:
+            description: OK
+  /all_reviews:
+       get:
+         summary: Returns a list of all reviews.
+         operationId: getAllReviews
+         x-google-backend:
+           address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-getAllReviews
+         responses:
+           200:
+             description: OK
+  /ingredients:
+       get:
+        summary: Returns searched ingredient.
+        operationId: getIngredients
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-getIngredients
+        responses:
+          200:
+            description: OK
+  /reviews_new:
+       get: 
+        summary: Returns reviews.
+        operationId: getIdReviews
+        x-google-backend:
+           address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-getReviews
+        responses:
+          200:
+            description: OK
+  /reviewtext:
+       get:
+        summary: Returns searched reviews.
+        operationId: getReviewText
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-getReviewsText
+        responses:
+          200:
+            description: OK
