@@ -7,10 +7,12 @@ import 'ingredient_textfield.dart';
 
 class SearchIngredients extends StatefulWidget {
   final List<Ingredient> ingredients;
+  final scaffoldKey;
 
   const SearchIngredients({
     Key key,
     @required this.ingredients,
+    @required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -31,12 +33,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     ingredients = widget.ingredients;
     isUsingSearchBar = false;
 
-    // ingredients.insert(
-    //     0,
-    //     Ingredient(
-    //       id: -1,
-    //       name: "",
-    //     ));
     super.initState();
   }
 
@@ -56,30 +52,24 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   Widget getIngredientWidget(Ingredient ingredient, int index) {
     return Card(
       child: ListTile(
-        title: IngredientTextField(item: ingredient.name),
-        trailing: Visibility(
-          visible: !isUsingSearchBar,
-          child: IconButton(
-            onPressed: () => launchIngredientDialog(index),
-            icon: Icon(
-              Icons.remove_circle,
-              color: Colors.red,
+        title: IngredientTextField(
+          ingredient: ingredient,
+          index: index,
+          updateIngredient: updateIngredient,
+          scaffoldKey: widget.scaffoldKey,
+        ),
+        trailing: Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: Visibility(
+            visible: !isUsingSearchBar,
+            child: IconButton(
+              onPressed: () => launchIngredientDialog(index),
+              icon: Icon(
+                Icons.remove_circle,
+                color: Colors.red,
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget getAddIngredientWidget(index) {
-    return new Card(
-      child: ListTile(
-        title: textFields[index],
-        trailing: IconButton(
-          icon: new Icon(Icons.add_circle, color: Colors.green),
-          onPressed: () {
-            addIngredient(Ingredient(id: -1, name: controllers[index].text));
-          },
         ),
       ),
     );
@@ -100,13 +90,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     isUsingSearchBar = true;
     log("isUsingSearchBar: " + isUsingSearchBar.toString());
     await Future.delayed(Duration(seconds: 2));
-    // log("searching!");
-    // List<Ingredient> sublist = ingredients
-    //     .where((ingredient) =>
-    //         ingredient.name.toLowerCase().startsWith(search.toLowerCase()))
-    //     .toList();
-    // sublist.forEach((elem) => log(elem.name));
-    // return sublist;
     return ingredients.sublist(1, 3);
   }
 
@@ -151,11 +134,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       shrinkWrap: true,
       onSearch: search,
       onItemFound: (Ingredient ingredient, int index) {
-        // if (index == 0) {
-        //   return getAddIngredientWidget(index);
-        // } else {
-        //   return getIngredientWidget(ingredient, index);
-        // }
         return getIngredientWidget(ingredient, index);
       },
     );

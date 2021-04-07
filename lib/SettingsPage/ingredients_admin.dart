@@ -5,7 +5,7 @@ import 'ingredient_dialog.dart';
 
 /// The [IngredientsAdmin] widget is a page that allows admin users to create, read, update, and delete (CRUD) ingredients.
 ///
-/// Create: use the text field at the bottom and click "add" to create a new ingredient in the SQL database and the UI.
+/// Create: use the floating action button in the bottom right corner.
 ///         Note that this widget does not check whether the ingredient already exists in the database.
 /// Read:   use the search bar at the top to search for ingredients in the SQL database.
 /// Update: tap on ingredients (represented as TextFields) and edit the ingredient name in the SQL database and the UI.
@@ -26,9 +26,9 @@ class IngredientsAdmin extends StatefulWidget {
 
 class _IngredientsAdminState extends State<IngredientsAdmin> {
   List<Ingredient> ingredients;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    // TODO: implement initState
     ingredients = widget.passedIngredients;
     super.initState();
   }
@@ -36,10 +36,12 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: _buildBar(context),
       body: Center(
         child: SearchIngredients(
           ingredients: widget.passedIngredients,
+          scaffoldKey: scaffoldKey,
         ),
       ),
       floatingActionButton: Builder(

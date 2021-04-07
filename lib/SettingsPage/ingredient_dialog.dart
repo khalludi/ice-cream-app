@@ -46,9 +46,7 @@ class DeleteIngredientDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     String ingredientName = ingredient.name;
     return AlertDialog(
-      title: ingredient == null
-          ? Text('Delete Ingredient?')
-          : Text("Add Ingredient?"),
+      title: Text('Delete Ingredient?'),
       content: Text(
           'Are you sure you want to delete the $ingredientName ingredient?'),
       actions: [
@@ -86,15 +84,14 @@ class _AddIngredientDialogState extends State<AddIngredientDialog> {
       title: Text("Add Ingredient"),
       content: Form(
         key: _formKey,
-        child: Column(children: <Widget>[
-          TextFormField(
-            controller: nameController,
-            validator: (value) {
-              return value.isNotEmpty ? null : 'Invalid field';
-            },
-            decoration: InputDecoration(hintText: 'name'),
-          ),
-        ]),
+        child: TextFormField(
+          controller: nameController,
+          validator: (value) {
+            return value.isNotEmpty ? null : 'Invalid field';
+          },
+          decoration: InputDecoration(hintText: 'name'),
+          maxLines: null,
+        ),
       ),
       actions: [
         TextButton(

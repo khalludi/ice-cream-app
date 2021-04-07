@@ -1,27 +1,71 @@
 import 'package:flutter/material.dart';
+import 'ingredient.dart';
+import 'dart:developer';
+
+/// [IngredientTextField] is a custom TextField widget.
+/// It represents the name of an ingredient. Users can click
+/// to edit the name of an ingredient, and if their change is valid,
+/// their change will be updated in the front-end and in the SQL
+/// database.
 
 class IngredientTextField extends StatefulWidget {
+  final Ingredient ingredient;
+  final int index;
+  Function(Ingredient, int) updateIngredient;
+  final scaffoldKey;
+
   IngredientTextField({
     Key key,
-    this.item,
+    @required this.ingredient,
+    @required this.index,
+    @required this.updateIngredient,
+    @required this.scaffoldKey,
   }) : super(key: key);
-  final String item;
   @override
   _IngredientTextFieldState createState() => _IngredientTextFieldState();
 }
 
 class _IngredientTextFieldState extends State<IngredientTextField> {
-  TextEditingController textEditingController;
+  TextEditingController controller;
+  String ingredientName;
+  final focusNode = FocusNode();
+
   @override
   void initState() {
-    textEditingController = TextEditingController(text: widget.item);
+    ingredientName = widget.ingredient.name;
+    controller = TextEditingController(text: ingredientName);
+    focusNode.addListener(onTextFieldChange);
     super.initState();
+  }
+
+  void onTextFieldChange() async {
+    if (ingredientName == controller.text) return;
+    if (controller.text.isEmpty) {
+      SnackBar snackBar =
+          SnackBar(content: Text('Invalid ingredient! Old name restored.'));
+      widget.scaffoldKey.currentState.showSnackBar(snackBar);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        controller.text = ingredientName;
+        setState(() {});
+      });
+    } else {
+      SnackBar snackBar = SnackBar(content: Text('Updated ingredient!'));
+      widget.scaffoldKey.currentState.showSnackBar(snackBar);
+      ingredientName = controller.text;
+      widget.updateIngredient(
+          Ingredient(
+            name: controller.text,
+            id: widget.ingredient.id,
+          ),
+          widget.index);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: textEditingController,
+      focusNode: focusNode,
+      controller: controller,
       autovalidateMode: AutovalidateMode.always,
       validator: (value) {
         return value.isNotEmpty ? null : 'Invalid field';
@@ -35,7 +79,13 @@ class _IngredientTextFieldState extends State<IngredientTextField> {
           disabledBorder: InputBorder.none,
           contentPadding:
               EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-          hintText: widget.item == "" ? "add new ingredient" : null),
+          hintText: controller.text == "" ? "add new ingredient" : null),
     );
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
   }
 }
