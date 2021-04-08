@@ -116,3 +116,21 @@ paths:
         responses:
           200:
             description: OK
+  /h_advanced:
+       get:
+        summary: Hannah's advanced query.
+        operationId: hAdvanced
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-hAdvanced
+        responses:
+          200:
+            description: OK
+  /a_advanced:
+       get:
+        summary: Anna's advanced query.
+        operationId: aAdvanced
+        x-google-backend:
+          address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-aAdvanced
+        responses:
+          200:
+            description: OK

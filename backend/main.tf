@@ -34,8 +34,8 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 resource "google_vpc_access_connector" "my_connector" {
   provider      = google-beta
-  name          = "hannah-connector"
-  ip_cidr_range = "10.8.0.0/28"
+  name          = "vpc-con"
+  ip_cidr_range = "10.2.0.0/28"
   network       = google_compute_network.private_network.name
 }
 
@@ -170,6 +170,20 @@ resource "google_storage_bucket_object" "archive12" {
   name   = "update_reviews.zip"
   bucket = google_storage_bucket.bucket.name
   source = "./update_reviews.zip"
+}
+
+resource "google_storage_bucket_object" "archive13" {
+  provider = google-beta
+  name   = "h_advanced.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./h_advanced.zip"
+}
+
+resource "google_storage_bucket_object" "archive14" {
+  provider = google-beta
+  name   = "a_advanced.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./a_advanced.zip"
 }
 ######
 #
@@ -448,6 +462,52 @@ resource "google_cloudfunctions_function" "function12" {
 resource "google_cloudfunctions_function_iam_binding" "binding12" {
   provider = google-beta
   cloud_function = google_cloudfunctions_function.function12.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+resource "google_cloudfunctions_function" "function13" {
+  provider = google-beta
+  name        = "function-hAdvanced"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.my_connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive13.name
+  trigger_http          = true
+  entry_point           = "hADVANCED"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding13" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function13.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+resource "google_cloudfunctions_function" "function14" {
+  provider = google-beta
+  name        = "function-aAdvanced"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.my_connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive14.name
+  trigger_http          = true
+  entry_point           = "aADVANCED"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding14" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function14.name
   role = "roles/cloudfunctions.invoker"
   members = [
     "allUsers",

@@ -1,5 +1,5 @@
 /**
- *  Return Ingredients
+ *  Return reviews
  */
 
 const mysql = require('promise-mysql');
@@ -49,8 +49,9 @@ const createPool = async () => {
 
 let pool;
 
-exports.ingredientsSET = async (req, res) => {
+exports.aADVANCED = async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query("UPDATE Ingredients SET ingredient_id = '" +  req.body.ingredient_id + "', name = '"+ req.body.name + "' + WHERE ingredient_id = '" + req.body.oldIngredient_id);
-  res.send("Update Complete!");
+  const talentiQuery = pool.query("SELECT result.product_id, result.brand, AVG(result.stars) as averageRating, COUNT(result.review_id) as numReviews FROM (SELECT  * FROM Reviews WHERE YEAR(date_updated) >= 2019) AS result GROUP BY result.product_id, result.brand HAVING numReviews >= 5 ORDER BY averageRating DESC LIMIT 50;");
+  const output = await talentiQuery;
+  res.send(JSON.stringify(output));
 }
