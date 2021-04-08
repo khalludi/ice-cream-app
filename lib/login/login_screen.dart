@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  bool toProfile = false;
+  int toProfile = 0;
   bool _isLogin = true;
   String _userId;
   String _password;
@@ -33,15 +33,23 @@ class _LoginScreenState extends State<LoginScreen> {
   Authentication auth;
 
   IntCallback onLoginChanged;
+  IntCallback onProfileChanged;
   _LoginScreenState(IntCallback onLoginChanged, Authentication auth) {
     this.onLoginChanged = onLoginChanged;
     this.auth = auth;
   }
 
+  void updateProfileChanged(int newId) {
+    setState(() {
+      toProfile = newId;
+    });
+    print("Updated toProfile to $toProfile\n");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return toProfile ?
-      Profile(auth: auth)
+    return toProfile == 1 ?
+      Profile(auth: auth, profileChanged: updateProfileChanged)
       : Scaffold(
       // appBar: AppBar(title: Text('Login'),),
         backgroundColor: Color(0xFFcfcfcf),
@@ -243,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       if (_userId != null) {
         setState(() {
-          toProfile = true;
+          toProfile = 1;
         });
         // onLoginChanged(1);
         // Navigator.replace(context, PlaceholderWidget(Colors.blueGrey));

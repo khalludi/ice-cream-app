@@ -6,16 +6,20 @@ import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
 import 'package:http/http.dart' as http;
 
+typedef void IntCallback(int id);
+
 class Profile extends StatefulWidget {
   Authentication auth;
-  Profile({this.auth});
+  IntCallback profileChanged;
+  Profile({this.auth, this.profileChanged});
 
   @override
-  _ProfileState createState() => _ProfileState(auth);
+  _ProfileState createState() => _ProfileState(auth, profileChanged);
 }
 
 class _ProfileState extends State<Profile> {
   Authentication auth;
+  IntCallback profileChanged;
 
   Future<String> username;
   Future<String> email;
@@ -24,8 +28,9 @@ class _ProfileState extends State<Profile> {
   final TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
 
-  _ProfileState(Authentication auth) {
+  _ProfileState(Authentication auth, profileChanged) {
     this.auth = auth;
+    this.profileChanged = profileChanged;
   }
 
   @override
@@ -265,7 +270,7 @@ class _ProfileState extends State<Profile> {
           icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
             auth.signOut();
-            // onLoginChanged(0);
+            profileChanged(0);
           },
         ),
       ],
