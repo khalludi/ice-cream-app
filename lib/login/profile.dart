@@ -227,27 +227,19 @@ class _ProfileState extends State<Profile> {
             onLoginChanged(0);
           },
         ),
+        // Settings Page
         IconButton(
           icon: Icon(Icons.more_horiz, color: Colors.white),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SettingsPage(
-                  signOut: signOut,
-                ),
+                builder: (context) => SettingsPage(),
               ),
             );
           },
         ),
       ],
     );
-  }
-
-  void signOut() {
-    final Authentication auth = new Authentication();
-    auth.signOut();
-    onLoginChanged(0);
-    setState(() {});
   }
 }

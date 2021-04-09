@@ -9,7 +9,7 @@ import './ingredients_admin.dart';
 /// Currently it supports two advanced SQL queries.
 
 class StatisticsPage extends StatefulWidget {
-  StatisticsPage({signOut});
+  StatisticsPage();
 
   @override
   _StatisticsPageState createState() => _StatisticsPageState();

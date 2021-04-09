@@ -17,8 +17,7 @@ typedef Callback = Function(int);
 typedef Callback2 = Function(String);
 
 class SettingsPage extends StatefulWidget {
-  Function signOut;
-  SettingsPage({signOut});
+  SettingsPage();
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -133,7 +132,6 @@ class _SettingsPageState extends State<SettingsPage> {
     if (litems[index]['text'] == "Modify Ingredients")
       route = routeIngredients;
     else if (litems[index]['text'] == "Log Out") {
-      widget.signOut();
       Navigator.pop(context);
     } else if (litems[index]['text'] == "View Statistics") {
       route = routeStatistics;
