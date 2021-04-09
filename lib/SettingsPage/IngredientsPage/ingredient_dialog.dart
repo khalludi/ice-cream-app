@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './ingredient.dart';
+import 'ingredient.dart';
 
 /// The [IngredientDialog] widget displays a dialog relating to ingredients.
 /// Currently there are 2 possible dialogs

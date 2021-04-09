@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ice_cream_social/SettingsPage/ingredient.dart';
-import './ingredients_admin.dart';
+import 'package:ice_cream_social/SettingsPage/IngredientsPage/ingredient.dart';
+import 'IngredientsPage/ingredients_admin.dart';
 
 /// The [Statistics] page allows admin users to view statistics about the ice cream data.
 /// Currently it supports two advanced SQL queries.

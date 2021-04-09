@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
-import 'package:ice_cream_social/SettingsPage/ingredient.dart';
-import './ingredients_admin.dart';
+import 'package:flutter/material.dart';
+import 'package:ice_cream_social/SettingsPage/IngredientsPage/ingredient.dart';
+import 'IngredientsPage/ingredients_admin.dart';
 import './statistics.dart';
 
 /// The [Settings] page widget enables the user to change their system preferences.
@@ -26,45 +28,62 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   initState() {
+    // TODO: uncomment out fetchIngredients
+    // fetchIngredients();
     super.initState();
+  }
+
+  Future<Ingredient> fetchIngredients() async {
+    final response =
+        await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return Ingredient.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   }
 
   List<Ingredient> ingredients = [
     Ingredient(
       name: "vanilla",
-      id: 1,
+      ingredient_id: 1,
     ),
     Ingredient(
       name: "chocolate",
-      id: 2,
+      ingredient_id: 2,
     ),
     Ingredient(
       name: "heavy cream",
-      id: 3,
+      ingredient_id: 3,
     ),
     Ingredient(
       name: "almonds",
-      id: 4,
+      ingredient_id: 4,
     ),
     Ingredient(
       name: "peanut butter",
-      id: 5,
+      ingredient_id: 5,
     ),
     Ingredient(
       name: "sugar",
-      id: 6,
+      ingredient_id: 6,
     ),
     Ingredient(
       name: "molasses",
-      id: 7,
+      ingredient_id: 7,
     ),
     Ingredient(
       name: "strawberries",
-      id: 8,
+      ingredient_id: 8,
     ),
     Ingredient(
       name: "skim milk",
-      id: 9,
+      ingredient_id: 9,
     ),
   ];
 
