@@ -104,15 +104,16 @@ app.post('/create-profile', async (req, res) => {
   res.status(201).send(JSON.parse(JSON.stringify(out1)));
 })
 
+// Edit both username AND email
 app.post('/edit-profile', async (req, res) => {
   pool = await createPool();
-  const output = await pool.query('SELECT username FROM Users WHERE email = "' + req.oldEmail + '"');
+  const output = await pool.query('SELECT * FROM Users WHERE email = "' + req.body.oldEmail + '"');
   if (output.length <= 0) {
     return res.status(400).send("User not found");
   }
 
   const out3 = await pool.query('SELECT * FROM Users WHERE username = "' + req.body.username +
-                                                          '", email = "' + req.body.email+'"');
+                                                          '" OR email = "' + req.body.email+'"');
   if (out3.length > 0) {
     return res.status(401).send("Username or Email already exists");
   }
@@ -121,6 +122,12 @@ app.post('/edit-profile', async (req, res) => {
                   "', email = '" + req.body.email + "' WHERE username = '" + output[0]["username"]+"'");
 
   res.status(200).send(JSON.parse(JSON.stringify(out2)));
+})
+
+app.delete('/delete-profile', async (req, res) => {
+  pool = await createPool();
+  const output = await pool.query('DELETE FROM Users WHERE username = "' + req.body.username + '"')
+  res.status(200).send({});
 })
 
 app.listen(port, () => {

@@ -55,4 +55,28 @@ class Authentication {
     User user = _firebaseAuth.currentUser;
     return user.email;
   }
+
+  Future<String> updateEmail(String newEmail) async {
+    if (_initialization ==  null) {
+      _initialization = await Firebase.initializeApp();
+      _firebaseAuth = FirebaseAuth.instance;
+    }
+    User user = _firebaseAuth.currentUser;
+    try {
+      await user.updateEmail(newEmail);
+      return newEmail;
+    } catch (error) {
+      print(error);
+      return error;
+    }
+  }
+
+  deleteUser() async {
+    if (_initialization ==  null) {
+      _initialization = await Firebase.initializeApp();
+      _firebaseAuth = FirebaseAuth.instance;
+    }
+    _firebaseAuth.currentUser.delete();
+    _firebaseAuth.signOut();
+  }
 }

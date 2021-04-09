@@ -266,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<http.Response> createUser(String username, String email) {
     return http.post(
-      Uri.http('127.0.0.1:3000', 'create-profile'),
+      Uri.http('10.0.2.2:3000', 'create-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

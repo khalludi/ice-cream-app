@@ -21,6 +21,9 @@ class _ProfileState extends State<Profile> {
   Authentication auth;
   IntCallback profileChanged;
 
+  String oldUsername;
+  String oldEmail;
+
   Future<String> username;
   Future<String> email;
   String title = '';
@@ -50,6 +53,8 @@ class _ProfileState extends State<Profile> {
     setState(() {
       txtUsername.text = obj[0]["username"];
       txtEmail.text = queryParameters["email"];
+      oldUsername = obj[0]["username"];
+      oldEmail = queryParameters["email"];
       title = obj[0]["username"];
     });
 
@@ -187,7 +192,7 @@ class _ProfileState extends State<Profile> {
     return Padding(
         padding: EdgeInsets.only(top: 20, left: 60, right: 60, bottom: 20),
         child: GestureDetector(
-          onTap: () {},
+          onTap: sendEdit,
           child: Container(
             padding: EdgeInsets.only(top: 10, bottom: 8),
             decoration: BoxDecoration(
@@ -212,12 +217,49 @@ class _ProfileState extends State<Profile> {
         ));
   }
 
+  void sendEdit() async {
+    String ret = await auth.updateEmail(txtEmail.text);
+    if (ret != txtEmail.text) {
+      print("It didn't work! $ret\n");
+      return;
+    }
+
+    var response = await editProfileDB(txtUsername.text, txtEmail.text, oldEmail);
+    if (response.statusCode != 200) {
+      await auth.updateEmail(oldEmail);
+      print(response.statusCode);
+      print(response.body);
+      print(oldEmail);
+      return;
+    }
+
+    oldEmail = txtEmail.text;
+    oldUsername = txtUsername.text;
+    setState(() {
+      title = txtUsername.text;
+    });
+  }
+
+  Future<http.Response> editProfileDB(String username, String email, String oldEmail) {
+    return http.post(
+      Uri.http('10.0.2.2:3000', 'edit-profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email,
+        'oldEmail': oldEmail
+      }),
+    );
+  }
+
   Widget deleteButton() {
     String buttonText = 'DELETE PROFILE';
     return Padding(
         padding: EdgeInsets.only(left: 60, right: 60, bottom: 20),
         child: GestureDetector(
-          onTap: () {},
+          onTap: deleteProfile,
           child: Container(
             padding: EdgeInsets.only(top: 10, bottom: 8),
             decoration: BoxDecoration(
@@ -240,6 +282,24 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ));
+  }
+
+  void deleteProfile() async {
+    await deleteProfileDB(oldUsername);
+    auth.deleteUser();
+    profileChanged(0);
+  }
+
+  Future<http.Response> deleteProfileDB(String username) {
+    return http.delete(
+      Uri.http('10.0.2.2:3000', 'delete-profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username
+      }),
+    );
   }
 
   Widget _buildBar(BuildContext context) {
