@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'ingredient.dart';
 import 'search_ingredients.dart';
 import 'ingredient_dialog.dart';
@@ -14,10 +18,9 @@ import 'ingredient_dialog.dart';
 typedef Callback = Function(int);
 
 class IngredientsAdmin extends StatefulWidget {
-  final List<Ingredient> passedIngredients;
+  // final List<Ingredient> passedIngredients;
   IngredientsAdmin({
     Key key,
-    @required this.passedIngredients,
   });
 
   @override
@@ -25,22 +28,73 @@ class IngredientsAdmin extends StatefulWidget {
 }
 
 class _IngredientsAdminState extends State<IngredientsAdmin> {
+  Future<List<Ingredient>> futureIngredients;
   List<Ingredient> ingredients;
+  String url = '192.168.0.7:8080';
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    ingredients = widget.passedIngredients;
+    futureIngredients = fetchIngredients();
     super.initState();
+  }
+
+  Future<List<Ingredient>> fetchIngredients() async {
+    // final response =
+    //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+    final response = await http
+        .get(Uri.http(url, "/"), headers: {"Accept": "application/json"});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var rest = data['ingredients'] as List;
+      List<Ingredient> ingredients =
+          (rest).map((i) => Ingredient.fromJson(i)).toList();
+      log("ingredient 0: " + ingredients[0].name);
+      return ingredients;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      log("Error!!");
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    print("build run");
+    return FutureBuilder<List<Ingredient>>(
+      future: futureIngredients,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          ingredients = snapshot.data;
+          return buildScaffold(context);
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            key: scaffoldKey,
+            appBar: _buildBar(context),
+            body: Center(
+              child: Text("Error getting ingredients data"),
+            ),
+          );
+        }
+        // By default, show a loading spinner.
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: _buildBar(context),
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+
+  Widget buildScaffold(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: _buildBar(context),
       body: Center(
         child: SearchIngredients(
-          ingredients: widget.passedIngredients,
+          ingredients: ingredients,
           scaffoldKey: scaffoldKey,
         ),
       ),

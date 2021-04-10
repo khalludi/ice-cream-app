@@ -70,7 +70,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       context: context,
       builder: (_) => IngredientDialog(
         context: context,
-        ingredient: widget.ingredients[index],
+        ingredient: ingredients[index],
       ),
     );
     if (result[1] == DialogAction.Delete.index) deleteIngredient(index);
@@ -89,10 +89,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   }
 
   void deleteIngredient(int index) {
-    log("delete ingredient w name:" + ingredients[index].name);
-    // ingredients = List.from(ingredients)..removeAt(index);
     ingredients.removeAt(index);
-    log("new ingredient length: " + ingredients.length.toString());
     setState(() {});
     ingredients.forEach((element) {
       log(element.name);
@@ -106,8 +103,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
 
   @override
   Widget build(BuildContext context) {
-    print("build run");
-    // make dynamic list of TextEditingControllers
     return SearchBar<Ingredient>(
       key: Key(ingredients.length.toString()),
       searchBarPadding: const EdgeInsets.symmetric(

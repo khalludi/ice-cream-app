@@ -28,66 +28,10 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   initState() {
-    // TODO: uncomment out fetchIngredients
-    // fetchIngredients();
     super.initState();
   }
 
-  Future<Ingredient> fetchIngredients() async {
-    final response =
-        await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return Ingredient.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
-
-  List<Ingredient> ingredients = [
-    Ingredient(
-      name: "vanilla",
-      ingredient_id: 1,
-    ),
-    Ingredient(
-      name: "chocolate",
-      ingredient_id: 2,
-    ),
-    Ingredient(
-      name: "heavy cream",
-      ingredient_id: 3,
-    ),
-    Ingredient(
-      name: "almonds",
-      ingredient_id: 4,
-    ),
-    Ingredient(
-      name: "peanut butter",
-      ingredient_id: 5,
-    ),
-    Ingredient(
-      name: "sugar",
-      ingredient_id: 6,
-    ),
-    Ingredient(
-      name: "molasses",
-      ingredient_id: 7,
-    ),
-    Ingredient(
-      name: "strawberries",
-      ingredient_id: 8,
-    ),
-    Ingredient(
-      name: "skim milk",
-      ingredient_id: 9,
-    ),
-  ];
-
-  List<Map<String, Object>> litems = [
+  List<Map<String, Object>> settingOptions = [
     {
       'text': "Admin",
       'isTitle': true,
@@ -148,36 +92,32 @@ class _SettingsPageState extends State<SettingsPage> {
   void handleRoute(int index) {
     Widget Function() route;
 
-    if (litems[index]['text'] == "Modify Ingredients")
+    if (settingOptions[index]['text'] == "Modify Ingredients")
       route = routeIngredients;
-    else if (litems[index]['text'] == "Log Out") {
+    else if (settingOptions[index]['text'] == "Log Out") {
       Navigator.pop(context);
-    } else if (litems[index]['text'] == "View Statistics") {
+    } else if (settingOptions[index]['text'] == "View Statistics") {
       route = routeStatistics;
     }
     if (route != null)
       Navigator.push(context, CupertinoPageRoute(builder: (_) => route()));
   }
 
-  // routeIngredients returns
   Widget routeIngredients() {
-    return IngredientsAdmin(
-      passedIngredients: ingredients,
-    );
+    return IngredientsAdmin();
   }
 
-  // routeIngredients returns
   Widget routeStatistics() {
     return StatisticsPage();
   }
 
   Widget buildBody(BuildContext ctxt, int index) {
-    bool shouldIncludeIcon = litems[index]['text'] != 'Log Out';
-    if (litems[index]['isTitle']) {
+    bool shouldIncludeIcon = settingOptions[index]['text'] != 'Log Out';
+    if (settingOptions[index]['isTitle']) {
       return Padding(
         padding: const EdgeInsets.only(left: 20.0, top: 10.0),
         child: Text(
-          litems[index]['text'],
+          settingOptions[index]['text'],
           style: TextStyle(
             fontSize: 24,
             fontFamily: 'Nexa',
@@ -206,7 +146,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Container(
                     margin: const EdgeInsets.only(left: 10.0),
                     child: Text(
-                      litems[index]['text'],
+                      settingOptions[index]['text'],
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -232,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: _buildBar(context),
       body: new ListView.builder(
-        itemCount: litems.length,
+        itemCount: settingOptions.length,
         itemBuilder: (BuildContext ctxt, int index) => buildBody(ctxt, index),
       ),
     );
