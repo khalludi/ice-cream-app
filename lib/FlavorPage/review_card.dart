@@ -71,7 +71,7 @@ class _ReviewCardState extends State<ReviewCard> {
                   ),
                 ),
                 Text(
-                  getFormattedDate(widget.review.date),
+                  getFormattedDate(widget.review.date_updated),
                   style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.black,
@@ -96,7 +96,8 @@ class _ReviewCardState extends State<ReviewCard> {
                   onRated: (v) {},
                   starCount: 5,
                   size: 20.0,
-                  rating: widget.review.reviewStars.toDouble(),
+                  // rating: widget.review.stars.toDouble(),
+                  rating: 1.5,
                   isReadOnly: true,
                   color: Colors.green,
                   borderColor: Colors.green,
@@ -106,7 +107,7 @@ class _ReviewCardState extends State<ReviewCard> {
             ),
             SizedBox(height: 6.0),
             Text(
-              widget.review.text,
+              widget.review.review_text,
               style: TextStyle(
                 fontSize: 14.0,
               ),
@@ -115,8 +116,8 @@ class _ReviewCardState extends State<ReviewCard> {
               alignment: Alignment(0.8, -1.0),
               heightFactor: 0.5,
               child: Visibility(
-                visible: (widget.review.isEditable != null)
-                    ? widget.review.isEditable
+                visible: (widget.review.is_editable != null)
+                    ? widget.review.is_editable
                     : true,
                 child: FloatingActionButton(
                   onPressed: () => widget.createEditDialog(widget.index),

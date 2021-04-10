@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import './review.dart';
 
+enum DialogAction { Add, Edit, Delete }
+
 /// The [ReviewDialog] widget displays a dialog to add or edit a review.
 /// Widgets like [AddReviewDialog] and [EditReviewDialog] widgets should extend this class.
 /// To use the international package, update pubspec.yaml, navigate to project folder, and run "flutter packages get".
@@ -29,7 +31,8 @@ class ReviewDialogState extends State<ReviewDialog> {
   void initState() {
     titleController.text = widget.review != null ? widget.review.title : "";
     authorController.text = widget.review != null ? widget.review.author : "";
-    textController.text = widget.review != null ? widget.review.text : "";
+    textController.text =
+        widget.review != null ? widget.review.review_text : "";
     super.initState();
   }
 
@@ -54,7 +57,7 @@ class ReviewDialogState extends State<ReviewDialog> {
                 this.rating = v;
               },
               starCount: 5,
-              rating: widget.review != null ? widget.review.reviewStars : 5.0,
+              rating: widget.review != null ? widget.review.stars : 5.0,
               size: 40.0,
               isReadOnly: false,
               color: Colors.green,
@@ -93,7 +96,7 @@ class ReviewDialogState extends State<ReviewDialog> {
                   child: Text('Delete Review'),
                   onPressed: () {
                     Navigator.pop(
-                        context, [widget.review, 2]); // 2 = delete review
+                        context, [widget.review, DialogAction.Delete]);
                   },
                 ),
               ),
@@ -109,18 +112,24 @@ class ReviewDialogState extends State<ReviewDialog> {
                   var formatter = new DateFormat('yyyy-MM-dd');
                   String formattedDate = formatter.format(currentTime);
                   Review newReview = Review(
-                      author: authorController.text,
-                      text: textController.text,
-                      title: titleController.text,
-                      reviewStars: rating,
-                      helpfulYes: 0,
-                      helpfulNo: 0,
-                      date: formattedDate,
-                      isEditable: true);
+                    author: authorController.text,
+                    review_text: textController.text,
+                    title: titleController.text,
+                    stars: rating,
+                    helpful_yes: 0,
+                    helpful_no: 0,
+                    date_updated: formattedDate,
+                    is_editable: true,
+                  );
                   widget.review == null
-                      ? Navigator.pop(context, [newReview, 0])
-                      : Navigator.pop(context,
-                          [newReview, 1]); // 0 = new review, 1 = edit review
+                      ? Navigator.pop(
+                          context,
+                          [newReview, DialogAction.Add],
+                        )
+                      : Navigator.pop(
+                          context,
+                          [newReview, DialogAction.Edit],
+                        ); // 0 = new review, 1 = edit review
                 }
               },
             ),

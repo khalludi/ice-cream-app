@@ -47,19 +47,47 @@ class _FlavorPageState extends State<FlavorPage> {
     super.initState();
   }
 
+  //  @override
+  // initState() {
+  //   // futureReviews = fetchReviews();
+  //   super.initState();
+  // }
+
+  // Future<List<Review>> fetchReviews() async {
+  //   // final response =
+  //   //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+  //   final response = await http.get(
+  //       Uri.http(url, "reviews"), //TODO: pass in specific brand and productId
+  //       headers: {"Accept": "application/json"});
+
+  //   if (response.statusCode == 200) {
+  //     log("got something");
+  //     var data = json.decode(response.body);
+  //     var rest = data['reviews'] as List;
+  //     List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
+  //     log("review 0, author: " + reviews[0].author);
+  //     return reviews;
+  //   } else {
+  //     // If the server did not return a 200 OK response,
+  //     // then throw an exception.
+  //     log("Error:(");
+  //   }
+  //   return null;
+  // }
+
   void addReview(review) {
     hasAddedReview = true;
     reviews.insert(
         0,
         Review(
-            date: review.date,
+            date_updated: review.date,
             author: review.author,
             title: review.title,
-            text: review.text,
-            reviewStars: review.reviewStars,
-            helpfulNo: review.helpfulNo,
-            helpfulYes: review.helpfulYes,
-            isEditable: true));
+            review_text: review.text,
+            stars: review.reviewStars,
+            helpful_no: review.helpfulNo,
+            helpful_yes: review.helpfulYes,
+            is_editable: true));
     setState(() {});
   }
 
@@ -82,14 +110,14 @@ class _FlavorPageState extends State<FlavorPage> {
 
   void editReview(newReview, index) {
     reviews[index] = Review(
-      date: newReview.date,
+      date_updated: newReview.date,
       author: newReview.author,
       title: newReview.title,
-      text: newReview.text,
-      reviewStars: newReview.reviewStars,
-      helpfulNo: newReview.helpfulNo,
-      helpfulYes: newReview.helpfulYes,
-      isEditable: newReview.isEditable,
+      review_text: newReview.text,
+      stars: newReview.reviewStars,
+      helpful_no: newReview.helpfulNo,
+      helpful_yes: newReview.helpfulYes,
+      is_editable: newReview.isEditable,
     );
     setState(() {});
   }
@@ -126,12 +154,12 @@ class _FlavorPageState extends State<FlavorPage> {
               (review) => Review(
                 author: review.author,
                 title: review.title,
-                date: review.date,
-                reviewStars: review.reviewStars,
-                text: review.text,
-                helpfulYes: review.helpfulYes,
-                helpfulNo: review.helpfulNo,
-                isEditable: review.isEditable,
+                date_updated: review.date_updated,
+                stars: review.stars,
+                review_text: review.review_text,
+                helpful_yes: review.helpful_yes,
+                helpful_no: review.helpful_no,
+                is_editable: review.is_editable,
               ),
             )
             .toList(),
