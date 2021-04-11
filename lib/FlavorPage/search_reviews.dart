@@ -22,8 +22,8 @@ class SearchReviews extends StatelessWidget {
   Future<List<Review>> searchReviews(String query) async {
     var queryParameters = {
       'productId': productId,
-      'brandId': brandId,
-      'query': query,
+      'brand': brandId,
+      'text': query,
     };
 
     final response = await http.get(

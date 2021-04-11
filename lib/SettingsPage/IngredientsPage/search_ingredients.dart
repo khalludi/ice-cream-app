@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'ingredient.dart';
 import 'ingredient_dialog.dart';
 import 'ingredient_textfield.dart';
@@ -28,6 +31,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   List<TextFormField> textFields;
   SearchBar<Ingredient> searchBar;
   bool isUsingSearchBar;
+  String url = '192.168.0.7:8080';
 
   @override
   initState() {
@@ -76,11 +80,28 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     if (result[1] == DialogAction.Delete.index) deleteIngredient(index);
   }
 
-  Future<List<Ingredient>> search(String search) async {
+  Future<List<Ingredient>> search(String query) async {
     isUsingSearchBar = true;
-    log("isUsingSearchBar: " + isUsingSearchBar.toString());
     await Future.delayed(Duration(seconds: 2));
-    return ingredients.sublist(1, 3);
+    final response = await http.get(
+        Uri.http(
+          url,
+          "ingredients/hazelnuts",
+        ),
+        headers: {"Accept": "application/json"});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var rest = data['ingredients'] as List;
+      List<Ingredient> ingredients =
+          (rest).map((i) => Ingredient.fromJson(i)).toList();
+      return ingredients;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      log("Error!!");
+    }
+    return null;
   }
 
   void addIngredient(Ingredient ingredient) {
@@ -88,12 +109,29 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     setState(() {});
   }
 
-  void deleteIngredient(int index) {
+  void deleteIngredient(int index) async {
+    await deleteIngredientFromDatabase(ingredients[index]);
     ingredients.removeAt(index);
     setState(() {});
-    ingredients.forEach((element) {
-      log(element.name);
-    });
+  }
+
+  void deleteIngredientFromDatabase(Ingredient ingredient) async {
+    String url = '192.168.0.7:8080';
+    var queryParameters = {
+      'ingredient_id': '100',
+    };
+    String ingredient_id = ingredient.ingredient_id.toString();
+    http.Response response = await http.delete(
+      Uri.http(
+        url,
+        "ingredients/$ingredient_id",
+        queryParameters,
+      ),
+      headers: {"Accept": "application/json"},
+    );
+    log("delete ingredient response body: " + response.body);
+    if (response.statusCode == 200) {
+    } else {}
   }
 
   void updateIngredient(Ingredient editedIngredient, int index) {

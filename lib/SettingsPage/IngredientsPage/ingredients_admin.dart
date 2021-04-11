@@ -42,15 +42,14 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> fetchIngredients() async {
     // final response =
     //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-    final response = await http
-        .get(Uri.http(url, "/"), headers: {"Accept": "application/json"});
+    final response = await http.get(Uri.http(url, "ingredients"),
+        headers: {"Accept": "application/json"});
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       var rest = data['ingredients'] as List;
       List<Ingredient> ingredients =
           (rest).map((i) => Ingredient.fromJson(i)).toList();
-      log("ingredient 0: " + ingredients[0].name);
       return ingredients;
     } else {
       // If the server did not return a 200 OK response,
@@ -143,5 +142,26 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   void addIngredient(Ingredient ingredient) {
     ingredients.add(ingredient);
     setState(() {});
+    addIngredientToDatabase(ingredient);
+  }
+
+  void addIngredientToDatabase(Ingredient ingredient) async {
+    var data = {
+      'ingredient_id': '100',
+      'name': ingredient.name,
+    };
+    String body = json.encode(data);
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "ingredients",
+      ),
+      headers: {"Accept": "application/json"},
+      body: body,
+    );
+    log("addIngredient response body: " + response.body);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+    } else {}
   }
 }

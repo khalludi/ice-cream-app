@@ -7,6 +7,7 @@ import 'dart:developer';
 import 'flavor_info.dart';
 import 'review.dart';
 import 'review_dialog.dart';
+import 'package:intl/intl.dart';
 
 /// The [FlavorPage] widget describes the screen representing an ice cream flavor, all of its reviews,
 /// and a floating action button. The floating action button triggers a fab which allows the user to
@@ -46,34 +47,41 @@ class FlavorPage extends StatefulWidget {
 class _FlavorPageState extends State<FlavorPage> {
   Future<List<Review>> futureReviews;
   List<Review> reviews;
+  String brandId;
   bool hasAddedReview = false;
   String url = '192.168.0.7:8080';
+  Map<String, String> brandIdMap = {
+    'Breyers': 'breyers',
+    'Ben & Jerry\'s': 'bj',
+    'Talenti': 'talenti',
+    'Haagen Daaz': 'hd',
+  };
 
   @override
   void initState() {
     futureReviews = fetchReviews();
-    // reviews = widget.passedReviews;
+    brandId = brandIdMap[widget.brand];
     super.initState();
   }
 
   Future<List<Review>> fetchReviews() async {
-    // final response =
-    //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+    var queryParameters = {
+      'productId': widget.productId,
+      'brand': brandId,
+    };
     final response = await http.get(
-        Uri.http(url, "reviews"), //TODO: pass in specific brand and productId
-        headers: {"Accept": "application/json"});
-
+      Uri.http(
+        url,
+        "reviews",
+      ),
+      headers: {"Accept": "application/json"},
+    );
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       var rest = data['reviews'] as List;
-      Review review = Review.fromJson(rest[0]);
       List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
       return reviews;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      log("Error:(");
-    }
+    } else {}
     return null;
   }
 
@@ -92,12 +100,42 @@ class _FlavorPageState extends State<FlavorPage> {
         is_editable: true,
       ),
     );
-    log("length of reviews: " + reviews.length.toString());
-    log("review 0: " + reviews[0].review_text);
-    log("has added review: " + hasAddedReview.toString());
     setState(() {});
     final snackBar = SnackBar(content: Text('Added review!'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    addReviewToDatabase(review);
+  }
+
+  void addReviewToDatabase(review) async {
+    log("add review to database");
+    Map data = {
+      'review_id': 100,
+      'product_id': widget.productId,
+      'brand': brandId,
+      'author': review.author,
+      // TODO: figure out datetime stuff
+      'date_updated': DateFormat('yyyy-mm-dd').format(review.date_updated),
+      'stars': review.stars,
+      'helpful_yes': review.helpful_yes,
+      'helpful_no': review.helpful_no,
+    };
+    String body = json.encode(data);
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "/reviews",
+      ),
+      headers: {"Accept": "application/json"},
+      body: body,
+    );
+    log("addReview response body: " + response.body);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      log("add review: success");
+    } else {
+      log("add review: error");
+    }
   }
 
   void createEditDialog(int index) async {
@@ -106,7 +144,6 @@ class _FlavorPageState extends State<FlavorPage> {
         builder: (_) => ReviewDialog(context: context, review: reviews[index]));
     Review review = result[0];
     int action = result[1];
-    print("flavorpage new review: " + review.author);
     if (action == 1)
       editReview(review, index);
     else if (action == 2) deleteReview(review, index);
@@ -118,6 +155,27 @@ class _FlavorPageState extends State<FlavorPage> {
     setState(() {});
     final snackBar = SnackBar(content: Text('Deleted review!'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    deleteReviewFromDatabase(review);
+  }
+
+  void deleteReviewFromDatabase(Review review) async {
+    String url = '192.168.0.7:8080';
+    var queryParameters = {
+      'review_id': review.review_id,
+      'brand': brandIdMap[review.brand],
+    };
+    http.Response response = await http.delete(
+      Uri.http(
+        url,
+        "reviews/${review.review_id}",
+        queryParameters,
+      ),
+      headers: {"Accept": "application/json"},
+    );
+    log("delete review response body: " + response.body);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+    } else {}
   }
 
   void editReview(newReview, index) {
@@ -148,7 +206,7 @@ class _FlavorPageState extends State<FlavorPage> {
           return Scaffold(
             appBar: _buildBar(context),
             body: Center(
-              child: Text("Error getting reviews data"),
+              child: Text("Error getting reviews"),
             ),
           );
         }
