@@ -54,7 +54,6 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      log("Error!!");
     }
     return null;
   }
