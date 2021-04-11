@@ -11,10 +11,12 @@ typedef Callback = Function(int);
 class ReviewCard extends StatefulWidget {
   final Review review;
   final int index;
+  final bool allowEditing;
   final Callback createEditDialog;
   ReviewCard({
     @required this.review,
     @required this.index,
+    @required this.allowEditing,
     this.createEditDialog,
   });
 
@@ -117,7 +119,7 @@ class _ReviewCardState extends State<ReviewCard> {
               heightFactor: 0.5,
               child: Visibility(
                 visible: (widget.review.is_editable != null)
-                    ? widget.review.is_editable
+                    ? widget.review.is_editable && widget.allowEditing
                     : true,
                 child: FloatingActionButton(
                   onPressed: () => widget.createEditDialog(widget.index),

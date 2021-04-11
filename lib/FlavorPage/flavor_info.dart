@@ -1,11 +1,13 @@
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../OldFlavorMain/flavor_image.dart';
 import 'flavor_title.dart';
 import 'review.dart';
 import 'review_card.dart';
 import 'flavor_description.dart';
+import 'search_reviews.dart';
 
 /// The [FlavorInfo] widget consists of the specific ice cream flavor's name, brand, image,
 /// average rating, and reviews. These items are laid out as a column and the
@@ -25,20 +27,16 @@ class FlavorInfo extends StatefulWidget {
   final List<Review> passedReviews;
   final double avgRating;
   final Callback createEditDialog;
-  final Callback2 searchReviews;
-  final VoidCallback undoSearchReviews;
 
-  FlavorInfo(
-      {@required this.flavor,
-      @required this.brand,
-      @required this.description,
-      @required this.flavorImageUrl,
-      @required this.passedReviews,
-      @required this.avgRating,
-      @required this.createEditDialog,
-      @required this.searchReviews,
-      @required this.undoSearchReviews});
-
+  FlavorInfo({
+    @required this.flavor,
+    @required this.brand,
+    @required this.description,
+    @required this.flavorImageUrl,
+    @required this.passedReviews,
+    @required this.avgRating,
+    @required this.createEditDialog,
+  });
   @override
   _FlavorInfoState createState() => _FlavorInfoState();
 }
@@ -61,8 +59,17 @@ class _FlavorInfoState extends State<FlavorInfo> {
   @override
   Widget build(BuildContext context) {
     buildNumber += 1;
-    // log("Rebuild FlavorInfo: $buildNumber times");
     // ListView builder only creates items when the user reaches them
+    return buildReviewList();
+  }
+
+  Widget buildSearchBar() {
+    return SearchReviews(
+      reviews: reviews,
+    );
+  }
+
+  Widget buildReviewList() {
     return ListView.builder(
       itemCount: reviews.length + 1,
       itemBuilder: (context, index) {
@@ -85,26 +92,13 @@ class _FlavorInfoState extends State<FlavorInfo> {
                 ),
               ),
               FlavorDescription(widget.description),
-              Container(
-                color: Colors.lightBlue,
-                // margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                width: MediaQuery.of(context).size.width,
-                height: 20,
-                child: SearchBar(
-                  placeHolder: Text("search review content!"),
-                  onItemFound: (item, int index) {},
-                  onSearch: (String text) {
-                    widget.searchReviews(text);
-                  },
-                  onCancelled: () {
-                    widget.undoSearchReviews();
-                  },
+              Align(
+                // launches search page
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => routeSearchReviews(context),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
               ),
             ],
           );
@@ -112,10 +106,22 @@ class _FlavorInfoState extends State<FlavorInfo> {
           return ReviewCard(
             review: reviews[index - 1],
             index: index - 1,
+            allowEditing: false,
             createEditDialog: widget.createEditDialog,
           );
         }
       },
+    );
+  }
+
+  void routeSearchReviews(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (_) => SearchReviews(
+          reviews: reviews,
+        ),
+      ),
     );
   }
 }

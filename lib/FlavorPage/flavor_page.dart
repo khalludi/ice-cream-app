@@ -78,16 +78,19 @@ class _FlavorPageState extends State<FlavorPage> {
   void addReview(review) {
     hasAddedReview = true;
     reviews.insert(
-        0,
-        Review(
-            date_updated: review.date,
-            author: review.author,
-            title: review.title,
-            review_text: review.text,
-            stars: review.reviewStars,
-            helpful_no: review.helpfulNo,
-            helpful_yes: review.helpfulYes,
-            is_editable: true));
+      0,
+      Review(
+          date_updated: review.date_updated,
+          author: review.author,
+          title: review.title,
+          review_text: review.review_text,
+          stars: review.stars,
+          helpful_no: review.helpful_no,
+          helpful_yes: review.helpful_yes,
+          is_editable: true),
+    );
+    log("length of reviews: " + reviews.length.toString());
+    log("review 0: " + reviews[0].review_text);
     setState(() {});
   }
 
@@ -110,27 +113,15 @@ class _FlavorPageState extends State<FlavorPage> {
 
   void editReview(newReview, index) {
     reviews[index] = Review(
-      date_updated: newReview.date,
+      date_updated: newReview.date_updated,
       author: newReview.author,
       title: newReview.title,
-      review_text: newReview.text,
-      stars: newReview.reviewStars,
-      helpful_no: newReview.helpfulNo,
-      helpful_yes: newReview.helpfulYes,
-      is_editable: newReview.isEditable,
+      review_text: newReview.review_text,
+      stars: newReview.stars,
+      helpful_no: newReview.helpful_no,
+      helpful_yes: newReview.helpful_yes,
+      is_editable: newReview.is_editable,
     );
-    setState(() {});
-  }
-
-  void searchReviews(String query) {
-    // This line should be replaced with a SQL query for all the reviews
-    // containing review_text %LIKE% query.
-    reviews = [reviews[0]];
-    setState(() {});
-  }
-
-  void undoSearchReviews() {
-    reviews = widget.passedReviews;
     setState(() {});
   }
 
@@ -140,10 +131,8 @@ class _FlavorPageState extends State<FlavorPage> {
     log("Rebuild FlavorPage: $buildNumber times");
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        title: Text('CS411 final project'),
-      ),
+      // backgroundColor: Colors.grey[300],
+      appBar: _buildBar(context),
       body: FlavorInfo(
         flavor: widget.flavorName,
         brand: widget.brand,
@@ -165,8 +154,6 @@ class _FlavorPageState extends State<FlavorPage> {
             .toList(),
         avgRating: 1.5,
         createEditDialog: createEditDialog,
-        searchReviews: searchReviews,
-        undoSearchReviews: undoSearchReviews,
       ),
       floatingActionButton: Visibility(
         visible: !hasAddedReview,
@@ -182,6 +169,30 @@ class _FlavorPageState extends State<FlavorPage> {
             },
             child: Icon(Icons.add),
             backgroundColor: Colors.purple,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBar(BuildContext context) {
+    String flavorName = widget.flavorName;
+    return new AppBar(
+      centerTitle: true,
+      title: Text(
+        '$flavorName',
+        style: TextStyle(
+          fontFamily: 'Nexa',
+          fontSize: 30,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[Colors.purple, Colors.blue],
           ),
         ),
       ),

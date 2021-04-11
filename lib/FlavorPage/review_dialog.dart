@@ -39,6 +39,7 @@ class ReviewDialogState extends State<ReviewDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       title: Text("Your review"),
       content: Form(
         key: _formKey,
@@ -46,6 +47,7 @@ class ReviewDialogState extends State<ReviewDialog> {
           children: <Widget>[
             TextFormField(
               controller: authorController,
+              maxLines: null,
               validator: (value) {
                 return value.isNotEmpty ? null : 'Invalid field';
               },
