@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/login/advanced_item.dart';
 import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
 import 'package:http/http.dart' as http;
@@ -75,6 +76,18 @@ class _ProfileState extends State<Profile> {
               editProfileCard(),
               Padding(padding: EdgeInsets.only(top: 14)),
               deleteButton(),
+              Padding(padding: EdgeInsets.only(top: 14)),
+              maxReviewHeader(),
+              Padding(padding: EdgeInsets.only(top: 10)),
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: advancedWidget(),
+                )
+              )
             ],
           ),
         )));
@@ -94,6 +107,23 @@ class _ProfileState extends State<Profile> {
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ))),
+    );
+  }
+
+  Widget maxReviewHeader() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: //Center(
+      Container(
+          padding: EdgeInsets.only(left: 11, right: 10, top: 11, bottom: 8),
+          child: Text('Longest Review Leaderboard',
+              style: TextStyle(
+                fontFamily: 'Nexa',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ))),
     );
   }
 
@@ -299,6 +329,48 @@ class _ProfileState extends State<Profile> {
       body: jsonEncode(<String, String>{
         'username': username
       }),
+    );
+  }
+
+  Future<List<AdvancedItem>> getAdvancedItems() async {
+    var result = await http.get(Uri.http('10.0.2.2:3000', 'advanced-query'));
+    var tagObjsJson = jsonDecode(result.body) as List;
+    List<AdvancedItem> tagObjs = tagObjsJson.map((tagJson) => AdvancedItem.fromJson(tagJson)).toList();
+    return tagObjs;
+  }
+
+  Widget advancedWidget() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          //print('project snapshot data is: ${projectSnap.data}');
+          return Container();
+        }
+        return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: projectSnap.data == null ? 0 : projectSnap.data.length,
+          itemBuilder: (context, index) {
+            AdvancedItem project = projectSnap.data[index];
+            String p1 = project.username;
+            int p2 = project.maxChars;
+            int idx = index+1;
+            return ListTile(
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(" $idx", textAlign: TextAlign.center,),
+                ],
+              ),
+              title: Text(p1),
+              // isThreeLine: true,
+              trailing: Text("$p2"),
+            );
+          },
+        );
+      },
+      future: getAdvancedItems(),
     );
   }
 

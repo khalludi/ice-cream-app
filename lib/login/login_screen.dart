@@ -252,6 +252,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (_userId != null) {
         setState(() {
           toProfile = 1;
+          txtEmail.text = "";
+          txtUsername.text = "";
         });
         // onLoginChanged(1);
         // Navigator.replace(context, PlaceholderWidget(Colors.blueGrey));

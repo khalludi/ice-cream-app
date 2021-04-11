@@ -71,7 +71,7 @@ app.get('/', async (req, res) => {
 app.get('/advanced-query', async (req, res) => {
   pool = await createPool();
 //  const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
-  const talentiQuery = pool.query('SELECT u.email, drv.max_len FROM Users u JOIN (SELECT r.author as author, MAX(LENGTH(r.review_text)) as max_len FROM Reviews r GROUP BY r.author) as drv ON drv.author = u.username ORDER BY drv.max_len DESC LIMIT 15')
+  const talentiQuery = pool.query('SELECT u.username, drv.max_len FROM Users u JOIN (SELECT r.author as author, MAX(LENGTH(r.review_text)) as max_len FROM Reviews r GROUP BY r.author) as drv ON drv.author = u.username ORDER BY drv.max_len DESC LIMIT 15')
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
 })
@@ -124,6 +124,7 @@ app.post('/edit-profile', async (req, res) => {
   res.status(200).send(JSON.parse(JSON.stringify(out2)));
 })
 
+// DONE
 app.delete('/delete-profile', async (req, res) => {
   pool = await createPool();
   const output = await pool.query('DELETE FROM Users WHERE username = "' + req.body.username + '"')
