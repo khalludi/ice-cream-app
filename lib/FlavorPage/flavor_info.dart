@@ -20,6 +20,7 @@ typedef Callback = Function(int);
 typedef Callback2 = Function(String);
 
 class FlavorInfo extends StatefulWidget {
+  final int productId;
   final String flavor;
   final String brand;
   final String description;
@@ -29,6 +30,7 @@ class FlavorInfo extends StatefulWidget {
   final Callback createEditDialog;
 
   FlavorInfo({
+    @required this.productId,
     @required this.flavor,
     @required this.brand,
     @required this.description,
@@ -43,10 +45,18 @@ class FlavorInfo extends StatefulWidget {
 
 class _FlavorInfoState extends State<FlavorInfo> {
   List<Review> reviews;
+  String brandId;
+  Map<String, String> brandIdMap = {
+    'Breyers': 'breyers',
+    'Ben & Jerry\'s': 'bj',
+    'Talenti': 'talenti',
+    'Haagen Daaz': 'hd',
+  };
 
   @override
   initState() {
     reviews = widget.passedReviews;
+    brandId = brandIdMap[widget.brand];
     super.initState();
   }
 
@@ -61,12 +71,6 @@ class _FlavorInfoState extends State<FlavorInfo> {
     buildNumber += 1;
     // ListView builder only creates items when the user reaches them
     return buildReviewList();
-  }
-
-  Widget buildSearchBar() {
-    return SearchReviews(
-      reviews: reviews,
-    );
   }
 
   Widget buildReviewList() {
@@ -106,7 +110,7 @@ class _FlavorInfoState extends State<FlavorInfo> {
           return ReviewCard(
             review: reviews[index - 1],
             index: index - 1,
-            allowEditing: false,
+            allowEditing: true,
             createEditDialog: widget.createEditDialog,
           );
         }
@@ -119,7 +123,8 @@ class _FlavorInfoState extends State<FlavorInfo> {
       context,
       CupertinoPageRoute(
         builder: (_) => SearchReviews(
-          reviews: reviews,
+          productId: widget.productId,
+          brandId: brandId,
         ),
       ),
     );

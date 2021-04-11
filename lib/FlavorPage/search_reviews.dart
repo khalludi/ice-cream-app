@@ -2,22 +2,53 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ice_cream_social/FlavorPage/review.dart';
 import 'package:ice_cream_social/FlavorPage/review_card.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 
 class SearchReviews extends StatelessWidget {
-  const SearchReviews({
+  int productId;
+  int brandId;
+  String url = '192.168.0.7:8080';
+
+  SearchReviews({
     Key key,
-    @required this.reviews,
+    @required productId,
+    @required brandId,
   }) : super(key: key);
 
-  final List<Review> reviews;
+  Future<List<Review>> searchReviews(String query) async {
+    var queryParameters = {
+      'productId': productId,
+      'brandId': brandId,
+      'query': query,
+    };
 
-  List<Review> searchReviews(String query) {
-    // This line should be replaced with a SQL query for all the reviews
-    // containing review_text %LIKE% query.
-    return reviews.sublist(0, 2);
+    final response = await http.get(
+      Uri.http(
+        url,
+        "reviews/test", //TODO: pass in specific brand and productId
+        queryParameters,
+      ),
+      headers: {"Accept": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var rest = data['reviews'] as List;
+      Review review = Review.fromJson(rest[0]);
+      List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
+      await Future.delayed(Duration(seconds: 2));
+      return reviews;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      log("ERROR!!!!");
+    }
+    return null;
   }
-
-  void undoSearchReviews() {}
 
   @override
   Widget build(BuildContext context) {
@@ -62,21 +93,15 @@ class SearchReviews extends StatelessWidget {
         vertical: 10,
       ),
       shrinkWrap: true,
-      suggestions: reviews,
       hintText: "Search review content!",
       onItemFound: (item, int index) {
         return ReviewCard(
-          review: reviews[index],
+          review: item,
           index: index,
           allowEditing: false,
         );
       },
-      onSearch: (String text) {
-        searchReviews(text);
-      },
-      onCancelled: () {
-        undoSearchReviews();
-      },
+      onSearch: searchReviews,
     );
   }
 }

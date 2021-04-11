@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'dart:developer';
 import 'review.dart';
 
 /// The [ReviewCard] widget contains the author, title, date, and content of a review.
@@ -39,6 +40,11 @@ class _ReviewCardState extends State<ReviewCard> {
     '11': 'Nov',
     '12': 'Dec'
   };
+
+  @override
+  initState() {
+    super.initState();
+  }
 
   String getFormattedDate(date) {
     var result = new StringBuffer(_months[date.substring(5, 7)]);
@@ -95,11 +101,9 @@ class _ReviewCardState extends State<ReviewCard> {
                 ),
                 SmoothStarRating(
                   allowHalfRating: true,
-                  onRated: (v) {},
                   starCount: 5,
                   size: 20.0,
-                  // rating: widget.review.stars.toDouble(),
-                  rating: 1.5,
+                  rating: widget.review.stars,
                   isReadOnly: true,
                   color: Colors.green,
                   borderColor: Colors.green,
@@ -122,6 +126,7 @@ class _ReviewCardState extends State<ReviewCard> {
                     ? widget.review.is_editable && widget.allowEditing
                     : true,
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () => widget.createEditDialog(widget.index),
                   child: Icon(Icons.edit),
                 ),

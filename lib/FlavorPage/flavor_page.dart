@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'dart:developer';
 import 'flavor_info.dart';
 import 'review.dart';
@@ -19,6 +23,7 @@ class FlavorPage extends StatefulWidget {
   FlavorPage({
     Key key,
     @required this.flavorName,
+    @required this.productId,
     @required this.brand,
     @required this.description,
     @required this.pngFile,
@@ -27,6 +32,7 @@ class FlavorPage extends StatefulWidget {
   });
 
   final String flavorName;
+  final int productId;
   final String brand;
   final String description;
   final String pngFile;
@@ -38,60 +44,60 @@ class FlavorPage extends StatefulWidget {
 }
 
 class _FlavorPageState extends State<FlavorPage> {
+  Future<List<Review>> futureReviews;
   List<Review> reviews;
   bool hasAddedReview = false;
+  String url = '192.168.0.7:8080';
 
   @override
-  initState() {
-    reviews = widget.passedReviews;
+  void initState() {
+    futureReviews = fetchReviews();
+    // reviews = widget.passedReviews;
     super.initState();
   }
 
-  //  @override
-  // initState() {
-  //   // futureReviews = fetchReviews();
-  //   super.initState();
-  // }
+  Future<List<Review>> fetchReviews() async {
+    // final response =
+    //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+    final response = await http.get(
+        Uri.http(url, "reviews"), //TODO: pass in specific brand and productId
+        headers: {"Accept": "application/json"});
 
-  // Future<List<Review>> fetchReviews() async {
-  //   // final response =
-  //   //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-  //   final response = await http.get(
-  //       Uri.http(url, "reviews"), //TODO: pass in specific brand and productId
-  //       headers: {"Accept": "application/json"});
-
-  //   if (response.statusCode == 200) {
-  //     log("got something");
-  //     var data = json.decode(response.body);
-  //     var rest = data['reviews'] as List;
-  //     List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
-  //     log("review 0, author: " + reviews[0].author);
-  //     return reviews;
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     log("Error:(");
-  //   }
-  //   return null;
-  // }
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var rest = data['reviews'] as List;
+      Review review = Review.fromJson(rest[0]);
+      List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
+      return reviews;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      log("Error:(");
+    }
+    return null;
+  }
 
   void addReview(review) {
     hasAddedReview = true;
     reviews.insert(
       0,
       Review(
-          date_updated: review.date_updated,
-          author: review.author,
-          title: review.title,
-          review_text: review.review_text,
-          stars: review.stars,
-          helpful_no: review.helpful_no,
-          helpful_yes: review.helpful_yes,
-          is_editable: true),
+        date_updated: review.date_updated,
+        author: review.author,
+        title: review.title,
+        review_text: review.review_text,
+        stars: review.stars,
+        helpful_no: review.helpful_no,
+        helpful_yes: review.helpful_yes,
+        is_editable: true,
+      ),
     );
     log("length of reviews: " + reviews.length.toString());
     log("review 0: " + reviews[0].review_text);
+    log("has added review: " + hasAddedReview.toString());
     setState(() {});
+    final snackBar = SnackBar(content: Text('Added review!'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void createEditDialog(int index) async {
@@ -100,6 +106,7 @@ class _FlavorPageState extends State<FlavorPage> {
         builder: (_) => ReviewDialog(context: context, review: reviews[index]));
     Review review = result[0];
     int action = result[1];
+    print("flavorpage new review: " + review.author);
     if (action == 1)
       editReview(review, index);
     else if (action == 2) deleteReview(review, index);
@@ -109,6 +116,8 @@ class _FlavorPageState extends State<FlavorPage> {
     reviews.removeAt(0);
     hasAddedReview = false;
     setState(() {});
+    final snackBar = SnackBar(content: Text('Deleted review!'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void editReview(newReview, index) {
@@ -123,42 +132,56 @@ class _FlavorPageState extends State<FlavorPage> {
       is_editable: newReview.is_editable,
     );
     setState(() {});
+    final snackBar = SnackBar(content: Text('Edited review!'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
-    buildNumber += 1;
-    log("Rebuild FlavorPage: $buildNumber times");
+    return FutureBuilder<List<Review>>(
+      future: futureReviews,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          reviews = snapshot.data;
+          return buildScaffold(context);
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            appBar: _buildBar(context),
+            body: Center(
+              child: Text("Error getting reviews data"),
+            ),
+          );
+        }
+        // By default, show a loading spinner.
+        return Scaffold(
+          appBar: _buildBar(context),
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildScaffold(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // backgroundColor: Colors.grey[300],
       appBar: _buildBar(context),
       body: FlavorInfo(
         flavor: widget.flavorName,
+        productId: widget.productId,
         brand: widget.brand,
         flavorImageUrl: widget.pngFile,
         description: widget.description,
-        passedReviews: reviews
-            .map(
-              (review) => Review(
-                author: review.author,
-                title: review.title,
-                date_updated: review.date_updated,
-                stars: review.stars,
-                review_text: review.review_text,
-                helpful_yes: review.helpful_yes,
-                helpful_no: review.helpful_no,
-                is_editable: review.is_editable,
-              ),
-            )
-            .toList(),
-        avgRating: 1.5,
+        passedReviews: reviews,
+        avgRating: 2.5,
         createEditDialog: createEditDialog,
       ),
       floatingActionButton: Visibility(
         visible: !hasAddedReview,
         child: Builder(
           builder: (context) => FloatingActionButton(
+            heroTag: null,
             onPressed: () async {
               List<Object> result = await showDialog(
                 context: context,

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'dart:developer';
+
 /// The [Review] class describes an ice cream review.
 ///
 /// Qualitative data
@@ -48,12 +51,12 @@ class Review {
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
       review_id: json['review_id'],
-      product_id: json['review_id'],
+      product_id: json['product_id'],
       author: json['author'],
       brand: json['brand'],
       date_updated: json['date_updated'],
       title: json['title'],
-      stars: json['stars'],
+      stars: json['stars'] + .0,
       review_text: json['review_text'],
       helpful_yes: json['helpful_yes'],
       helpful_no: json['helpful_no'],
