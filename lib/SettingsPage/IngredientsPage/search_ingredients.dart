@@ -120,7 +120,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   }
 
   void deleteIngredient(int index) async {
-    await deleteIngredientFromDatabase(ingredients[index]);
+    // await deleteIngredientFromDatabase(ingredients[index]);
     ingredients.removeAt(index);
     setState(() {});
   }

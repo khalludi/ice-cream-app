@@ -144,9 +144,9 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   }
 
   void addIngredient(Ingredient ingredient) {
-    ingredients.add(ingredient);
+    ingredients.insert(0, ingredient);
     setState(() {});
-    addIngredientToDatabase(ingredient);
+    // addIngredientToDatabase(ingredient);
   }
 
   void addIngredientToDatabase(Ingredient ingredient) async {
