@@ -31,7 +31,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   List<TextFormField> textFields;
   SearchBar<Ingredient> searchBar;
   bool isUsingSearchBar;
-  String url = '192.168.0.7:8080';
+  String url = '10.0.2.2:3000';
 
   @override
   initState() {
@@ -82,24 +82,34 @@ class _SearchIngredientsState extends State<SearchIngredients> {
 
   Future<List<Ingredient>> search(String query) async {
     isUsingSearchBar = true;
+    String url = '10.0.2.2:3000';
     await Future.delayed(Duration(seconds: 2));
+
+    String username = 'root';
+    String password = 'testtest';
+    var data = {'search_term': query};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
-        Uri.http(
-          url,
-          "ingredients/hazelnuts",
-        ),
-        headers: {"Accept": "application/json"});
+      Uri.http(
+        url,
+        "ingredients/nameParam",
+        data,
+      ),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+    );
 
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var rest = data['ingredients'] as List;
+      List<dynamic> data = json.decode(response.body);
       List<Ingredient> ingredients =
-          (rest).map((i) => Ingredient.fromJson(i)).toList();
+          (data).map((i) => Ingredient.fromJson(i)).toList();
       return ingredients;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      log("Error!!");
     }
     return null;
   }
@@ -129,7 +139,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       ),
       headers: {"Accept": "application/json"},
     );
-    log("delete ingredient response body: " + response.body);
     if (response.statusCode == 200) {
     } else {}
   }

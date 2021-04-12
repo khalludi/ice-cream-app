@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 class Ingredient {
   String name;
-  int ingredient_id;
+  String ingredient_id;
 
   Ingredient({
     @required this.name,

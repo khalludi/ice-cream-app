@@ -30,7 +30,7 @@ class IngredientsAdmin extends StatefulWidget {
 class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> futureIngredients;
   List<Ingredient> ingredients;
-  String url = '192.168.0.7:8080';
+  String url = '10.0.2.2:3000';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -42,14 +42,19 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> fetchIngredients() async {
     // final response =
     //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-    final response = await http.get(Uri.http(url, "ingredients"),
-        headers: {"Accept": "application/json"});
-
+    String username = 'root';
+    String password = 'testtest';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.http(url, "ingredients"), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+    });
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var rest = data['ingredients'] as List;
+      List<dynamic> data = json.decode(response.body);
+      // var rest = data as List;
       List<Ingredient> ingredients =
-          (rest).map((i) => Ingredient.fromJson(i)).toList();
+          (data).map((i) => Ingredient.fromJson(i)).toList();
       return ingredients;
     } else {
       // If the server did not return a 200 OK response,
@@ -146,21 +151,32 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
 
   void addIngredientToDatabase(Ingredient ingredient) async {
     var data = {
-      'ingredient_id': '100',
+      'ingredient_id': (ingredients.length + 1).toString(),
       'name': ingredient.name,
     };
+    String username = 'root';
+    String password = 'testtest';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
+    log("ingredient post body: " + body);
     http.Response response = await http.post(
       Uri.http(
         url,
         "ingredients",
       ),
-      headers: {"Accept": "application/json"},
+      headers: {
+        // "Accept": "application/json",
+        'authorization': basicAuth,
+      },
       body: body,
     );
     log("addIngredient response body: " + response.body);
     if (response.statusCode == 200) {
+      print("ingredientAdmin success");
       var data = json.decode(response.body);
-    } else {}
+    } else {
+      print("ingredientAdmin fail");
+    }
   }
 }
