@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -7,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'ingredient.dart';
 import 'ingredient_dialog.dart';
 import 'ingredient_textfield.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 /// The [SearchIngredients] widget uses the FlappySearchBar so that the user can search, edit, and
 /// delete ingredients.
@@ -27,18 +29,24 @@ class SearchIngredients extends StatefulWidget {
 
 class _SearchIngredientsState extends State<SearchIngredients> {
   List<Ingredient> ingredients;
-  List<TextEditingController> controllers;
-  List<TextFormField> textFields;
   SearchBar<Ingredient> searchBar;
   bool isUsingSearchBar;
-  String url = '10.0.2.2:3000';
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
 
   @override
   initState() {
-    controllers = [];
-    textFields = [];
     ingredients = widget.ingredients;
     isUsingSearchBar = false;
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
 
     super.initState();
   }
@@ -85,8 +93,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String url = '10.0.2.2:3000';
     await Future.delayed(Duration(seconds: 2));
 
-    String username = 'root';
-    String password = 'testtest';
     var data = {'search_term': query};
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
@@ -145,7 +151,35 @@ class _SearchIngredientsState extends State<SearchIngredients> {
 
   void updateIngredient(Ingredient editedIngredient, int index) {
     ingredients[index] = editedIngredient;
+    // updateIngredientInDatabase(editedIngredient)
     setState(() {});
+  }
+
+  void updateIngredientInDatabase(Ingredient ingredient) async {
+    var data = {
+      'ingredient_id': (ingredients.length + 1).toString(),
+      'name': ingredient.name,
+    };
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String body = json.encode(data);
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "ingredients",
+      ),
+      headers: {
+        // "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      print("ingredientAdmin success");
+      var data = json.decode(response.body);
+    } else {
+      print("ingredientAdmin fail");
+    }
   }
 
   @override

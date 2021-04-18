@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'ingredient.dart';
 import 'search_ingredients.dart';
 import 'ingredient_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 /// The [IngredientsAdmin] widget is a page that allows admin users to create, read, update, and delete (CRUD) ingredients.
 ///
@@ -18,7 +20,6 @@ import 'ingredient_dialog.dart';
 typedef Callback = Function(int);
 
 class IngredientsAdmin extends StatefulWidget {
-  // final List<Ingredient> passedIngredients;
   IngredientsAdmin({
     Key key,
   });
@@ -30,20 +31,26 @@ class IngredientsAdmin extends StatefulWidget {
 class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> futureIngredients;
   List<Ingredient> ingredients;
-  String url = '10.0.2.2:3000';
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
+
   @override
   void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
     futureIngredients = fetchIngredients();
     super.initState();
   }
 
   Future<List<Ingredient>> fetchIngredients() async {
-    // final response =
-    //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-    String username = 'root';
-    String password = 'testtest';
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(Uri.http(url, "ingredients"), headers: {
@@ -65,7 +72,6 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    print("build run");
     return FutureBuilder<List<Ingredient>>(
       future: futureIngredients,
       builder: (context, snapshot) {
@@ -154,12 +160,9 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
       'ingredient_id': (ingredients.length + 1).toString(),
       'name': ingredient.name,
     };
-    String username = 'root';
-    String password = 'testtest';
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
-    log("ingredient post body: " + body);
     http.Response response = await http.post(
       Uri.http(
         url,
@@ -171,7 +174,6 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
       },
       body: body,
     );
-    log("addIngredient response body: " + response.body);
     if (response.statusCode == 200) {
       print("ingredientAdmin success");
       var data = json.decode(response.body);

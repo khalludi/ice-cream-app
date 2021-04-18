@@ -125,6 +125,7 @@ class _FlavorInfoState extends State<FlavorInfo> {
         builder: (_) => SearchReviews(
           productId: widget.productId,
           brandId: brandId,
+          context: context,
         ),
       ),
     );

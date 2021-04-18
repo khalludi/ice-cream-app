@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -8,6 +9,7 @@ import 'flavor_info.dart';
 import 'review.dart';
 import 'review_dialog.dart';
 import 'package:intl/intl.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 /// The [FlavorPage] widget describes the screen representing an ice cream flavor, all of its reviews,
 /// and a floating action button. The floating action button triggers a fab which allows the user to
@@ -28,7 +30,6 @@ class FlavorPage extends StatefulWidget {
     @required this.brand,
     @required this.description,
     @required this.pngFile,
-    @required this.passedReviews,
     @required this.context,
   });
 
@@ -37,7 +38,6 @@ class FlavorPage extends StatefulWidget {
   final String brand;
   final String description;
   final String pngFile;
-  final List<Review> passedReviews;
   final BuildContext context;
 
   @override
@@ -49,18 +49,28 @@ class _FlavorPageState extends State<FlavorPage> {
   List<Review> reviews;
   String brandId;
   bool hasAddedReview = false;
-  String url = '192.168.0.7:8080';
   Map<String, String> brandIdMap = {
     'Breyers': 'breyers',
     'Ben & Jerry\'s': 'bj',
     'Talenti': 'talenti',
     'Haagen Daaz': 'hd',
   };
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
 
   @override
   void initState() {
-    futureReviews = fetchReviews();
     brandId = brandIdMap[widget.brand];
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+    futureReviews = fetchReviews();
     super.initState();
   }
 
@@ -69,17 +79,21 @@ class _FlavorPageState extends State<FlavorPage> {
       'productId': widget.productId,
       'brand': brandId,
     };
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
       Uri.http(
         url,
         "reviews",
       ),
-      headers: {"Accept": "application/json"},
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
     );
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var rest = data['reviews'] as List;
-      List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
+      List<dynamic> data = json.decode(response.body);
+      List<Review> reviews = (data).map((i) => Review.fromJson(i)).toList();
       return reviews;
     } else {}
     return null;
@@ -108,7 +122,6 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void addReviewToDatabase(review) async {
-    log("add review to database");
     Map data = {
       'review_id': 100,
       'product_id': widget.productId,
@@ -129,13 +142,9 @@ class _FlavorPageState extends State<FlavorPage> {
       headers: {"Accept": "application/json"},
       body: body,
     );
-    log("addReview response body: " + response.body);
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      log("add review: success");
-    } else {
-      log("add review: error");
-    }
+    } else {}
   }
 
   void createEditDialog(int index) async {
@@ -159,7 +168,6 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void deleteReviewFromDatabase(Review review) async {
-    String url = '192.168.0.7:8080';
     var queryParameters = {
       'review_id': review.review_id,
       'brand': brandIdMap[review.brand],
@@ -172,7 +180,6 @@ class _FlavorPageState extends State<FlavorPage> {
       ),
       headers: {"Accept": "application/json"},
     );
-    log("delete review response body: " + response.body);
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
     } else {}
@@ -192,6 +199,33 @@ class _FlavorPageState extends State<FlavorPage> {
     setState(() {});
     final snackBar = SnackBar(content: Text('Edited review!'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void editReviewInDatabase(Review review) async {
+    var data = {
+      'review_id': (reviews.length + 1).toString(),
+      'author': review.author,
+    };
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String body = json.encode(data);
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "ingredients",
+      ),
+      headers: {
+        // "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      print("ingredientAdmin success");
+      var data = json.decode(response.body);
+    } else {
+      print("ingredientAdmin fail");
+    }
   }
 
   @override
@@ -257,11 +291,10 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   Widget _buildBar(BuildContext context) {
-    String flavorName = widget.flavorName;
     return new AppBar(
       centerTitle: true,
       title: Text(
-        '$flavorName',
+        '${widget.flavorName}',
         style: TextStyle(
           fontFamily: 'Nexa',
           fontSize: 30,
