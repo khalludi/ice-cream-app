@@ -8,12 +8,57 @@ schemes:
 produces:
   - application/json
 paths:
-  /reviews:
-    get:
-      summary: Returns a list of reviews.
-      operationId: getReviews
+  /create-profile:
+    post:
+      summary: Returns the specified user profile
+      operationId: createProfile
       x-google-backend:
-        address: https://us-central1-test-sql-project-305022.cloudfunctions.net/function-test
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-profile
+      responses:
+        201:
+          description: Profile created
+  /get-profile:
+    get:
+      summary: Returns the specified user profile
+      operationId: getProfile
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-profile
+      responses:
+        200:
+          description: OK
+  /edit-profile:
+    post:
+      summary: Edits the profile if it exists
+      operationId: editProfile
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-edit-profile
+      responses:
+        200:
+          description: Profile edited
+  /delete-profile:
+    delete:
+      summary: Deletes the profile if it exists
+      operationId: deleteProfile
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-profile
+      responses:
+        200:
+          description: Profile deleted
+  /reviews-adv-query:
+    get:
+      summary: Returns advanced query of reviews.
+      operationId: getAdvQuery
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-user-adv-query
+      responses:
+        200:
+          description: OK
+  /user-search:
+    get:
+      summary: Returns users that match search query
+      operationId: searchUsers
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-user-search
       responses:
         200:
           description: OK

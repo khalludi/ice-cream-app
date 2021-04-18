@@ -50,9 +50,8 @@ const createPool = async () => {
 
 let pool;
 
-exports.reviewsGET = async (req, res) => {
+exports.usersAdvQuery = async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
-  const output = await talentiQuery;
-  res.send(JSON.parse(JSON.stringify(output)));
+  const out = await pool.query("SELECT username FROM Users WHERE email = '" + req.query.email +"'");
+  res.status(200).send(JSON.parse(JSON.stringify(out)));
 }
