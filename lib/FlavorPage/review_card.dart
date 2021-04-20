@@ -47,10 +47,11 @@ class _ReviewCardState extends State<ReviewCard> {
   }
 
   String getFormattedDate(date) {
-    var result = new StringBuffer(_months[date.substring(5, 7)]);
-    result.write(' ');
-    result.write(date.substring(0, 4));
-    return result.toString();
+    // var result = new StringBuffer(_months[date.substring(5, 7)]);
+    // result.write(' ');
+    // result.write(date.substring(0, 4));
+    // return result.toString();
+    return "";
   }
 
   @override

@@ -2,50 +2,72 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ice_cream_social/FlavorPage/review.dart';
 import 'package:ice_cream_social/FlavorPage/review_card.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
-class SearchReviews extends StatelessWidget {
+class SearchReviews extends StatefulWidget {
   int productId;
   int brandId;
-  String url = '192.168.0.7:8080';
-
+  BuildContext context;
   SearchReviews({
     Key key,
     @required productId,
     @required brandId,
+    @required context,
   }) : super(key: key);
 
-  Future<List<Review>> searchReviews(String query) async {
-    var queryParameters = {
-      'productId': productId,
-      'brand': brandId,
-      'text': query,
-    };
+  @override
+  _SearchReviewsState createState() => _SearchReviewsState();
+}
 
+class _SearchReviewsState extends State<SearchReviews> {
+  int productId;
+  int brandId;
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
+
+  @override
+  void initState() {
+    brandId = widget.brandId;
+    productId = widget.productId;
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+    super.initState();
+  }
+
+  Future<List<Review>> searchReviews(String query) async {
+    var data = {'search_term': query};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
       Uri.http(
         url,
-        "reviews/test", //TODO: pass in specific brand and productId
-        queryParameters,
+        "reviews/text",
+        data,
       ),
-      headers: {"Accept": "application/json"},
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
     );
-
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var rest = data['reviews'] as List;
-      Review review = Review.fromJson(rest[0]);
-      List<Review> reviews = (rest).map((i) => Review.fromJson(i)).toList();
-      await Future.delayed(Duration(seconds: 2));
-      return reviews;
+      List<dynamic> data = json.decode(response.body);
+      List<Review> ingredients = (data).map((i) => Review.fromJson(i)).toList();
+      return ingredients;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      log("ERROR!!!!");
     }
     return null;
   }
