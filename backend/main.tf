@@ -281,7 +281,7 @@ resource "google_cloudfunctions_function_iam_binding" "binding7" {
 }
 
 output "function_url" {
-  value = google_cloudfunctions_function.function.https_trigger_url
+  value = google_cloudfunctions_function.function2.https_trigger_url
 }
 
 ######
