@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import './review.dart';
+
+enum DialogAction { Add, Edit, Delete }
 
 /// The [ReviewDialog] widget displays a dialog to add or edit a review.
 /// Widgets like [AddReviewDialog] and [EditReviewDialog] widgets should extend this class.
@@ -22,20 +25,23 @@ class ReviewDialogState extends State<ReviewDialog> {
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
   TextEditingController textController = TextEditingController();
-  double rating = 3;
+  double rating;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     titleController.text = widget.review != null ? widget.review.title : "";
     authorController.text = widget.review != null ? widget.review.author : "";
-    textController.text = widget.review != null ? widget.review.text : "";
+    textController.text =
+        widget.review != null ? widget.review.review_text : "";
+    rating = widget.review != null ? widget.review.stars : 5.0;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       title: Text("Your review"),
       content: Form(
         key: _formKey,
@@ -43,6 +49,7 @@ class ReviewDialogState extends State<ReviewDialog> {
           children: <Widget>[
             TextFormField(
               controller: authorController,
+              maxLines: null,
               validator: (value) {
                 return value.isNotEmpty ? null : 'Invalid field';
               },
@@ -51,10 +58,10 @@ class ReviewDialogState extends State<ReviewDialog> {
             SmoothStarRating(
               allowHalfRating: true,
               onRated: (v) {
-                this.rating = v;
+                rating = v;
               },
               starCount: 5,
-              rating: widget.review != null ? widget.review.reviewStars : 5.0,
+              rating: rating,
               size: 40.0,
               isReadOnly: false,
               color: Colors.green,
@@ -93,7 +100,7 @@ class ReviewDialogState extends State<ReviewDialog> {
                   child: Text('Delete Review'),
                   onPressed: () {
                     Navigator.pop(
-                        context, [widget.review, 2]); // 2 = delete review
+                        context, [widget.review, DialogAction.Delete.index]);
                   },
                 ),
               ),
@@ -109,18 +116,24 @@ class ReviewDialogState extends State<ReviewDialog> {
                   var formatter = new DateFormat('yyyy-MM-dd');
                   String formattedDate = formatter.format(currentTime);
                   Review newReview = Review(
-                      author: authorController.text,
-                      text: textController.text,
-                      title: titleController.text,
-                      reviewStars: rating,
-                      helpfulYes: 0,
-                      helpfulNo: 0,
-                      date: formattedDate,
-                      isEditable: true);
+                    author: authorController.text,
+                    review_text: textController.text,
+                    title: titleController.text,
+                    stars: rating,
+                    helpful_yes: 0,
+                    helpful_no: 0,
+                    date_updated: formattedDate,
+                    is_editable: true,
+                  );
                   widget.review == null
-                      ? Navigator.pop(context, [newReview, 0])
-                      : Navigator.pop(context,
-                          [newReview, 1]); // 0 = new review, 1 = edit review
+                      ? Navigator.pop(
+                          context,
+                          [newReview, DialogAction.Add.index],
+                        )
+                      : Navigator.pop(
+                          context,
+                          [newReview, DialogAction.Edit.index],
+                        ); // 0 = new review, 1 = edit review
                 }
               },
             ),

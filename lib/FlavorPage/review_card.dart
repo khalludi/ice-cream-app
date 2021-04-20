@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'dart:developer';
 import 'review.dart';
 
 /// The [ReviewCard] widget contains the author, title, date, and content of a review.
@@ -11,10 +12,12 @@ typedef Callback = Function(int);
 class ReviewCard extends StatefulWidget {
   final Review review;
   final int index;
+  final bool allowEditing;
   final Callback createEditDialog;
   ReviewCard({
     @required this.review,
     @required this.index,
+    @required this.allowEditing,
     this.createEditDialog,
   });
 
@@ -38,11 +41,17 @@ class _ReviewCardState extends State<ReviewCard> {
     '12': 'Dec'
   };
 
+  @override
+  initState() {
+    super.initState();
+  }
+
   String getFormattedDate(date) {
-    var result = new StringBuffer(_months[date.substring(5, 7)]);
-    result.write(' ');
-    result.write(date.substring(0, 4));
-    return result.toString();
+    // var result = new StringBuffer(_months[date.substring(5, 7)]);
+    // result.write(' ');
+    // result.write(date.substring(0, 4));
+    // return result.toString();
+    return "";
   }
 
   @override
@@ -71,7 +80,7 @@ class _ReviewCardState extends State<ReviewCard> {
                   ),
                 ),
                 Text(
-                  getFormattedDate(widget.review.date),
+                  getFormattedDate(widget.review.date_updated),
                   style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.black,
@@ -93,10 +102,9 @@ class _ReviewCardState extends State<ReviewCard> {
                 ),
                 SmoothStarRating(
                   allowHalfRating: true,
-                  onRated: (v) {},
                   starCount: 5,
                   size: 20.0,
-                  rating: widget.review.reviewStars.toDouble(),
+                  rating: widget.review.stars,
                   isReadOnly: true,
                   color: Colors.green,
                   borderColor: Colors.green,
@@ -106,7 +114,7 @@ class _ReviewCardState extends State<ReviewCard> {
             ),
             SizedBox(height: 6.0),
             Text(
-              widget.review.text,
+              widget.review.review_text,
               style: TextStyle(
                 fontSize: 14.0,
               ),
@@ -115,10 +123,11 @@ class _ReviewCardState extends State<ReviewCard> {
               alignment: Alignment(0.8, -1.0),
               heightFactor: 0.5,
               child: Visibility(
-                visible: (widget.review.isEditable != null)
-                    ? widget.review.isEditable
+                visible: (widget.review.is_editable != null)
+                    ? widget.review.is_editable && widget.allowEditing
                     : true,
                 child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () => widget.createEditDialog(widget.index),
                   child: Icon(Icons.edit),
                 ),

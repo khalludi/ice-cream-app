@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ice_cream_social/SettingsPage/ingredient.dart';
-import './ingredients_admin.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
 
 /// The [Statistics] page allows admin users to view statistics about the ice cream data.
 /// Currently it supports two advanced SQL queries.
@@ -17,21 +19,28 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   // Used for testing. Will be deleted once SQL integration is set up.
-  List<Object> listItems = [
-    "cat",
-    "dog",
-    "horse",
-    "zebra",
-    "tiger",
-  ];
+  Future<List<Object>> futureListItems;
+  List<Object> listItems;
   List<String> queryTitles = ["Anna's Query", "Hannah's Query"];
   bool showList;
   String query;
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
 
   @override
   initState() {
+    listItems = [];
     showList = false;
     query = queryTitles[0];
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
     super.initState();
   }
 
@@ -79,21 +88,30 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget getItemWidget(index) {
-    return Visibility(
-      visible: showList,
-      child: Card(
-        color: Colors.blue,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            listItems[index],
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
+    return FutureBuilder<List<String>>(
+      future: futureListItems,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          listItems = snapshot.data;
+          return Card(
+            color: Colors.purple,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                listItems[index],
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+          );
+        } else if (snapshot.hasError) {
+          return Text("Error getting ingredients data");
+        }
+        // By default, show a loading spinner.
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -133,7 +151,52 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void runQuery() {
+    futureListItems = fetchQuery();
     showList = true;
     setState(() {});
+  }
+
+  Future<List<String>> fetchQuery() async {
+    String path = query == "Anna's Query" ? "aadvanced" : "hadvanced";
+    // final response =
+    //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.http(url, path), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+    });
+
+    log("statistics response body: " + response.body);
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<String> results = (data).map((i) => mapper(i)).toList();
+      for (String x in results) {
+        log("x is: " + x);
+      }
+      listItems = results;
+      return results;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      return null;
+    }
+  }
+
+  String mapper(Map<String, dynamic> json) {
+    if (query == "Anna's Query") {
+      return json['product_id'].toString() +
+          " " +
+          json['brand'].toString() +
+          " " +
+          json['averageRating'].toString() +
+          " " +
+          json['numReviews'].toString();
+    } else {
+      String result = json['username'].toString() +
+          " " +
+          json['five_star_reviews'].toString();
+      return result;
+    }
   }
 }

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'ingredient.dart';
 import 'ingredient_dialog.dart';
 import 'ingredient_textfield.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 /// The [SearchIngredients] widget uses the FlappySearchBar so that the user can search, edit, and
 /// delete ingredients.
@@ -24,17 +29,24 @@ class SearchIngredients extends StatefulWidget {
 
 class _SearchIngredientsState extends State<SearchIngredients> {
   List<Ingredient> ingredients;
-  List<TextEditingController> controllers;
-  List<TextFormField> textFields;
   SearchBar<Ingredient> searchBar;
   bool isUsingSearchBar;
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
 
   @override
   initState() {
-    controllers = [];
-    textFields = [];
     ingredients = widget.ingredients;
     isUsingSearchBar = false;
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
 
     super.initState();
   }
@@ -70,17 +82,42 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       context: context,
       builder: (_) => IngredientDialog(
         context: context,
-        ingredient: widget.ingredients[index],
+        ingredient: ingredients[index],
       ),
     );
     if (result[1] == DialogAction.Delete.index) deleteIngredient(index);
   }
 
-  Future<List<Ingredient>> search(String search) async {
+  Future<List<Ingredient>> search(String query) async {
     isUsingSearchBar = true;
-    log("isUsingSearchBar: " + isUsingSearchBar.toString());
+    String url = '10.0.2.2:3000';
     await Future.delayed(Duration(seconds: 2));
-    return ingredients.sublist(1, 3);
+
+    var data = {'search_term': query};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(
+      Uri.http(
+        url,
+        "ingredients/nameParam",
+        data,
+      ),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Ingredient> ingredients =
+          (data).map((i) => Ingredient.fromJson(i)).toList();
+      return ingredients;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+    }
+    return null;
   }
 
   void addIngredient(Ingredient ingredient) {
@@ -88,26 +125,65 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     setState(() {});
   }
 
-  void deleteIngredient(int index) {
-    log("delete ingredient w name:" + ingredients[index].name);
-    // ingredients = List.from(ingredients)..removeAt(index);
+  void deleteIngredient(int index) async {
+    // await deleteIngredientFromDatabase(ingredients[index]);
     ingredients.removeAt(index);
-    log("new ingredient length: " + ingredients.length.toString());
     setState(() {});
-    ingredients.forEach((element) {
-      log(element.name);
-    });
+  }
+
+  void deleteIngredientFromDatabase(Ingredient ingredient) async {
+    String url = '192.168.0.7:8080';
+    var queryParameters = {
+      'ingredient_id': '100',
+    };
+    String ingredient_id = ingredient.ingredient_id.toString();
+    http.Response response = await http.delete(
+      Uri.http(
+        url,
+        "ingredients/$ingredient_id",
+        queryParameters,
+      ),
+      headers: {"Accept": "application/json"},
+    );
+    if (response.statusCode == 200) {
+    } else {}
   }
 
   void updateIngredient(Ingredient editedIngredient, int index) {
     ingredients[index] = editedIngredient;
+    // updateIngredientInDatabase(editedIngredient)
     setState(() {});
+  }
+
+  void updateIngredientInDatabase(Ingredient ingredient) async {
+    var data = {
+      'ingredient_id': (ingredients.length + 1).toString(),
+      'name': ingredient.name,
+    };
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String body = json.encode(data);
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "ingredients",
+      ),
+      headers: {
+        // "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      print("ingredientAdmin success");
+      var data = json.decode(response.body);
+    } else {
+      print("ingredientAdmin fail");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("build run");
-    // make dynamic list of TextEditingControllers
     return SearchBar<Ingredient>(
       key: Key(ingredients.length.toString()),
       searchBarPadding: const EdgeInsets.symmetric(

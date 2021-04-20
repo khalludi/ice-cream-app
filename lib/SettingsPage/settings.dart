@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ice_cream_social/SettingsPage/ingredient.dart';
-import './ingredients_admin.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ice_cream_social/FlavorPage/flavor_page.dart';
+import 'package:ice_cream_social/backend_data.dart';
+import 'IngredientsPage/ingredients_admin.dart';
 import './statistics.dart';
 
 /// The [Settings] page widget enables the user to change their system preferences.
@@ -16,59 +17,10 @@ int buildNumber = 0;
 typedef Callback = Function(int);
 typedef Callback2 = Function(String);
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   SettingsPage();
 
-  @override
-  _SettingsPageState createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  @override
-  initState() {
-    super.initState();
-  }
-
-  List<Ingredient> ingredients = [
-    Ingredient(
-      name: "vanilla",
-      id: 1,
-    ),
-    Ingredient(
-      name: "chocolate",
-      id: 2,
-    ),
-    Ingredient(
-      name: "heavy cream",
-      id: 3,
-    ),
-    Ingredient(
-      name: "almonds",
-      id: 4,
-    ),
-    Ingredient(
-      name: "peanut butter",
-      id: 5,
-    ),
-    Ingredient(
-      name: "sugar",
-      id: 6,
-    ),
-    Ingredient(
-      name: "molasses",
-      id: 7,
-    ),
-    Ingredient(
-      name: "strawberries",
-      id: 8,
-    ),
-    Ingredient(
-      name: "skim milk",
-      id: 9,
-    ),
-  ];
-
-  List<Map<String, Object>> litems = [
+  final List<Map<String, Object>> settingOptions = [
     {
       'text': "Admin",
       'isTitle': true,
@@ -86,6 +38,11 @@ class _SettingsPageState extends State<SettingsPage> {
     },
     {
       'text': "View Statistics",
+      'isTitle': false,
+      'route': null,
+    },
+    {
+      'text': "View Example Flavor Page",
       'isTitle': false,
       'route': null,
     },
@@ -126,39 +83,50 @@ class _SettingsPageState extends State<SettingsPage> {
     },
   ];
 
-  void handleRoute(int index) {
-    Widget Function() route;
+  void handleRoute(BuildContext context, int index) {
+    Widget Function(BuildContext context) route;
 
-    if (litems[index]['text'] == "Modify Ingredients")
+    if (settingOptions[index]['text'] == "Modify Ingredients")
       route = routeIngredients;
-    else if (litems[index]['text'] == "Log Out") {
+    else if (settingOptions[index]['text'] == "Log Out") {
       Navigator.pop(context);
-    } else if (litems[index]['text'] == "View Statistics") {
+    } else if (settingOptions[index]['text'] == "View Statistics") {
       route = routeStatistics;
+    } else if (settingOptions[index]['text'] == "View Example Flavor Page") {
+      route = routeFlavorPage;
     }
     if (route != null)
-      Navigator.push(context, CupertinoPageRoute(builder: (_) => route()));
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (_) => route(context)));
   }
 
-  // routeIngredients returns
-  Widget routeIngredients() {
-    return IngredientsAdmin(
-      passedIngredients: ingredients,
-    );
+  Widget routeIngredients(BuildContext context) {
+    return IngredientsAdmin();
   }
 
-  // routeIngredients returns
-  Widget routeStatistics() {
+  Widget routeStatistics(BuildContext context) {
     return StatisticsPage();
   }
 
-  Widget buildBody(BuildContext ctxt, int index) {
-    bool shouldIncludeIcon = litems[index]['text'] != 'Log Out';
-    if (litems[index]['isTitle']) {
+  Widget routeFlavorPage(BuildContext context) {
+    return FlavorPage(
+      flavorName: "Cookies and Cream",
+      productId: 15,
+      brand: "Breyers",
+      description:
+          "Breyers? vanilla and heaps of OREO? cookies? Yes please! If you?re anything like us, you love Breyers? vanilla and OREO? cookies. So why not combine your love into one tub with Breyers? OREO? Cookies & Cream? Rich, creamy vanilla goodness surrounds those chunks of 100% REAL OREO? cookies and will be sure to bring a smile to your face.",
+      pngFile: "15_breyers.png",
+      context: context,
+    );
+  }
+
+  Widget buildBody(BuildContext context, int index) {
+    bool shouldIncludeIcon = settingOptions[index]['text'] != 'Log Out';
+    if (settingOptions[index]['isTitle']) {
       return Padding(
         padding: const EdgeInsets.only(left: 20.0, top: 10.0),
         child: Text(
-          litems[index]['text'],
+          settingOptions[index]['text'],
           style: TextStyle(
             fontSize: 24,
             fontFamily: 'Nexa',
@@ -179,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
           minWidth: 0, //wraps child's width
           height: 0, //wraps child's height
           child: ElevatedButton(
-            onPressed: () => handleRoute(index),
+            onPressed: () => handleRoute(context, index),
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Container(
                     margin: const EdgeInsets.only(left: 10.0),
                     child: Text(
-                      litems[index]['text'],
+                      settingOptions[index]['text'],
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -209,12 +177,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     buildNumber += 1;
-    log("Rebuild FlavorPage: $buildNumber times");
     return Scaffold(
       appBar: _buildBar(context),
       body: new ListView.builder(
-        itemCount: litems.length,
-        itemBuilder: (BuildContext ctxt, int index) => buildBody(ctxt, index),
+        itemCount: settingOptions.length,
+        itemBuilder: (BuildContext context, int index) =>
+            buildBody(context, index),
       ),
     );
   }

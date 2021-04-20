@@ -55,7 +55,7 @@ class _IngredientTextFieldState extends State<IngredientTextField> {
       widget.updateIngredient(
           Ingredient(
             name: controller.text,
-            id: widget.ingredient.id,
+            ingredient_id: widget.ingredient.ingredient_id,
           ),
           widget.index);
     }

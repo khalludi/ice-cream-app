@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
 import 'package:ice_cream_social/login/profile.dart';
-import 'HomePage/filter.dart';
-import 'HomePage/placeholder_widget.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 void main() {
   runApp(new MyApp());
@@ -61,26 +61,30 @@ class _HomePageState extends State<HomePage> {
     _widgetOptions.add(Profile(
       onLoginChanged: updateLoginChanged,
     ));
-
-    return MaterialApp(
-      home: Scaffold(
-        // appBar: _buildBar(context),
-        body: chooseWidget(),
-        /**Bottom navigation drawer.**/
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: 'Account',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.blue,
-          onTap: _onItemTapped,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BackendData()),
+      ],
+      child: MaterialApp(
+        home: Scaffold(
+          // appBar: _buildBar(context),
+          body: chooseWidget(),
+          /**Bottom navigation drawer.**/
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_outlined),
+                label: 'Account',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.blue,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );
@@ -90,7 +94,8 @@ class _HomePageState extends State<HomePage> {
     return new AppBar(
       centerTitle: true,
       title: Text('ICE CREAM SOCIAL',
-          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
+          style: TextStyle(
+              fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
