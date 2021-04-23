@@ -6,9 +6,7 @@ $table = "Product";
 $username = "root";
 $password = "testuser";
 
-use Google\Cloud\Debugger\Agent;
-
-$agent = new Agent(['sourceRoot' => realpath('/app')]);
+$action = $_POST["action"];
  
 //connect to database
 try {
