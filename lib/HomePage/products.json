@@ -1,0 +1,602 @@
+[
+    {
+      "product_name": "Cannoli",
+      "brand_name": "bj",
+      "subhead": "Mascarpone Ice Cream with Fudge-Covered Pastry Shell Pieces & Mascarpone Swirls",
+      "description": "As a Limited Batch that captured the rapture of the classic Sicilian dessert, our Cannoli captivated fans like no other Cannoli could. Now that it?s a full-time flavor, you and your Cannoli can re-capture the rapture all over again."
+    },
+    {
+      "product_name": "S'mores",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with Fudge Chunks, Toasted Marshmallow & Graham Cracker Swirls",
+      "description": "Remember when cookouts & campfires kindled your cravings for s'mores, glorious s?mores? We loaded this flavor with all the stuff that makes s?mores so glorious, so you can kindle your cravings whenever, no campfires required."
+    },
+    {
+      "product_name": "Vanilla",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream",
+      "description": "When you dig into this pint, you?ll find a rich, creamy Vanilla that?s more vanilla-tasting than any Vanilla you?ve ever tasted."
+    },
+    {
+      "product_name": "Half Baked?",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Vanilla Ice Creams mixed with Gobs of Chocolate Chip Cookie Dough & Fudge Brownies",
+      "description": "Ben & Jerry?s is proud to partner with fellow B Corps Greyston & Rhino Bakeries to bring you half baked. The incredible stories behind both the fudge brownies & cookie dough make this a flavor that not only tastes good, but does good."
+    },
+    {
+      "product_name": "Phish Food?",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with Gooey Marshmallow Swirls, Caramel Swirls & Fudge Fish",
+      "description": "?Ben was our neighbor through the woods & we're fond of ice cream. So we teamed up to create Phish Food?. A portion of our royalties from this flavor goes toward environmental efforts in Vermont's Lake Champlain Watershed. Enjoy!? - PHISH"
+    },
+    {
+      "product_name": "Chip Happens",
+      "brand_name": "bj",
+      "subhead": "A Cold Mess of Chocolate Ice Cream with Fudge Chips & Crunchy Potato Chip Swirls",
+      "description": "Sometimes ?chip? happens and everything?s a mess, but we Nailed It! with this chip-filled limited batch. When smooth chocolate ice cream meets fudge chips & salty swirls, they pack a serious one-two crunch. The best part? There won?t be anything left to clean up."
+    },
+    {
+      "product_name": "Chubby Hubby?",
+      "brand_name": "bj",
+      "subhead": "Vanilla Malt Ice Cream with Peanutty Fudge-Covered Pretzels with Fudge & Peanut Buttery Swirls",
+      "description": "Two tricksters convinced a co-worker this flavor really existed (it didn?t), then felt guilty & made him an actual batch packed with pretzels, peanut butter & fudge. He loved it, so did we, & the rest is history. Enjoy!"
+    },
+    {
+      "product_name": "Cherry Garcia?",
+      "brand_name": "bj",
+      "subhead": "Cherry Ice Cream with Cherries & Fudge Flakes",
+      "description": "Our euphorically edible tribute to guitarist Jerry Garcia & Grateful Dead fans everywhere, it?s the first ice cream named for a rock legend and the most famous of our fan-suggested flavors."
+    },
+    {
+      "product_name": "Chunky Monkey?",
+      "brand_name": "bj",
+      "subhead": "Banana Ice Cream with Fudge Chunks & Walnuts",
+      "description": "To create a flavor as fun as the name, we monkeyed around with bunches of test batches until we knew we had a winner: the nuttiest chocolatey-chunkiest concoction-gone-bananas you'll ever go ape for."
+    },
+    {
+      "product_name": "Cinnamon Buns?",
+      "brand_name": "bj",
+      "subhead": "Caramel Ice Cream with Cinnamon Bun Dough & a Cinnamon Streusel Swirl",
+      "description": "Our cool salute to cinnamon buns is so cinnamon-streuseled & dough-loaded, there's no telling where the cinnamon buns end or the ice cream begins. That's because it's one fun flavor all the way through. Enjoy!"
+    },
+    {
+      "product_name": "Gimme S?more!?",
+      "brand_name": "bj",
+      "subhead": "Toasted Marshmallow Ice Cream with Chocolate Cookie Swirls, Graham Cracker Swirls & Fudge Flakes",
+      "description": "It?s a gimme: there?s always room for s?more. And we?re pretty sure you?ll want to make s?more room in your freezer for this ?shmallowy-rich, graham-good-?n-chocolatey concoction now that it's full time flavor!."
+    },
+    {
+      "product_name": "Milk & Cookies",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with a Chocolate Cookie Swirl, Chocolate Chip & Chocolate Chocolate Chip Cookies",
+      "description": "How do you take classic milk-&-cookie goodness to a whole 'nother level of greatness? We don?t really know what that means, but we know this flavor?s loaded with the most euphoric assortment of cookies we ever dunked, chunked & swirled in our ice cream."
+    },
+    {
+      "product_name": "Urban Bourbon?",
+      "brand_name": "bj",
+      "subhead": "Burnt Caramel Ice Cream with Almonds, Fudge Flakes & Bourbon Caramel Swirls",
+      "description": "Want to enjoy a night on the town without leaving the house? Treat yourself to a caramel concoction that?s bold, toasty and bourbon-swirled, with lots of nuts and fudge for fun."
+    },
+    {
+      "product_name": "Americone Dream?",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with Fudge-Covered Waffle Cone Pieces & a Caramel Swirl",
+      "description": "Founded in fudge-covered waffle cones, this caramel-swirled concoction is the only flavor that gets a s'cream of approval from The Late Show host, Stephen Colbert. What's sweeter is this flavor supports charitable causes through The Stephen Colbert AmeriCone Dream Fund."
+    },
+    {
+      "product_name": "Ice Cream Sammie",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with Chocolate Sandwich Cookies & Chocolate Cookie Swirls",
+      "description": "To capture the great taste of the classic ice cream sandwich in a flavor that?s not actually a sandwich, we packed our creamy-rich vanilla ice cream with chocolate sandwich cookies & swirls, best-captured, by you, with a spoon."
+    },
+    {
+      "product_name": "Bourbon Pecan Pie",
+      "brand_name": "bj",
+      "subhead": "Buttery Bourbon Ice Cream with Pecans, Shortbread Cookie Pieces & a Whiskey Caramel Swirl",
+      "description": "Not long ago we scoop-toured through Texas asking you to elect the best of two Texas-inspired flavors. Thanks to you this bourbon-y whirl of pecans and cookies wrapped in whiskey-kissed caramel is now available Tex-clusively!"
+    },
+    {
+      "product_name": "Brewed to Matter?",
+      "brand_name": "bj",
+      "subhead": "Coffee Ice Cream with Fudge Chunks & a Brownie Batter Swirl",
+      "description": "We're thrilled to add this made-to-matter, brownie batter-swirled batchful of coffee awesomeness to the Ben & Jerry's family of flavors. It packs a powerful pintful of goodness that's guaranteed to amaze you with every consciously concocted bite."
+    },
+    {
+      "product_name": "Justice ReMix'd ?",
+      "brand_name": "bj",
+      "subhead": "Cinnamon & Chocolate Ice Creams with Gobs of Cinnamon Bun Dough & Spicy Fudge Brownies",
+      "description": "Now serving Justice ReMix?d: the flavor and action campaign dedicated to criminal justice reform. We?re proud to work with Advancement Project National Office in supporting reforms that invest in people instead of prisons. Together we can transform the system to deliver justice for all, instead of just some. Join us at benjerry.com/justice."
+    },
+    {
+      "product_name": "Peanut Butter Cup",
+      "brand_name": "bj",
+      "subhead": "Peanut Butter Ice Cream with Peanut Butter Cups",
+      "description": "We interrupt our regularly scheduled programming to remind you how much you love ice cream that?s perfectly peanut buttery & peanut butter cuppity at the same time."
+    },
+    {
+      "product_name": "Chocolate Therapy?",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with Chocolate Cookies & Swirls of Chocolate Pudding Ice Cream",
+      "description": "You know how sometimes you just want to scream? You could just scream, or you could grab a spoon, get a grip, and treat yourself to some primal s'cream therapy of the sublimest chocolate kind. (Euphoria may occur upon tasting.)"
+    },
+    {
+      "product_name": "Minter Wonderland?",
+      "brand_name": "bj",
+      "subhead": "Dark Chocolate Mint Ice Cream with Marshmallow Swirls & Chocolate Cookie Swirls",
+      "description": "Imagine a wild ride through the wintriest, chocolate mintiest wonderland of ice cream filled with crunchy cookie swirls and marshmallowy drifts. Honestly, if this flavor was a toboggan, you?d already be on it."
+    },
+    {
+      "product_name": "Pumpkin Cheesecake",
+      "brand_name": "bj",
+      "subhead": "Pumpkin Cheesecake Ice Cream with a Graham Cracker Swirl",
+      "description": "We took the great taste of pumpkin cheesecake & gave it an ice cream upgrade, complete with a complementary graham cracker swirl, so it's more than just a great flavor: it's a first-class ticket to pumpkin wonderful."
+    },
+    {
+      "product_name": "The Tonight Dough?",
+      "brand_name": "bj",
+      "subhead": "Caramel & Chocolate Ice Creams with Chocolate Cookie Swirls & Gobs of Chocolate Chip Cookie Dough & Peanut Butter Cookie Dough.",
+      "description": "Inspired by the show & host we love staying up late for, here's a flavor you'll love spooning into - dedicated to SeriousFun Children's Network of global camps for children with serious illnesses. Learn more at seriousfunnetwork.org."
+    },
+    {
+      "product_name": "Brownie Batter Core",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Vanilla Ice Creams with Fudge Brownies & a Brownie Batter Core",
+      "description": "Spooning your way to brownie nirvana? Smack dab in the middle of this brownie-chunk-filled ice cream there's a core of unbaked brownie batter calling your name. No, really. We heard it."
+    },
+    {
+      "product_name": "Chillin' the Roast?",
+      "brand_name": "bj",
+      "subhead": "Cold Brew Coffee Ice Cream with Chocolate Cookie-Covered Coffee Liqueur Truffles & Fudge Swirls",
+      "description": "Our cold brew coffee ice cream not only delivers a chillacious blast of creamy caffeination, it?s also loaded with enough coffee liqueur-filled, cookie crumble-covered truffles to fuel a truffolution."
+    },
+    {
+      "product_name": "Chocolate Shake It?",
+      "brand_name": "bj",
+      "subhead": "Chocolate Malt Milkshake Ice Cream With Salted Fudge Pieces & Marshmallow Swirls",
+      "description": "For those who prefer their ice cream shaken & swirled here?s a chocolate malt milkshake and marshmallow creation we topped off with euphoric morsels of salted fudge. Enjoy!"
+    },
+    {
+      "product_name": "Karamel Sutra? Core",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Caramel Ice Creams with Fudge Chips & a Soft Caramel Core",
+      "description": "Find your way to the ultimate ice cream experience with our Cores. Whether your primal urges lead you to the center of soft caramel or directly to the fudge chips, you?ll be in total control of your own ice cream destiny."
+    },
+    {
+      "product_name": "Netflix & Chilll'd?",
+      "brand_name": "bj",
+      "subhead": "Peanut Butter Ice Cream with Sweet & Salty Pretzel Swirls & Fudge Brownies",
+      "description": "There?s something for everyone to watch on Netflix & flavors for everyone to enjoy from Ben & Jerry?s, so we?ve teamed up to bring you a chillaxing new creation that?s certain to satisfy any sweet or salty snack craving. It?s a flavorful world, and everyone is invited to grab a spoon."
+    },
+    {
+      "product_name": "Pistachio Pistachio",
+      "brand_name": "bj",
+      "subhead": "Pistachio Ice Cream with Lightly Roasted Pistachios",
+      "description": "The name alone shows how much we love pistachios. But don't just take our word for it - let the flavor speak for itself!"
+    },
+    {
+      "product_name": "Salted Caramel Core",
+      "brand_name": "bj",
+      "subhead": "Sweet Cream Ice Cream with Blonde Brownies & a Salted Caramel Core",
+      "description": "Find your way to the ultimate ice cream experience with our Cores. Whether your primal urges lead you to the center of salted caramel or directly to the blonde brownies, you?ll be in total control of your own ice cream destiny."
+    },
+    {
+      "product_name": "Glampfire Trail Mix?",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with Crunchy Pretzel Swirls, Marshmallow Swirls & Fudge-Covered Almonds",
+      "description": "Inspired by glampfire tales of outdoorsy getaways filled with indoorsy perks, our trail mix is uber-chocolatey, nutty, marshmallowed-&-pretzeled, so you can get lost in the dessert without leaving the yurt."
+    },
+    {
+      "product_name": "Oat of This Swirled?",
+      "brand_name": "bj",
+      "subhead": "Buttery Brown Sugar Ice Cream with Fudge Flakes & Oatmeal Cinnamon Cookie Swirls",
+      "description": "When?s the best time to enjoy this blissful mix of brown sugar ice cream with otherworldly swirls of cinnamony oatmeal cookies? Any time between breakfast and bed, from now ?til whenever."
+    },
+    {
+      "product_name": "Peanut Butter World?",
+      "brand_name": "bj",
+      "subhead": "Milk Chocolate Ice Cream with Peanut Buttery Swirls & Chocolate Cookie Swirls",
+      "description": "What makes Ben & Jerry's so euphoric? Some say it's the legendary creamy-richness of our flavor creations. Others say it's the tastebud-boggling combinations of spoon-bending chunks & perfect swirls. We say, \"Enjoy!\""
+    },
+    {
+      "product_name": "Boots on the Moooo?n?",
+      "brand_name": "bj",
+      "subhead": "A Universe of Milk Chocolate Ice Cream with Fudge Cows & Toffee Meteor Clusters Orbiting a Sugar Cookie Dough Core",
+      "description": "While Space Force works to get boots (back) on the moon, this cosmic concoction will launch your dreams into orbit. With fudgy astronaut cows & toffee meteors, space couldn't be any sweeter. Unless the moon was made out of sugar cookie dough. Which for this limited-time flavor, it actually is! View All Of Our Netflix Inspired Flavors\""
+    },
+    {
+      "product_name": "Mint Chocolate Cookie",
+      "brand_name": "bj",
+      "subhead": "Peppermint Ice Cream with Chocolate Sandwich Cookies",
+      "description": "In case you?ve ever wondered what makes this wintry flavor so wicked cool to luge a spoon through: it?s the pepperminty excellence we packed in it, not to mention all those chocolate sandwich cookie moguls. Enjoy!"
+    },
+    {
+      "product_name": "Salted Caramel Almond",
+      "brand_name": "bj",
+      "subhead": "Vanilla Bean Ice Cream with Roasted Almond Slivers, Fudge Flakes & a Salted Caramel Swirl",
+      "description": "What makes Ben & Jerry?s so euphoric? Some say it?s the legendary creamy-richness of our flavor creations. Others say it?s the tastebud-boggling combinations of spoon-bending chunks & perfect swirls. We say, ?Enjoy!\""
+    },
+    {
+      "product_name": "Strawberry Cheesecake",
+      "brand_name": "bj",
+      "subhead": "Strawberry Cheesecake Ice Cream with Strawberries & a Thick Graham Cracker Swirl",
+      "description": "For strawberry cheesecake lovers who?ve always wanted to have their cheesecake & scoop it, too, we?ve created a flavor jam-packed with strawberry cheesecake-greatness & a fantastic graham-cracker swirl."
+    },
+    {
+      "product_name": "Triple Caramel Chunk?",
+      "brand_name": "bj",
+      "subhead": "Caramel Ice Cream with a Swirl of Caramel & Fudge-Covered Caramel Chunks",
+      "description": "Caramel lovers won?t want to miss a single moment of this must-eat caramel thrillogy, starring creamy caramel ice cream, gooey caramel swirls, and chewy caramel chunks. They probably won?t want it to end, either. Enjoy!"
+    },
+    {
+      "product_name": "Vanilla Caramel Fudge",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with Swirls of Caramel & Fudge",
+      "description": "If you?ve been looking for reasons to try something chunkless, this container holds a Vanilla-rich, fudge-luscious & caramel-gooey pintful of them. Enjoy!"
+    },
+    {
+      "product_name": "Berry Sweet Mascarpone",
+      "brand_name": "bj",
+      "subhead": "Blackberry & Mascarpone Ice Creams with Shortbread Cookies & Fudge-Covered Almonds",
+      "description": "From the sweet blackberry and crazy creamy mascarpone ice creams to the shortbread cookies and fudge-dunked almonds, you?ll fall in love with this flavor faster than you can say ?mass-car-po-nay.?"
+    },
+    {
+      "product_name": "Everything But The...?",
+      "brand_name": "bj",
+      "subhead": "A Collision of Chocolate & Vanilla Ice Creams mixed with Peanut Butter Cups, Fudge-Covered Toffee Pieces, White Chocolatey Chunks & Fudge-Covered Almonds",
+      "description": "We've combined some of your most favorite Ben & Jerry's flavors & swirled them into even bigger show-stoppers. Now you can enjoy them in tasty, twisted tandem!"
+    },
+    {
+      "product_name": "Red, White & Blueberry",
+      "brand_name": "bj",
+      "subhead": "Blueberry & Raspberry Ice Cream swirled with Vanilla Ice Cream with Strawberries & Shortbread Pieces",
+      "description": "Hooray for Red, White & Blueberry! From the strawberried fields of raspberry, blueberry, & vanilla ice creams to the glorious morsels of shortbread, every spoonful?s a salute to taste beyond the fruited plain."
+    },
+    {
+      "product_name": "Chocolate Fudge Brownie",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with Fudge Brownies",
+      "description": "The fabulously fudgy brownies in this flavor come from New York?s Greyston Bakery, where producing great baked goods is part of their greater-good mission to provide jobs and training to low-income city residents."
+    },
+    {
+      "product_name": "Cold Brew Caramel Latte",
+      "brand_name": "bj",
+      "subhead": "Cold Brew & Sweet Cream Ice Creams with Salted Caramel Swirls",
+      "description": "If you?ve been looking for a more chillacious way to get your Ben & Jerry?s on, this dreamy latte-inspired ice cream made with cold brew coffee, rich sweet cream, & salt-kissed caramel is a mighty cool & euphoric motorvator."
+    },
+    {
+      "product_name": "Coffee Toffee Bar Crunch",
+      "brand_name": "bj",
+      "subhead": "Coffee Ice Cream with Fudge-Covered Toffee Pieces",
+      "description": "Coffee What Bar Crunch?  We gave this flavor a new name to go with the new toffee bars we?re using as part of our commitment to source Fairtrade Certified and non-GMO ingredients.  We love it and know you will too!"
+    },
+    {
+      "product_name": "Peanut Butter Fudge Core",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Peanut Butter Ice Creams with Mini Peanut Butter Cups & a Peanut Butter Fudge Core",
+      "description": "Find your way to the ultimate ice cream experience with our Cores. Whether your primal urges lead you to the center of peanut butter fudge or directly to the peanut butter cups, you?ll be in total control of your own ice cream destiny."
+    },
+    {
+      "product_name": "Peanut Butter Half Baked?",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Peanut Butter Ice Creams Mixed with Gobs of Peanut Butter Cookie Dough & Fudge Brownies",
+      "description": "If you were more than a little bit smitten with half baked??s peanut buttery cousin when it was a Limited Batch, we expect you could be a whole lot smittener now that it?s a full-time flavor. Enjoy!"
+    },
+    {
+      "product_name": "Chocolate Chip Cookie Dough",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with Gobs of Chocolate Chip Cookie Dough",
+      "description": "We knew we were onto something big when we made the world?s first batch of Chocolate Chip Cookie Dough ice cream in 1984. Today the flavor still reigns among our all-time most popular concoctions."
+    },
+    {
+      "product_name": "New York Super Fudge Chunk?",
+      "brand_name": "bj",
+      "subhead": "Chocolate Ice Cream with White & Dark Fudge Chunks, Pecans, Walnuts & Fudge-Covered Almonds",
+      "description": "In 1985, to make a name for ourselves in New York, we picked a New York kind of name and created a flavor packed with more kinds of chunks than ever before. We figured if the flavor was euphoric in New York, it would be everywhere. It was, and it is."
+    },
+    {
+      "product_name": "Boom Chocolatta? Cookie Core",
+      "brand_name": "bj",
+      "subhead": "Mocha & Caramel Ice Creams with Chocolate Cookies, Fudge Flakes & a Chocolate Cookie Core",
+      "description": "As you slam dunk your spoon through creamy mocha & caramel to celebrate the epic chocolate cookie-spread core, your technique may not be perfect, but the victory?s perfectly delicious."
+    },
+    {
+      "product_name": "Caramel Chocolate Cheesecake",
+      "brand_name": "bj",
+      "subhead": "Caramel Cheesecake Ice Cream with Cheesecake Pieces & Chocolate Cookie Swirls",
+      "description": "In your cheesecake dreams, is it like you?re spooning through a world of caramel cheesecake ice cream swirled with chocolate cookies in a wonderland filled with chunks of cheesecake? Hello? You can wake up now?"
+    },
+    {
+      "product_name": "Coffee Coffee BuzzBuzzBuzz!?",
+      "brand_name": "bj",
+      "subhead": "Coffee Ice Cream with Espresso Bean Fudge Chunks",
+      "description": "Somewhere between the creamy coffee coffee ice cream & the buzzbuzzbuzz of espresso fudge, it hits you: you?re wide awake & in lovelovelove."
+    },
+    {
+      "product_name": "Chocolate Peanut Butter Split",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Banana Ice Creams with Mini Peanut Butter Cups",
+      "description": "We?ve loaded our banana and chocolate ice creams with a chocolatey lot of bite-size PB surprises, so if you find your chocolate-covered, peanut-buttered banana fantasies aren?t fulfilled in every spoonful, we suggest a bigger spoon."
+    },
+    {
+      "product_name": "Cookies & Cream Cheesecake Core",
+      "brand_name": "bj",
+      "subhead": "Chocolate & Cheesecake Ice Creams with Chocolate Cookies & a Cheesecake Core",
+      "description": "What's it called when you find yourself spoon-deep in a rich center of cheesecake in the middle of a cool ice cream universe of chocolate, cheesecake & cookies? A Core encounter of the Ben & Jerriest kind."
+    },
+    {
+      "product_name": "Chocolate Chip Cookie Dough Core",
+      "brand_name": "bj",
+      "subhead": "Cookie Milk Ice Cream with Fudge Chips & a Chocolate Chip Cookie Dough Core",
+      "description": "Our latest cookie dough creation is boldly loaded like never before, with ice cream that tastes like a just-dunked-cookie, & an epic core of chocolate-chippity dough where no dough has ever been."
+    },
+    {
+      "product_name": "Sweet Like Sugar Cookie Dough Core",
+      "brand_name": "bj",
+      "subhead": "Sweet Cream Ice Cream with a hint of Almond flavor & Shortbread Cookies & Cherry Ice Cream with Cherries & a Sugar Cookie Dough Core",
+      "description": "Instead of just giving you some sugar cookie dough, we thought you?d enjoy a core full even more, enwrapped in almond-kissed sweet cream & cherry ice creams packed with cookies & cherries. Do we love you or what?"
+    },
+    {
+      "product_name": "Wake & \" No Bake \" Cookie Dough Core",
+      "brand_name": "bj",
+      "subhead": "Vanilla Ice Cream with Peanut Butter Cookies, Peanut Butter Ice Cream with Fudge Chips & a No Bake Cookie Dough Core",
+      "description": "Now that we?ve core-fully captured the No Bake cookie dough of your dreams in the middle of our fudge-&-cookie-chunked peanut butter and vanilla ice creams, we bet you?ll love how it tastes when you?re awake."
+    },
+    {
+      "product_name": "Lemon Sorbet",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Juicy, sun-ripened lemons create a tart yet sweet fruit sorbet. An indulgent treat with a delicate flavor that dazzles your tongue and refreshes your senses."
+    },
+    {
+      "product_name": "Mango Sorbet",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We blended juicy, tropical mangos into a smooth puree to create a refreshing treat with sweet fruit intensity."
+    },
+    {
+      "product_name": "Mango Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Our ode to the tropical flavors of South America combines sweet mango ice cream and slices of juicy mango for a simply perfect treat."
+    },
+    {
+      "product_name": "Coffee Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We roast the finest Brazilian coffee beans and brew them to perfection to bring out their rich, complex flavor. the combination of the brew with our pure, creamy ice cream awakens the senses."
+    },
+    {
+      "product_name": "Raspberry Sorbet",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We blended delicious, ripe raspberries into a smooth puree for this tangy yet sweet fruit sorbet. It's refreshing and smooth with a sweet flavor intensity."
+    },
+    {
+      "product_name": "Vanilla Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Vanilla is the essence of elegance and sophistication. This marriage of pure, sweet cream and Madagascar vanilla creates the sweet scent of exotic spice and a distinctive taste that lingers on your tongue."
+    },
+    {
+      "product_name": "Chocolate Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Rich, creamy, and totally indulgent. Made from the finest cocoa and pure, sweet cream, our chocolate ice cream is the ultimate experience."
+    },
+    {
+      "product_name": "Green Tea Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We make our green tea ice cream from a highly sought-after Japanese matcha green tea, a ceremonial tea prized for its intense yet delicate essence. enjoy its soothing flavor enhanced with the richness of pure, sweet cream."
+    },
+    {
+      "product_name": "Mint Chip Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We infuse mint essence into a smooth, creamy base and add rich chocolaty chips for the perfect finish to this refreshingly cool treat."
+    },
+    {
+      "product_name": "Pistachio Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Its exotic flavor is the hallmark of this remarkable dessert. roasted pistachio nuts gently mixed with pure sweet cream brings out the best in this pairing."
+    },
+    {
+      "product_name": "Rocky Road Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Velvety swirls of marshmallow, roasted almonds, and our legendary chocolate ice cream come together in this playful ice cream delight."
+    },
+    {
+      "product_name": "Rum Raisin Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We soak plump raisins in rum and add pure, sweet cream for a rich, flavorful experience infused with just the right hint of warmth."
+    },
+    {
+      "product_name": "Strawberry Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We introduce sweet summer strawberries to pure cream and other natural ingredients. Because it's brimming with real fruit, the true flavor of our strawberries comes shining through."
+    },
+    {
+      "product_name": "Coffee Chip Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We took our beloved Java Chip Ice Cream and made its famous coffee taste even better. Rich, sweet chocolaty chips balance our full-bodied coffee ice cream in this delicious homage to one of life's most perfect pairings."
+    },
+    {
+      "product_name": "Butter Pecan Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "An American classic, revisited with our passion for singular flavor. We blend spoonful after spoonful of buttery roasted pecans with pure, sweet cream to create a delight like no other."
+    },
+    {
+      "product_name": "Caramel Cone Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We balance a creamy blend of caramel ice cream and rich caramel swirls with the sweet crunch of chocolaty cone pieces to create a sweet, harmonious bite."
+    },
+    {
+      "product_name": "Ros? & Cream Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Indulge in this new wine infused sweet cream ice cream folded together with a refreshingly tart Ros? flavored swirl. *Contains Less Than 0.5% Alcohol by Volume\""
+    },
+    {
+      "product_name": "Vanilla Bean Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "a unique twist to our iconic flavor. our ice cream blends Madagascar vanilla and pure, sweet cream with flecks of real vanilla beans, for a spicy and sweet delight."
+    },
+    {
+      "product_name": "Vanilla Cookie Squares",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "A dark chocolate cookie gets even more decadent when it's topped with our signature vanilla ice cream then dipped in a dark chocolate shell and a milk chocolate drizzle."
+    },
+    {
+      "product_name": "Cherry Vanilla Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "The cherries of spring lend their delightful taste to our cherry vanilla ice cream. It is the perfect combination of pure, sweet cream and juicy black cherries."
+    },
+    {
+      "product_name": "Dulce de Leche Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Inspired by Latin America's treasured dessert, our dulce de leche ice cream is a delicious combination of caramel and sweet cream, swirled with ribbons of golden caramel."
+    },
+    {
+      "product_name": "Ruby Cacao Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Indulge in the decadent crunch of a ruby cacao shell and our creamy sweet cream ice cream, for a sensorial experience of luscious smoothness with berry fruity notes."
+    },
+    {
+      "product_name": "Coconut Caramel Non-Dairy",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "This one-of-a-kind non-dairy and vegan creation gives you more of what you love. Enjoy an irresistible combination of creamy coconut and ribbons of luscious caramel."
+    },
+    {
+      "product_name": "Peppermint Bark Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Celebrate the season with our rendition of this holiday classic. Rich white chocolate ice cream is blended with crunchy chocolaty peppermint bark and peppermint candy pieces."
+    },
+    {
+      "product_name": "Rum Tres Leches Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "A Latin American inspired indulgence, we infuse smooth white Rum into our ice cream then add thick ribbons of dulce de leche and chunks of sweet Tres Leches cake."
+    },
+    {
+      "product_name": "Caramel Cone Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Your favorite Caramel Pizzelle Bar, renamed. Golden ribbons of caramel in creamy vanilla gelato, enrobed in rich milk chocolate and crunchy italian style cone pieces."
+    },
+    {
+      "product_name": "Irish Cream Cookie Squares",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "A rich chocolate cookie topped with ice cream that?s infused with Irish Cream before the entire square is dipped in decadent dark chocolate."
+    },
+    {
+      "product_name": "Cookies and Cream Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Pieces of rich, chocolaty cookies are dunked in delicious, creamy vanilla ice cream to satisfy the milk-and-cookies kid in all of us."
+    },
+    {
+      "product_name": "Pineapple Coconut Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Let us take you on a voyage to a tropical island where exotic fruits ripen in the golden sun. We combine pure, sweet cream, tropical pineapple, and delectable coconut flavor for a truly indulgent ice cream experience."
+    },
+    {
+      "product_name": "Peanut Butter Cookie Squares",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "A chocolate cookie topped with our delicious peanut butter ice cream swirled with more creamy peanut butter, then dipped in milk chocolate and drizzled with a dark chocolate."
+    },
+    {
+      "product_name": "Chocolate Fudge Non-Dairy Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Enjoy an indulgent non-dairy and vegan bar made from Belgian chocolate, cocoa, and swirls of chocolate fudge that?s finished with a decadent rice milk chocolate coating."
+    },
+    {
+      "product_name": "Dulce de Leche Cookie Squares",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "A rich dark chocolate cookie topped with dulce de leche ice cream and swirls of luscious caramel coated in a milk chocolate shell with a drizzle of dark chocolate."
+    },
+    {
+      "product_name": "Irish Cream Brownie Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Irish Cream infused into our ice cream with rich chocolate brownie pieces and a decadent fudge swirl."
+    },
+    {
+      "product_name": "Peppermint Bark Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Our peppermint bark ice cream bars start with decadent white chocolate ice cream, dipped in thick, dark chocolate, then speckled with cool peppermint candy pieces."
+    },
+    {
+      "product_name": "Vanilla Swiss Almond Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "An almond lover's delight. Our dry-roasted almonds are lightly coated with sweet chocolate and combined with our distinctive vanilla ice cream. Simple yet perfect."
+    },
+    {
+      "product_name": "Bourbon Praline Pecan Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Treat yourself to ice cream infused with smooth Bourbon sprinkled with brown sugar and given the perfect crunch with praline pecans."
+    },
+    {
+      "product_name": "Vanilla Chocolate Chip Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Our delectable chocolate chips are swirled with our creamy, smooth vanilla ice cream, allowing two flavor titans to come together in this classically indulgent treat."
+    },
+    {
+      "product_name": "Whiskey Hazelnut Latte Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "This new spiked latte inspired treat is a delicious whiskey infused coffee ice cream blended with ribbons of hazelnut fudge and chocolate espresso flakes. *Contains Less Than 0.5% Alcohol by Volume\""
+    },
+    {
+      "product_name": "Caramel Soft Dipped Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Introducing New Soft Dipped Caramel Ice Cream Bars. A delicious pairing of indulgent caramel ice cream with a rich caramel swirl, covered in a soft chocolate truffle coating."
+    },
+    {
+      "product_name": "Chocolate Peanut Butter Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "We start with our legendary chocolate ice cream and swirl in ribbons of creamy, smooth peanut butter. The experience is an irresistible blend of flavors in every delicious mouthful."
+    },
+    {
+      "product_name": "Vanilla Soft Dipped Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Introducing Soft Dipped Ice Cream Bars, a luscious combination of creamy vanilla ice cream covered in a soft chocolate truffle coating - the ultimate luxurious taste sensation."
+    },
+    {
+      "product_name": "Chocolate Chocolate Chip Ice Cream",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Our chocolate chocolate chip ice cream is the perfect combination of pure, sweet cream, fine cocoa, and chocolate chips. Truly a decadent ice cream experience."
+    },
+    {
+      "product_name": "Coffee Almond Crunch Ice Cream Bar",
+      "brand_name": "hd",
+      "subhead": null,
+      "description": "Coffee ice cream bar dipped in rich milk chocolate and almonds."
+    }
+  ]
