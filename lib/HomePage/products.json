@@ -1,4 +1,5 @@
-[
+{
+  "ice-cream": [
     {
       "product_name": "Cannoli",
       "brand_name": "bj",
@@ -600,3 +601,4 @@
       "description": "Coffee ice cream bar dipped in rich milk chocolate and almonds."
     }
   ]
+}
