@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
       auth: auth,
+      context: context,
     ));
 
     return MultiProvider(

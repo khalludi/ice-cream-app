@@ -6,8 +6,16 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:provider/provider.dart';
 
 class SearchUsers extends StatefulWidget {
+  SearchUsers({
+    @required this.context,
+  });
+
+  final BuildContext context;
+
   @override
   _SearchUsersState createState() => _SearchUsersState();
 }
@@ -25,6 +33,19 @@ class User {
 
 class _SearchUsersState extends State<SearchUsers> {
   final SearchBarController<User> _searchBarController = SearchBarController();
+
+  BackendData providerBackendData;
+  String url;
+
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +95,7 @@ class _SearchUsersState extends State<SearchUsers> {
     var queryParameters = {
       "search_term" : searchTerm,
     };
-    return http.get(Uri.http('10.0.2.2:3000', 'user-search', queryParameters));
+    return http.get(Uri.http(url, 'user-search', queryParameters));
   }
 
   Future<List<User>> _getAllUsers(String text) async {

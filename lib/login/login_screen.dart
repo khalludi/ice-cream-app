@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
 import 'package:ice_cream_social/login/profile.dart';
+import 'package:provider/provider.dart';
 import 'authentication.dart';
 
 typedef void IntCallback(int id);
@@ -11,7 +13,8 @@ typedef void IntCallback(int id);
 class LoginScreen extends StatefulWidget {
   final IntCallback onLoginChanged;
   Authentication auth;
-  LoginScreen({ @required this.onLoginChanged, this.auth });
+  final BuildContext context;
+  LoginScreen({ @required this.onLoginChanged, this.auth, this.context });
 
   @override
   _LoginScreenState createState() => _LoginScreenState(onLoginChanged, auth);
@@ -39,6 +42,17 @@ class _LoginScreenState extends State<LoginScreen> {
     this.auth = auth;
   }
 
+  BackendData providerBackendData;
+  String url;
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false
+    );
+    url = providerBackendData.url;
+  }
+
   void updateProfileChanged(int newId) {
     setState(() {
       toProfile = newId;
@@ -49,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return toProfile == 1 ?
-      Profile(auth: auth, profileChanged: updateProfileChanged)
+      Profile(auth: auth, profileChanged: updateProfileChanged, context: context)
       : Scaffold(
       // appBar: AppBar(title: Text('Login'),),
         backgroundColor: Color(0xFFcfcfcf),
@@ -268,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<http.Response> createUser(String username, String email) {
     return http.post(
-      Uri.http('10.0.2.2:3000', 'create-profile'),
+      Uri.http(url, 'create-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/backend_data.dart';
 import 'package:ice_cream_social/login/advanced_item.dart';
 import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
 import 'package:http/http.dart' as http;
 import 'package:ice_cream_social/SettingsPage/settings.dart';
+import 'package:provider/provider.dart';
 
 typedef void IntCallback(int id);
 
@@ -14,7 +16,8 @@ class Profile extends StatefulWidget {
 
   Authentication auth;
   IntCallback profileChanged;
-  Profile({this.auth, this.profileChanged});
+  BuildContext context;
+  Profile({this.auth, this.profileChanged, this.context});
 
   @override
   _ProfileState createState() => _ProfileState(auth, profileChanged);
@@ -24,6 +27,8 @@ class _ProfileState extends State<Profile> {
 
   Authentication auth;
   IntCallback profileChanged;
+  BackendData providerBackendData;
+  String url;
 
   String oldUsername;
   String oldEmail;
@@ -42,8 +47,13 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    super.initState();
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false,
+    );
+    url = providerBackendData.url;
     getUsername(auth.getEmail());
+    super.initState();
   }
 
   Future<String> getUsername(Future<String> email) async {
@@ -51,7 +61,7 @@ class _ProfileState extends State<Profile> {
       "email": await email,
     };
     var response = await http
-        .get(Uri.http('10.0.2.2:3000', 'get-profile', queryParameters));
+        .get(Uri.http(url, 'get-profile', queryParameters));
     var obj = jsonDecode(response.body) as List;
 
     setState(() {
@@ -275,7 +285,7 @@ class _ProfileState extends State<Profile> {
 
   Future<http.Response> editProfileDB(String username, String email, String oldEmail) {
     return http.post(
-      Uri.http('10.0.2.2:3000', 'edit-profile'),
+      Uri.http(url, 'edit-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -325,7 +335,7 @@ class _ProfileState extends State<Profile> {
 
   Future<http.Response> deleteProfileDB(String username) {
     return http.delete(
-      Uri.http('10.0.2.2:3000', 'delete-profile'),
+      Uri.http(url, 'delete-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -336,7 +346,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<List<AdvancedItem>> getAdvancedItems() async {
-    var result = await http.get(Uri.http('10.0.2.2:3000', 'advanced-query'));
+    var result = await http.get(Uri.http(url, 'advanced-query'));
     var tagObjsJson = jsonDecode(result.body) as List;
     List<AdvancedItem> tagObjs = tagObjsJson.map((tagJson) => AdvancedItem.fromJson(tagJson)).toList();
     return tagObjs;
@@ -397,7 +407,7 @@ class _ProfileState extends State<Profile> {
         ),
         onPressed: () {
           Navigator.push(context,
-              new MaterialPageRoute(builder: (context) => SearchUsers()));
+              new MaterialPageRoute(builder: (context) => SearchUsers(context: context,)));
         },
       ),
       actions: <Widget>[
