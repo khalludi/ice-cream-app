@@ -280,6 +280,347 @@ resource "google_cloudfunctions_function_iam_binding" "binding7" {
   ]
 }
 
+### Anna's Advanced Query
+resource "google_storage_bucket_object" "archive8" {
+  provider = google-beta
+  name   = "aadvanced.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./aadvanced/aadvanced.zip"
+}
+
+resource "google_cloudfunctions_function" "function8" {
+  provider = google-beta
+  name        = "function-aadvanced"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive8.name
+  trigger_http          = true
+  entry_point           = "aadvQuery"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding8" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function8.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Hannah's Advanced Query
+resource "google_storage_bucket_object" "archive9" {
+  provider = google-beta
+  name   = "hadvanced.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./hadvanced/hadvanced.zip"
+}
+
+resource "google_cloudfunctions_function" "function9" {
+  provider = google-beta
+  name        = "function-hadvanced"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive9.name
+  trigger_http          = true
+  entry_point           = "aadvQuery"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding9" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function9.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Delete Review
+resource "google_storage_bucket_object" "archive10" {
+  provider = google-beta
+  name   = "delete_review.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./delete_review/delete_review.zip"
+}
+
+resource "google_cloudfunctions_function" "function10" {
+  provider = google-beta
+  name        = "function-delete-review"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive10.name
+  trigger_http          = true
+  entry_point           = "deleteReview"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding10" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function10.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Update Review
+resource "google_storage_bucket_object" "archive11" {
+  provider = google-beta
+  name   = "update_review.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./update_review/update_review.zip"
+}
+
+resource "google_cloudfunctions_function" "function11" {
+  provider = google-beta
+  name        = "function-update-review"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive11.name
+  trigger_http          = true
+  entry_point           = "updateReview"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding11" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function11.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get Review Text
+resource "google_storage_bucket_object" "archive12" {
+  provider = google-beta
+  name   = "get_review_text.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_review_text/get_review_text.zip"
+}
+
+resource "google_cloudfunctions_function" "function12" {
+  provider = google-beta
+  name        = "function-get-review-text"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive12.name
+  trigger_http          = true
+  entry_point           = "getReview"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding12" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function12.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get Review Text
+resource "google_storage_bucket_object" "archive13" {
+  provider = google-beta
+  name   = "get_review_key.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_review_key/get_review_key.zip"
+}
+
+resource "google_cloudfunctions_function" "function13" {
+  provider = google-beta
+  name        = "function-get-review-key"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive13.name
+  trigger_http          = true
+  entry_point           = "getReviewKey"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding13" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function13.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get Review All
+resource "google_storage_bucket_object" "archive14" {
+  provider = google-beta
+  name   = "get_review_all.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_review_all/get_review_all.zip"
+}
+
+resource "google_cloudfunctions_function" "function14" {
+  provider = google-beta
+  name        = "function-get-review-all"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive14.name
+  trigger_http          = true
+  entry_point           = "getReviewAll"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding14" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function14.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Delete Ingredient
+resource "google_storage_bucket_object" "archive15" {
+  provider = google-beta
+  name   = "delete_ingredient.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./delete_ingredient/delete_ingredient.zip"
+}
+
+resource "google_cloudfunctions_function" "function15" {
+  provider = google-beta
+  name        = "function-delete-ingredient"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive15.name
+  trigger_http          = true
+  entry_point           = "deleteIngredient"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding15" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function15.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Update Ingredient
+resource "google_storage_bucket_object" "archive16" {
+  provider = google-beta
+  name   = "update_ingredient.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./update_ingredient/update_ingredient.zip"
+}
+
+resource "google_cloudfunctions_function" "function16" {
+  provider = google-beta
+  name        = "function-update-ingredient"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive16.name
+  trigger_http          = true
+  entry_point           = "updateIngredient"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding16" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function16.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get Ingredient
+resource "google_storage_bucket_object" "archive17" {
+  provider = google-beta
+  name   = "get_ingredient.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_ingredient/get_ingredient.zip"
+}
+
+resource "google_cloudfunctions_function" "function17" {
+  provider = google-beta
+  name        = "function-get-ingredient"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive17.name
+  trigger_http          = true
+  entry_point           = "getIngredient"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding17" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function17.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get Ingredient All
+resource "google_storage_bucket_object" "archive18" {
+  provider = google-beta
+  name   = "get_ingredient_all.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_ingredient_all/get_ingredient_all.zip"
+}
+
+resource "google_cloudfunctions_function" "function18" {
+  provider = google-beta
+  name        = "function-get-ingredient-all"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive18.name
+  trigger_http          = true
+  entry_point           = "getIngredientAll"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding18" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function18.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }
