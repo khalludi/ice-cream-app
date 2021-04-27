@@ -95,7 +95,7 @@ class _SearchUsersState extends State<SearchUsers> {
     var queryParameters = {
       "search_term" : searchTerm,
     };
-    return http.get(Uri.http(url, 'user-search', queryParameters));
+    return http.get(Uri.https(url, 'user-search', queryParameters));
   }
 
   Future<List<User>> _getAllUsers(String text) async {

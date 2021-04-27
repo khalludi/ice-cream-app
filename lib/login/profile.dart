@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
       "email": await email,
     };
     var response = await http
-        .get(Uri.http(url, 'get-profile', queryParameters));
+        .get(Uri.https(url, 'get-profile', queryParameters));
     var obj = jsonDecode(response.body) as List;
 
     setState(() {
@@ -285,7 +285,7 @@ class _ProfileState extends State<Profile> {
 
   Future<http.Response> editProfileDB(String username, String email, String oldEmail) {
     return http.post(
-      Uri.http(url, 'edit-profile'),
+      Uri.https(url, 'edit-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -335,7 +335,7 @@ class _ProfileState extends State<Profile> {
 
   Future<http.Response> deleteProfileDB(String username) {
     return http.delete(
-      Uri.http(url, 'delete-profile'),
+      Uri.https(url, 'delete-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -346,7 +346,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<List<AdvancedItem>> getAdvancedItems() async {
-    var result = await http.get(Uri.http(url, 'advanced-query'));
+    var result = await http.get(Uri.https(url, 'advanced-query'));
     var tagObjsJson = jsonDecode(result.body) as List;
     List<AdvancedItem> tagObjs = tagObjsJson.map((tagJson) => AdvancedItem.fromJson(tagJson)).toList();
     return tagObjs;

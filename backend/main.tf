@@ -330,7 +330,7 @@ resource "google_cloudfunctions_function" "function9" {
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.archive9.name
   trigger_http          = true
-  entry_point           = "aadvQuery"
+  entry_point           = "hAdvQuery"
 }
 
 resource "google_cloudfunctions_function_iam_binding" "binding9" {
@@ -423,7 +423,7 @@ resource "google_cloudfunctions_function" "function12" {
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.archive12.name
   trigger_http          = true
-  entry_point           = "getReview"
+  entry_point           = "getReviewText"
 }
 
 resource "google_cloudfunctions_function_iam_binding" "binding12" {

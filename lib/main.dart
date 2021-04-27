@@ -15,7 +15,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(home: new HomePage());
+    return new MaterialApp(
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => BackendData()),
+          ],
+          child: new HomePage(),
+        )
+    );
   }
 }
 
@@ -44,12 +51,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget chooseWidget() {
+  Widget chooseWidget(BuildContext context) {
     if (_selectedIndex == 0) {
       return _widgetOptions[_selectedIndex];
     } else if (_selectedIndex == 1 && loginChanged == 0) {
       return _widgetOptions[1];
     } else if (_selectedIndex == 1 && loginChanged == 1) {
+      // LoginScreen wid = _widgetOptions[2] as LoginScreen;
+      // wid.context = context;
       return _widgetOptions[2];
     } else {
       return _widgetOptions[_selectedIndex];
@@ -66,14 +75,12 @@ class _HomePageState extends State<HomePage> {
       context: context,
     ));
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => BackendData()),
-      ],
-      child: MaterialApp(
+    return MaterialApp(
         home: Scaffold(
           // appBar: _buildBar(context),
-          body: chooseWidget(),
+          body: Builder(
+            builder: (context) => chooseWidget(context)
+          ),
           /**Bottom navigation drawer.**/
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
@@ -91,8 +98,7 @@ class _HomePageState extends State<HomePage> {
             onTap: _onItemTapped,
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildBar(BuildContext context) {

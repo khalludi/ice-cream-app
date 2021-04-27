@@ -13,7 +13,7 @@ typedef void IntCallback(int id);
 class LoginScreen extends StatefulWidget {
   final IntCallback onLoginChanged;
   Authentication auth;
-  final BuildContext context;
+  BuildContext context;
   LoginScreen({ @required this.onLoginChanged, this.auth, this.context });
 
   @override
@@ -256,6 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print('Login for user $_userId');
       } else {
         var response = await createUser(txtUsername.text, txtEmail.text);
+        print(response.statusCode);
         if (response.statusCode != 201) {
           throw Exception('Username or email already exists');
         } else {
@@ -282,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<http.Response> createUser(String username, String email) {
     return http.post(
-      Uri.http(url, 'create-profile'),
+      Uri.https(url, 'create-profile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
