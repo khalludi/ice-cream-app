@@ -82,7 +82,7 @@ class _FlavorPageState extends State<FlavorPage> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
-      Uri.http(
+      Uri.https(
         url,
         "reviews",
       ),
@@ -135,7 +135,7 @@ class _FlavorPageState extends State<FlavorPage> {
     };
     String body = json.encode(data);
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "/reviews",
       ),
@@ -173,7 +173,7 @@ class _FlavorPageState extends State<FlavorPage> {
       'brand': brandIdMap[review.brand],
     };
     http.Response response = await http.delete(
-      Uri.http(
+      Uri.https(
         url,
         "reviews/${review.review_id}",
         queryParameters,
@@ -210,7 +210,7 @@ class _FlavorPageState extends State<FlavorPage> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "ingredients",
       ),

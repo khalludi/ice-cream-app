@@ -53,7 +53,7 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> fetchIngredients() async {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await http.get(Uri.http(url, "ingredients"), headers: {
+    final response = await http.get(Uri.https(url, "get-ingredient-all"), headers: {
       "Accept": "application/json",
       'authorization': basicAuth,
     });
@@ -164,7 +164,7 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "ingredients",
       ),

@@ -89,18 +89,18 @@ class _ProfileState extends State<Profile> {
               editProfileCard(),
               Padding(padding: EdgeInsets.only(top: 14)),
               deleteButton(),
-              Padding(padding: EdgeInsets.only(top: 14)),
-              maxReviewHeader(),
-              Padding(padding: EdgeInsets.only(top: 10)),
-              Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: advancedWidget(),
-                )
-              )
+              // Padding(padding: EdgeInsets.only(top: 14)),
+              // maxReviewHeader(),
+              // Padding(padding: EdgeInsets.only(top: 10)),
+              // Container(
+              //   padding: EdgeInsets.only(left: 10, right: 10),
+              //   child: Card(
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(30),
+              //     ),
+              //     child: advancedWidget(),
+              //   )
+              // )
             ],
           ),
         )));

@@ -621,6 +621,37 @@ resource "google_cloudfunctions_function_iam_binding" "binding18" {
   ]
 }
 
+### Call procedure
+resource "google_storage_bucket_object" "archive19" {
+  provider = google-beta
+  name   = "call_procedure.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./call_procedure/call_procedure.zip"
+}
+
+resource "google_cloudfunctions_function" "function19" {
+  provider = google-beta
+  name        = "function-call-procedure"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive19.name
+  trigger_http          = true
+  entry_point           = "callProcedure"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding19" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function19.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }

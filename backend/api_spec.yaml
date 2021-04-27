@@ -17,6 +17,15 @@ paths:
       responses:
         200:
           description: OK
+  /call-procedure:
+    get:
+      summary: Call stored procedure
+      operationId: callProcedure
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-call-procedure
+      responses:
+        200:
+          description: OK
   /create-ingredient:
     post:
       summary: Create the ingredient
