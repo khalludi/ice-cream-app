@@ -1,34 +1,66 @@
-/// The [Review] class describes an ice cream reviews.
-/// 
+import 'package:flutter/material.dart';
+import 'dart:developer';
+
+/// The [Review] class describes an ice cream review.
+///
 /// Qualitative data
-/// 
+///
 /// author: author of the review
+/// brand: what the author titled the review
+/// date_updated: date that the review was last edited. In format 'yyyy-mm-dd.'
 /// title: what the author titled the review
-/// date: date that the review was last edited. In format 'yyyy-mm-dd.'
-/// text: content of the review.
-/// 
+/// review_text: content of the review.
+///
 /// Quantitative data
-/// reviewStars: how the author ranks the review against other reviews. Range: 1-5 stars, inclusive.
-/// helpfulYes: how many people marked this review as helpful.
-/// helpfulNo: how many people marked this review as not helpful.
+/// review_id: id of the review; the id plus the brand uniquely identify each review.
+/// product_id: each review corresponds to exactly 1 product; this is the id of that product.
+/// stars: how the author ranks the review against other reviews. Range: 1-5 stars, inclusive.
+/// helpful_yes: how many people marked this review as helpful.
+/// helpful_no: how many people marked this review as not helpful.
+/// is_editable: whether the user that's currently signed in can edit this review.
 
 class Review {
+  // ignore: non_constant_identifier_names
+  int review_id;
+  // ignore: non_constant_identifier_names
+  int product_id;
   String author;
+  String brand;
+  String date_updated;
   String title;
-  String date;
-  String text;
-
-  int reviewStars;
-  int helpfulYes;
-  int helpfulNo;
+  double stars;
+  String review_text;
+  int helpful_yes;
+  int helpful_no;
+  bool is_editable;
 
   Review({
+    this.review_id,
+    this.product_id,
     this.author,
+    this.brand,
+    this.date_updated,
     this.title,
-    this.date,
-    this.text,
-    this.reviewStars,
-    this.helpfulYes,
-    this.helpfulNo
+    this.stars,
+    this.review_text,
+    this.helpful_yes,
+    this.helpful_no,
+    this.is_editable,
   });
+
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      review_id: json['review_id'],
+      product_id: json['product_id'],
+      author: json['author'],
+      brand: json['brand'],
+      date_updated: json['date_updated'],
+      title: json['title'],
+      stars: json['stars'] + .0,
+      review_text: json['review_text'],
+      helpful_yes: json['helpful_yes'],
+      helpful_no: json['helpful_no'],
+      is_editable: false,
+    );
+  }
 }

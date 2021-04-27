@@ -6,10 +6,12 @@ import 'package:ice_cream_social/login/advanced_item.dart';
 import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/search_users.dart';
 import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/SettingsPage/settings.dart';
 
 typedef void IntCallback(int id);
 
 class Profile extends StatefulWidget {
+
   Authentication auth;
   IntCallback profileChanged;
   Profile({this.auth, this.profileChanged});
@@ -19,6 +21,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
   Authentication auth;
   IntCallback profileChanged;
 
@@ -405,8 +408,19 @@ class _ProfileState extends State<Profile> {
             profileChanged(0);
           },
         ),
+        // Settings Page
+        IconButton(
+          icon: Icon(Icons.more_horiz, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsPage(),
+              ),
+            );
+          },
+        ),
       ],
-      //backgroundColor: Color(0x9C4FF2),
     );
   }
 }
