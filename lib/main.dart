@@ -3,7 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
 import 'package:ice_cream_social/login/profile.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'HomePage/filter.dart';
+import 'HomePage/placeholder_widget.dart';
 import 'package:ice_cream_social/backend_data.dart';
+
 
 void main() {
   runApp(new MyApp());
@@ -11,7 +15,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(home: new HomePage());
+    return new MaterialApp(
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => BackendData()),
+          ],
+          child: new HomePage(),
+        )
+    );
   }
 }
 
@@ -40,12 +51,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget chooseWidget() {
+  Widget chooseWidget(BuildContext context) {
     if (_selectedIndex == 0) {
       return _widgetOptions[_selectedIndex];
     } else if (_selectedIndex == 1 && loginChanged == 0) {
       return _widgetOptions[1];
     } else if (_selectedIndex == 1 && loginChanged == 1) {
+      // LoginScreen wid = _widgetOptions[2] as LoginScreen;
+      // wid.context = context;
       return _widgetOptions[2];
     } else {
       return _widgetOptions[_selectedIndex];
@@ -53,22 +66,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
+      auth: auth,
+      context: context,
     ));
-    _widgetOptions.add(Profile(
-      onLoginChanged: updateLoginChanged,
-    ));
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => BackendData()),
-      ],
-      child: MaterialApp(
+
+    return MaterialApp(
         home: Scaffold(
           // appBar: _buildBar(context),
-          body: chooseWidget(),
+          body: Builder(
+            builder: (context) => chooseWidget(context)
+          ),
           /**Bottom navigation drawer.**/
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
@@ -86,8 +98,7 @@ class _HomePageState extends State<HomePage> {
             onTap: _onItemTapped,
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildBar(BuildContext context) {

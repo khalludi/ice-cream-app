@@ -59,3 +59,4 @@ app.*.map.json
 /ios/*.lock
 
 backend/index.json
+test_server/node_modules/*

@@ -50,9 +50,9 @@ const createPool = async () => {
 
 let pool;
 
-exports.reviewsGET = async (req, res) => {
+exports.createIngredient = async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query('SELECT * FROM Users LIMIT 10');
-  const output = await talentiQuery;
-  res.send(JSON.parse(JSON.stringify(output)));
+  const out1 = await pool.query('INSERT INTO Ingredients (ingredient_id, name) VALUES ("' + req.body.ingredient_id
+                                   + '", "' + req.body.name + '")');
+  res.status(201).send(JSON.parse(JSON.stringify(out1)));
 }

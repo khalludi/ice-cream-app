@@ -51,7 +51,7 @@ class _SearchReviewsState extends State<SearchReviews> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
-      Uri.http(
+      Uri.https(
         url,
         "reviews/text",
         data,
