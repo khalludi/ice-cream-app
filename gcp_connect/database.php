@@ -2,7 +2,7 @@
 // used to connect to the database
 $DB_HOST = "35.226.156.119";
 $db_name = "icecreamdb";
-$table = "Product";
+$table = "Products";
 $username = "root";
 $password = "testuser";
 
@@ -81,7 +81,8 @@ if("UPDATE" == "$action"){
 //action to delete a product
 if("DELETE" == "$action"){
     $product_id = $_POST["product_id"];
-    $sql = "DELETE FROM $table WHERE product_id = $product_id"; 
+    $brand_name = $_POST["brand_name"];
+    $sql = "DELETE FROM $table WHERE product_id = $product_id" AND brand_name = $brand_name;
 
     if($con->query(sql) === TRUE){
         echo "Deleted!";
