@@ -213,6 +213,15 @@ paths:
       responses:
         200:
           description: Ingredient updated
+  /update-product:
+    post:
+      summary: Updates the Product if it exists
+      operationId: updateProduct
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-update-product
+      responses:
+        200:
+          description: Product updated
   /user-search:
     get:
       summary: Returns users that match search query

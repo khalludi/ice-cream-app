@@ -807,6 +807,37 @@ resource "google_cloudfunctions_function_iam_binding" "binding24" {
   ]
 }
 
+### Update Product
+resource "google_storage_bucket_object" "archive25" {
+  provider = google-beta
+  name   = "update_product.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./update_product/update_product.zip"
+}
+
+resource "google_cloudfunctions_function" "function25" {
+  provider = google-beta
+  name        = "function-update-product"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive25.name
+  trigger_http          = true
+  entry_point           = "updateProduct"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding25" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function25.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }

@@ -52,7 +52,7 @@ let pool;
 
 exports.createProduct = async (req, res) => {
   pool = await createPool();
-  const out1 = await pool.query('INSERT INTO Product VALUES (' + 
+  const out1 = await pool.query('INSERT INTO Products VALUES (' + 
     req.body.product_id + ",'" + req.body.product_name + "','" + req.body.brand_name + "','" +
     req.body.subhead + "','" + req.body.description + "'," + req.body.avg_rating + "," +
     req.body.num_ratings + ")");
