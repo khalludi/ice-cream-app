@@ -53,13 +53,15 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> fetchIngredients() async {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await http.get(Uri.http(url, "ingredients"), headers: {
-      "Accept": "application/json",
-      'authorization': basicAuth,
-    });
+    final response = await http.get(
+      Uri.http(url, "ingredients"),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+    );
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      // var rest = data as List;
       List<Ingredient> ingredients =
           (data).map((i) => Ingredient.fromJson(i)).toList();
       return ingredients;
@@ -152,30 +154,30 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   void addIngredient(Ingredient ingredient) {
     ingredients.insert(0, ingredient);
     setState(() {});
-    // addIngredientToDatabase(ingredient);
+    addIngredientToDatabase(ingredient);
   }
 
   void addIngredientToDatabase(Ingredient ingredient) async {
-    var data = {
-      'ingredient_id': (ingredients.length + 1).toString(),
-      'name': ingredient.name,
-    };
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    String body = json.encode(data);
     http.Response response = await http.post(
       Uri.http(
         url,
         "ingredients",
       ),
       headers: {
-        // "Accept": "application/json",
+        'Content-Type': 'application/json; charset=UTF-8',
         'authorization': basicAuth,
       },
-      body: body,
+      body: jsonEncode(
+        <String, String>{
+          'ingredient_id': (ingredients.length + 1).toString(),
+          'name': ingredient.name,
+        },
+      ),
     );
-    if (response.statusCode == 200) {
-      print("ingredientAdmin success");
+    if (response.statusCode == 201) {
+      print("ingredientAdmin add ingredient success");
       var data = json.decode(response.body);
     } else {
       print("ingredientAdmin fail");

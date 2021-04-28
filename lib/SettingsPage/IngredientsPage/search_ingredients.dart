@@ -90,7 +90,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
 
   Future<List<Ingredient>> search(String query) async {
     isUsingSearchBar = true;
-    String url = '10.0.2.2:3000';
     await Future.delayed(Duration(seconds: 2));
 
     var data = {'search_term': query};
@@ -126,53 +125,65 @@ class _SearchIngredientsState extends State<SearchIngredients> {
   }
 
   void deleteIngredient(int index) async {
-    // await deleteIngredientFromDatabase(ingredients[index]);
-    ingredients.removeAt(index);
-    setState(() {});
+    await deleteIngredientFromDatabase(ingredients[index], index);
   }
 
-  void deleteIngredientFromDatabase(Ingredient ingredient) async {
-    String url = '192.168.0.7:8080';
-    var queryParameters = {
-      'ingredient_id': '100',
-    };
-    String ingredient_id = ingredient.ingredient_id.toString();
-    http.Response response = await http.delete(
-      Uri.http(
-        url,
-        "ingredients/$ingredient_id",
-        queryParameters,
-      ),
-      headers: {"Accept": "application/json"},
-    );
-    if (response.statusCode == 200) {
-    } else {}
-  }
-
-  void updateIngredient(Ingredient editedIngredient, int index) {
-    ingredients[index] = editedIngredient;
-    // updateIngredientInDatabase(editedIngredient)
-    setState(() {});
-  }
-
-  void updateIngredientInDatabase(Ingredient ingredient) async {
-    var data = {
-      'ingredient_id': (ingredients.length + 1).toString(),
-      'name': ingredient.name,
-    };
+  Future<bool> deleteIngredientFromDatabase(
+      Ingredient ingredient, int index) async {
+    String id = ingredient.ingredient_id.toString();
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    String body = json.encode(data);
-    http.Response response = await http.post(
+    final response = await http.delete(
       Uri.http(
         url,
         "ingredients",
       ),
       headers: {
-        // "Accept": "application/json",
+        'Content-Type': 'application/json; charset=UTF-8',
         'authorization': basicAuth,
       },
-      body: body,
+      body: jsonEncode(<String, String>{
+        'ingredient_id': ingredient.ingredient_id,
+      }),
+    );
+
+    log("statuscode=" + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      log("delete ingredient response: " + response.body);
+      ingredients.removeAt(index);
+      setState(() {});
+      return true;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      return false;
+    }
+  }
+
+  void updateIngredient(Ingredient editedIngredient, int index) {
+    ingredients[index] = editedIngredient;
+    updateIngredientInDatabase(editedIngredient);
+    setState(() {});
+  }
+
+  void updateIngredientInDatabase(Ingredient ingredient) async {
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    http.Response response = await http.post(
+      Uri.http(
+        url,
+        "ingredients/edit",
+      ),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': basicAuth,
+      },
+      body: jsonEncode(
+        <String, String>{
+          'old_ingredient_id': ingredient.ingredient_id.toString(),
+          'name': ingredient.name,
+        },
+      ),
     );
     if (response.statusCode == 200) {
       print("ingredientAdmin success");
