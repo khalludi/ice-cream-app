@@ -1,16 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
+import '../main.dart';
 import 'Products.dart';
-import 'ProductsDialog.dart';
-import 'package:ice_cream_social/backend_data.dart';
-import 'ProductsTextField.dart';
 
 void main() {
   runApp(new MyApp());

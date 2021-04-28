@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:provider/provider.dart';
 import 'Products.dart';
 import 'ProductsDialog.dart';
-import 'package:ice_cream_social/backend_data.dart';
 import 'ProductsTextField.dart';
 
 class SearchProducts extends StatefulWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Products.dart';
-import 'dart:developer';
 
 /// [IngredientTextField] is a custom TextField widget that represents the name of an ingredient.
 /// Users can click to edit the name of an ingredient, and if their change is valid,
