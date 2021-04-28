@@ -130,7 +130,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
 
   Future<bool> deleteIngredientFromDatabase(
       Ingredient ingredient, int index) async {
-    String id = ingredient.ingredient_id.toString();
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.delete(

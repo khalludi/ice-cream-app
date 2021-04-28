@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'dart:developer';
 import 'review.dart';
+import 'package:intl/intl.dart';
 
 /// The [ReviewCard] widget contains the author, title, date, and content of a review.
 /// A separate widget, eg [FlavorPage], can construct a list of ReviewCards.
@@ -26,32 +27,14 @@ class ReviewCard extends StatefulWidget {
 }
 
 class _ReviewCardState extends State<ReviewCard> {
-  final _months = const {
-    '01': 'Jan',
-    '02': 'Feb',
-    '03': 'March',
-    '04': 'April',
-    '05': 'May',
-    '06': 'June',
-    '07': 'July',
-    '08': 'Aug',
-    '09': 'Sept',
-    '10': 'Oct',
-    '11': 'Nov',
-    '12': 'Dec'
-  };
-
   @override
   initState() {
     super.initState();
   }
 
-  String getFormattedDate(date) {
-    // var result = new StringBuffer(_months[date.substring(5, 7)]);
-    // result.write(' ');
-    // result.write(date.substring(0, 4));
-    // return result.toString();
-    return "";
+  String getFormattedDate(DateTime date) {
+    DateFormat formatter = new DateFormat('MMMM dd, yyyy');
+    return formatter.format(date);
   }
 
   @override

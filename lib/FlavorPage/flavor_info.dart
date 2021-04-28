@@ -8,6 +8,7 @@ import 'review.dart';
 import 'review_card.dart';
 import 'flavor_description.dart';
 import 'search_reviews.dart';
+import 'dart:developer';
 
 /// The [FlavorInfo] widget consists of the specific ice cream flavor's name, brand, image,
 /// average rating, and reviews. These items are laid out as a column and the
@@ -119,12 +120,13 @@ class _FlavorInfoState extends State<FlavorInfo> {
   }
 
   void routeSearchReviews(BuildContext context) {
+    log("flavorInfo productId" + widget.productId.toString());
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (_) => SearchReviews(
           productId: widget.productId,
-          brandId: brandId,
+          brand: brandId,
           context: context,
         ),
       ),
