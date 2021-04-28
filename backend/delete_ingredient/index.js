@@ -52,7 +52,7 @@ let pool;
 
 exports.deleteIngredient = async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query("DELETE FROM Ingredients WHERE ingredient_id = ?" + req.body.ingredient_id);
+  const talentiQuery = pool.query("DELETE FROM Ingredients WHERE ingredient_id = '" + req.body.ingredient_id + "'");
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
 }

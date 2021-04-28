@@ -52,7 +52,8 @@ let pool;
 
 exports.deleteReview = async (req, res) => {
   pool = await createPool();
-  const talentiQuery = pool.query("DELETE FROM Reviews WHERE review_id = " + req.body.review_id);
+  const talentiQuery = pool.query("DELETE FROM Reviews WHERE product_id = " + req.body.product_id + 
+  " and brand = '" + req.body.brand + "' and author = '" + req.body.author + "'");
   const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
 }

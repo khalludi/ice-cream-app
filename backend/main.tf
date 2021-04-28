@@ -652,6 +652,161 @@ resource "google_cloudfunctions_function_iam_binding" "binding19" {
   ]
 }
 
+### Edit Ingredient
+resource "google_storage_bucket_object" "archive20" {
+  provider = google-beta
+  name   = "edit_ingredient.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./edit_ingredient/edit_ingredient.zip"
+}
+
+resource "google_cloudfunctions_function" "function20" {
+  provider = google-beta
+  name        = "function-edit-ingredient"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive20.name
+  trigger_http          = true
+  entry_point           = "editIngredient"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding20" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function20.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Create Review
+resource "google_storage_bucket_object" "archive21" {
+  provider = google-beta
+  name   = "create_review.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./create_review/create_review.zip"
+}
+
+resource "google_cloudfunctions_function" "function21" {
+  provider = google-beta
+  name        = "function-create-review"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive21.name
+  trigger_http          = true
+  entry_point           = "createReview"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding21" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function21.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Get All Products
+resource "google_storage_bucket_object" "archive22" {
+  provider = google-beta
+  name   = "get_product_all.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_product_all/get_product_all.zip"
+}
+
+resource "google_cloudfunctions_function" "function22" {
+  provider = google-beta
+  name        = "function-get-product-all"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive22.name
+  trigger_http          = true
+  entry_point           = "getProductAll"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding22" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function22.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Create Products
+resource "google_storage_bucket_object" "archive23" {
+  provider = google-beta
+  name   = "create_product.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./create_product/create_product.zip"
+}
+
+resource "google_cloudfunctions_function" "function23" {
+  provider = google-beta
+  name        = "function-create-product"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive23.name
+  trigger_http          = true
+  entry_point           = "createProduct"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding23" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function23.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Delete Product
+resource "google_storage_bucket_object" "archive24" {
+  provider = google-beta
+  name   = "delete_product.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./delete_product/delete_product.zip"
+}
+
+resource "google_cloudfunctions_function" "function24" {
+  provider = google-beta
+  name        = "function-delete-product"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive24.name
+  trigger_http          = true
+  entry_point           = "deleteProduct"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding24" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function24.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }

@@ -50,11 +50,12 @@ const createPool = async () => {
 
 let pool;
 
-exports.updateReview = async (req, res) => {
+exports.createReview = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query("UPDATE Reviews SET review_text = '" + req.body.review_text + 
-    "', stars = " + req.body.stars + ", title = '" + req.body.title + "' WHERE product_id = " + 
-    req.body.product_id + " AND brand = '" + req.body.brand + "' AND author = '" + 
-    req.body.author + "'");
-  res.send(JSON.parse(JSON.stringify(output)));
+  const out1 = await pool.query('INSERT INTO Reviews (product_id, brand, author, date_updated, title, stars, review_text, helpful_yes, helpful_no) VALUES (' + 
+    req.body.product_id + ",'" + req.body.brand + "','" + req.body.author + "','" +
+    req.body.date_updated + "','" + req.body.title + "'," + req.body.stars + ",'" +
+    req.body.review_text + "'," + req.body.helpful_yes + "," + req.body.helpful_no + 
+    ")");
+  res.status(201).send(JSON.parse(JSON.stringify(out1)));
 }

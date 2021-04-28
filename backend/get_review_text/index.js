@@ -52,6 +52,6 @@ let pool;
 
 exports.getReviewText = async (req, res) => {
   pool = await createPool();
-  const out = await pool.query("SELECT * FROM Reviews WHERE review_text LIKE '%" + req.query.search_term+"%'");
+  const out = await pool.query("SELECT * FROM Reviews WHERE product_id = '" + req.query.productId + "' AND brand = '" + req.query.brand + "' and review_text LIKE '%" + req.query.search_term+"%' ORDER BY date_updated DESC");
   res.status(200).send(JSON.parse(JSON.stringify(out)));
 }
