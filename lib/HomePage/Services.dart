@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'Products.dart';
 
 class Services {
-  static const ROOT = "https://ice-cream-project-308820.uc.r.appspot.com/";
+  static const ROOT = "35.226.156.119";
   static const String _GET_ALL_ACTION = "GET_ALL";
   static const String _ADD_ACTION = "ADD";
   static const String _UPDATE_ACTION = "UPDATE";
