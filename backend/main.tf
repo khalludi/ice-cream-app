@@ -838,6 +838,37 @@ resource "google_cloudfunctions_function_iam_binding" "binding25" {
   ]
 }
 
+### Create Ingredient
+resource "google_storage_bucket_object" "archive26" {
+  provider = google-beta
+  name   = "create_ingredient.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./create_ingredient/create_ingredient.zip"
+}
+
+resource "google_cloudfunctions_function" "function26" {
+  provider = google-beta
+  name        = "function-create-ingredient"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive26.name
+  trigger_http          = true
+  entry_point           = "createIngredient"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding26" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function26.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }
