@@ -7,6 +7,11 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'HomePage/Products.dart';
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:provider/provider.dart';
+
+typedef Callback = Function(int);
 
 void main() {
   runApp(new MyApp());
@@ -23,6 +28,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String url;
+  String username;
+  String password;
+  Future<List<Products>> futureProducts;
+  List<Products> productsList;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  BackendData providerBackendData;
+
   int _selectedIndex = 0;
   int loginChanged = 0;
   static const TextStyle optionStyle =
@@ -31,7 +44,35 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+    futureProducts = fetchProducts();
     super.initState();
+  }
+
+  Future<List<Products>> fetchProducts() async {
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.https(url, "get-product-all"), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+    });
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      // var rest = data as List;
+      List<Products> product =
+      (data).map((i) => Products.fromJson(i)).toList();
+      return product;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+    }
+    return null;
   }
 
   /**Bottom navigation drawer.**/
@@ -71,88 +112,28 @@ class _HomePageState extends State<HomePage> {
       onLoginChanged: updateLoginChanged,
     ));
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: _buildBar(context),
-        body: Padding(
-            child: FutureBuilder<List<Photo>>(
-              future: fetchPhotos(http.Client()),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print(snapshot.error);
-
-                return snapshot.hasData
-                    ? PhotosList(photos: snapshot.data)
-                    : Center(child: CircularProgressIndicator());
-              },
-            ),
-            padding: EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 10.0),
-        ),
-        /**Bottom navigation drawer.**/
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: 'Account',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.blue,
-          onTap: _onItemTapped,
-        ),
-      ),
+    return FutureBuilder<List<Products>>(
+        future: futureProducts,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            productsList = snapshot.data;
+            return buildList(context);
+          } else{
+            return Scaffold(
+              key: scaffoldKey,
+              appBar: _buildBar(context),
+              body: Center(
+                child: Text("Error getting products data"),
+              ),
+            );
+          }
+        }
     );
   }
-
-  Widget _buildBar(BuildContext context) {
-    return new AppBar(
-      centerTitle: true,
-      title: Text('ICE CREAM SOCIAL',
-          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[Colors.purple, Colors.blue])),
-      ),
-      //backgroundColor: Color(0x9C4FF2),
-    );
-  }
-}
-
-class Photo {
-  final int albumId;
-  final int id;
-  final String title;
-  final String url;
-  final String thumbnailUrl;
-
-  Photo({this.albumId, this.id, this.title, this.url, this.thumbnailUrl});
-
-  factory Photo.fromJson(Map<String, dynamic> json) {
-    return Photo(
-      albumId: json['albumId'] as int,
-      id: json['id'] as int,
-      title: json['title'] as String,
-      url: json['url'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String,
-    );
-  }
-}
-
-class PhotosList extends StatelessWidget {
-  final List<Photo> photos;
-
-  PhotosList({Key key, this.photos}) : super(key: key);
-
   @override
-  Widget build(BuildContext context) {
+  Widget buildList(BuildContext context) {
     return ListView.builder(
-      itemCount: photos.length,
+      itemCount: productsList.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
@@ -168,12 +149,8 @@ class PhotosList extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: Image.network(
-                          photos[index].thumbnailUrl,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        title: Text(photos[index].title),
-                        subtitle: Text(photos[index].title),
+                        title: Text(productsList[index].product_name),
+                        subtitle: Text(productsList[index].brand_name),
                       ),
                       ButtonTheme(
 // make buttons use the appropriate styles for cards
@@ -194,19 +171,27 @@ class PhotosList extends StatelessWidget {
       },
     );
   }
-}
 
-Future<List<Photo>> fetchPhotos(http.Client client) async {
-  final response =
-  await client.get('https://jsonplaceholder.typicode.com/photos');
-
-// Use the compute function to run parsePhotos in a separate isolate
-  return compute(parsePhotos, response.body);
+  Widget _buildBar(BuildContext context) {
+    return new AppBar(
+      centerTitle: true,
+      title: Text('ICE CREAM SOCIAL',
+          style: TextStyle(fontFamily: 'Nexa', fontSize: 30, fontWeight: FontWeight.w700)),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[Colors.purple, Colors.blue])),
+      ),
+      //backgroundColor: Color(0x9C4FF2),
+    );
+  }
 }
 
 // A function that will convert a response body into a List<Photo>
-List<Photo> parsePhotos(String responseBody) {
+List<Products> parseProducts(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<Photo>((json) => Photo.fromJson(json)).toList();
+  return parsed.map<Products>((json) => Products.fromJson(json)).toList();
 }

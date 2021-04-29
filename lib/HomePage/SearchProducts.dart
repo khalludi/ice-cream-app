@@ -94,8 +94,7 @@ class _SearchProductsState extends State<SearchProducts> {
     final response = await http.get(
       Uri.https(
         url,
-        //CHANGE get-ingredient
-        "get-ingredient",
+        "get-product-all",
         data,
       ),
       headers: {
@@ -134,7 +133,7 @@ class _SearchProductsState extends State<SearchProducts> {
     http.Response response = await http.delete(
       Uri.https(
         url,
-        "products/$product_id",
+        "delete-product",
         queryParameters,
       ),
       headers: {"Accept": "application/json"},
@@ -164,7 +163,7 @@ class _SearchProductsState extends State<SearchProducts> {
     http.Response response = await http.post(
       Uri.https(
         url,
-        "products",
+        "update-product",
       ),
       headers: {
         // "Accept": "application/json",

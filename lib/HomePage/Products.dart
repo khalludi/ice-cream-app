@@ -17,7 +17,7 @@ class Products{
       brand_name: json["brand_name"] as String,
       subhead: json["subhead"] as String,
       description: json["description"] as String,
-      avg_rating: json["avg_rating"] as double,
+      avg_rating: json["avg_rating"].toDouble() as double,
       num_ratings: json["num_ratings"] as int,
     );
   }
