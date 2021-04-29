@@ -162,7 +162,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     //     await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await http.get(Uri.http(url, path), headers: {
+    final response = await http.get(Uri.https(url, path), headers: {
       "Accept": "application/json",
       'authorization': basicAuth,
     });

@@ -96,7 +96,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
-      Uri.http(
+      Uri.https(
         url,
         "ingredients/nameParam",
         data,
@@ -133,7 +133,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.delete(
-      Uri.http(
+      Uri.https(
         url,
         "ingredients",
       ),
@@ -169,7 +169,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "ingredients/edit",
       ),

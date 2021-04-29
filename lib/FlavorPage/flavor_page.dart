@@ -87,9 +87,9 @@ class _FlavorPageState extends State<FlavorPage> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
-      Uri.http(
+      Uri.https(
         url,
-        "/reviews/product",
+        "get_review_all",
         queryParameters,
       ),
       headers: {
@@ -142,7 +142,7 @@ class _FlavorPageState extends State<FlavorPage> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final String body = json.encode(review.toJson());
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "reviews",
       ),
@@ -164,7 +164,7 @@ class _FlavorPageState extends State<FlavorPage> {
     //   "email": await email,
     // };
     // var response =
-    //     await http.get(Uri.http(url, 'get-profile', queryParameters));
+    //     await http.get(Uri.https(url, 'get-profile', queryParameters));
     // var obj = jsonDecode(response.body) as List;
     // return obj[0]["username"];
   }
@@ -193,7 +193,7 @@ class _FlavorPageState extends State<FlavorPage> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     http.Response response = await http.delete(
-      Uri.http(
+      Uri.https(
         url,
         "reviews",
       ),
@@ -237,7 +237,7 @@ class _FlavorPageState extends State<FlavorPage> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
     http.Response response = await http.post(
-      Uri.http(
+      Uri.https(
         url,
         "/reviews/update",
       ),
