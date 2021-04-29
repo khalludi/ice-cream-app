@@ -51,7 +51,7 @@ class _SearchReviewsState extends State<SearchReviews> {
     log("productId: " + widget.productId.toString());
     var queryParameters = {
       'search_term': query,
-      'productId': widget.productId.toString(),
+      'product_id': widget.productId.toString(),
       'brand': widget.brand,
     };
 

@@ -70,9 +70,7 @@ class _FlavorPageState extends State<FlavorPage> {
     );
     url = providerBackendData.url;
     currentAuthor = "annaz2";
-    getUsername().then((value) {
-      currentAuthor = value;
-    });
+    loadUsername();
     username = providerBackendData.username;
     password = providerBackendData.password;
     futureReviews = fetchReviews();
@@ -81,7 +79,7 @@ class _FlavorPageState extends State<FlavorPage> {
 
   Future<List<Review>> fetchReviews() async {
     Map<String, dynamic> queryParameters = {
-      'productId': widget.productId.toString(),
+      'product_id': widget.productId.toString(),
       'brand': brandId,
     };
     String basicAuth =
@@ -89,7 +87,7 @@ class _FlavorPageState extends State<FlavorPage> {
     final response = await http.get(
       Uri.https(
         url,
-        "get_review_all",
+        "reviews/product",
         queryParameters,
       ),
       headers: {
@@ -129,6 +127,7 @@ class _FlavorPageState extends State<FlavorPage> {
         is_editable: true,
       ),
     );
+    hasAddedReview = true;
     setState(() {});
     final snackBar = SnackBar(content: Text('Added review!'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -137,7 +136,6 @@ class _FlavorPageState extends State<FlavorPage> {
 
   void addReviewToDatabase(Review review) async {
     review.author = currentAuthor;
-    log("addReview username=" + review.author);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final String body = json.encode(review.toJson());
@@ -155,18 +153,20 @@ class _FlavorPageState extends State<FlavorPage> {
     );
   }
 
-  Future<String> getUsername() async {
-    return "annaz2";
-    // TODO: uncomment out other code once GCP integrated
-    // Authentication auth = new Authentication();
-    // var email = auth.getEmail();
-    // var queryParameters = {
-    //   "email": await email,
-    // };
-    // var response =
-    //     await http.get(Uri.https(url, 'get-profile', queryParameters));
-    // var obj = jsonDecode(response.body) as List;
-    // return obj[0]["username"];
+  void loadUsername() async {
+    Authentication auth = new Authentication();
+    var email = auth.getEmail();
+
+    var queryParameters = {
+      "email": await email,
+    };
+    var response = await http.get(Uri.https(
+      url,
+      'get-profile',
+      queryParameters,
+    ));
+    var obj = jsonDecode(response.body) as List;
+    currentAuthor = obj[0]["username"];
   }
 
   void createEditDialog(int index) async {
@@ -230,13 +230,11 @@ class _FlavorPageState extends State<FlavorPage> {
     review.author = currentAuthor;
     review.brand = brandId;
     review.product_id = widget.productId;
-    log("productid=" + widget.productId.toString());
     Map<String, String> data = review.toJson();
-    log("review toJson productid=" + data['product_id']);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
-    http.Response response = await http.post(
+    http.Response response = await http.put(
       Uri.https(
         url,
         "/reviews/update",
@@ -249,10 +247,10 @@ class _FlavorPageState extends State<FlavorPage> {
       body: body,
     );
     if (response.statusCode == 200) {
-      print("ingredientAdmin success");
+      print("editReview success");
       var data = json.decode(response.body);
     } else {
-      print("ingredientAdmin fail");
+      print("editReview fail");
     }
   }
 

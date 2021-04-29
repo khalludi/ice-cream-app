@@ -176,6 +176,7 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         },
       ),
     );
+    log("addIngredient response=" + response.body);
     if (response.statusCode == 201) {
       print("ingredientAdmin add ingredient success");
       var data = json.decode(response.body);

@@ -188,7 +188,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       print("ingredientAdmin success");
       var data = json.decode(response.body);
     } else {
-      print("ingredientAdmin fail");
+      print("updateIngredient fail");
     }
   }
 

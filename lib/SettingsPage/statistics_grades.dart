@@ -201,7 +201,6 @@ class _StatisticsGradesPageState extends State<StatisticsGradesPage> {
           "Accept": "application/json",
         });
 
-    log("statistics response body: " + response.body);
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       productGrades = data[0];
