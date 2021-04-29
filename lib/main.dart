@@ -211,33 +211,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Products>> search(String query) async {
     isUsingSearchBar = true;
-    await Future.delayed(Duration(seconds: 2));
-
-    var data = {'search_term': query};
-    String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await http.get(
-      Uri.https(
-        url,
-        "get-product-all",
-        data,
-      ),
-      headers: {
-        "Accept": "application/json",
-        'authorization': basicAuth,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      List<Products> products =
-      (data).map((i) => Products.fromJson(i)).toList();
-      return products;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
+    List<Products> results = [];
+    for (int i = 0; i < products.length; i++){
+      if (products[i].product_name.toLowerCase().contains(query)){
+        results.add(products[i]);
+      }
     }
-    return null;
+    return results;
   }
 
   Widget getProductsWidget(Products product, int index) {
