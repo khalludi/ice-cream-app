@@ -60,10 +60,6 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         'authorization': basicAuth,
       },
     );
-<<<<<<< HEAD
-=======
-
->>>>>>> 66979de5ca7fd9e8e7dc32ed983197984747c340
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Ingredient> ingredients =
@@ -180,7 +176,6 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         },
       ),
     );
-    log("addIngredient response=" + response.body);
     if (response.statusCode == 201) {
       print("ingredientAdmin add ingredient success");
       var data = json.decode(response.body);
