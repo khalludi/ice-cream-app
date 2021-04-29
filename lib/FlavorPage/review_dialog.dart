@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import './review.dart';
+import 'dart:async';
 
 enum DialogAction { Add, Edit, Delete }
 
@@ -113,8 +113,9 @@ class ReviewDialogState extends State<ReviewDialog> {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   var currentTime = new DateTime.now();
-                  var formatter = new DateFormat('yyyy-MM-dd');
-                  String formattedDate = formatter.format(currentTime);
+                  // var formatter = new DateFormat('yyyy-MM-dd');
+                  // DateTime dateTime = formatter.parse(currentTime);
+                  // String formattedDate = formatter.format(currentTime);
                   Review newReview = Review(
                     author: authorController.text,
                     review_text: textController.text,
@@ -122,7 +123,7 @@ class ReviewDialogState extends State<ReviewDialog> {
                     stars: rating,
                     helpful_yes: 0,
                     helpful_no: 0,
-                    date_updated: formattedDate,
+                    date_updated: currentTime,
                     is_editable: true,
                   );
                   widget.review == null
