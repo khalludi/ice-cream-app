@@ -1,11 +1,21 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:flappy_search_bar/scaled_tile.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:provider/provider.dart';
 
 class SearchUsers extends StatefulWidget {
+  SearchUsers({
+    @required this.context,
+  });
+
+  final BuildContext context;
+
   @override
   _SearchUsersState createState() => _SearchUsersState();
 }
@@ -15,10 +25,27 @@ class User {
   final String email;
 
   User(this.username, this.email);
+
+  factory User.fromJson(dynamic json) {
+    return User(json['username'] as String, json['email'] as String);
+  }
 }
 
 class _SearchUsersState extends State<SearchUsers> {
   final SearchBarController<User> _searchBarController = SearchBarController();
+
+  BackendData providerBackendData;
+  String url;
+
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +91,32 @@ class _SearchUsersState extends State<SearchUsers> {
     );
   }
 
-  Future<List<User>> _getAllUsers(String text) async {
-    await Future.delayed(Duration(seconds: text.length == 4 ? 10 : 1));
-    if (text.length == 5) throw Error();
-    if (text.length == 6) return [];
-    List<User> posts = [];
+  Future<http.Response> fetchAlbum(String searchTerm) {
+    var queryParameters = {
+      "search_term" : searchTerm,
+    };
+    return http.get(Uri.https(url, 'user-search', queryParameters));
+  }
 
-    var random = new Random();
-    for (int i = 0; i < 10; i++) {
-      // posts.add(User("$text $i", "body random number : ${random.nextInt(100)}"));
-      posts.add(User("user_bobby", "dana.drow@gmail.com"));
+  Future<List<User>> _getAllUsers(String text) async {
+    var response;
+    try {
+      response = await fetchAlbum(text);
+    } on SocketException catch (e) {
+      print('error ${e}');
+    } catch (e) {
+      //for other errors
+      print('error ${e.toString()}');
     }
-    return posts;
+
+    print(response);
+
+    var tagObjsJson = jsonDecode(response.body) as List;
+    List<User> tagObjs = tagObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
+
+    print(tagObjs);
+
+    return tagObjs;
   }
 
   Widget _buildBar(BuildContext context) {

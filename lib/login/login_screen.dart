@@ -1,19 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:ice_cream_social/login/profile.dart';
+import 'package:provider/provider.dart';
 import 'authentication.dart';
 
 typedef void IntCallback(int id);
 
 class LoginScreen extends StatefulWidget {
   final IntCallback onLoginChanged;
-  LoginScreen({ @required this.onLoginChanged });
+  Authentication auth;
+  BuildContext context;
+  LoginScreen({ @required this.onLoginChanged, this.auth, this.context });
 
   @override
-  _LoginScreenState createState() => _LoginScreenState(onLoginChanged);
+  _LoginScreenState createState() => _LoginScreenState(onLoginChanged, auth);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  int toProfile = 0;
   bool _isLogin = true;
   String _userId;
   String _password;
@@ -27,19 +36,35 @@ class _LoginScreenState extends State<LoginScreen> {
   Authentication auth;
 
   IntCallback onLoginChanged;
-  _LoginScreenState(IntCallback onLoginChanged) {
+  IntCallback onProfileChanged;
+  _LoginScreenState(IntCallback onLoginChanged, Authentication auth) {
     this.onLoginChanged = onLoginChanged;
+    this.auth = auth;
   }
 
+  BackendData providerBackendData;
+  String url;
   @override
   void initState() {
-    auth = Authentication();
-    super.initState();
+    providerBackendData = Provider.of<BackendData>(
+      widget.context,
+      listen: false
+    );
+    url = providerBackendData.url;
+  }
+
+  void updateProfileChanged(int newId) {
+    setState(() {
+      toProfile = newId;
+    });
+    print("Updated toProfile to $toProfile\n");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return toProfile == 1 ?
+      Profile(auth: auth, profileChanged: updateProfileChanged, context: context)
+      : Scaffold(
       // appBar: AppBar(title: Text('Login'),),
         backgroundColor: Color(0xFFcfcfcf),
         body: Container(
@@ -230,11 +255,22 @@ class _LoginScreenState extends State<LoginScreen> {
         _userId = await auth.login(txtEmail.text, txtPassword.text);
         print('Login for user $_userId');
       } else {
-        _userId = await auth.signUp(txtEmail.text, txtPassword.text);
-        print('Sign up for user $_userId');
+        var response = await createUser(txtUsername.text, txtEmail.text);
+        print(response.statusCode);
+        if (response.statusCode != 201) {
+          throw Exception('Username or email already exists');
+        } else {
+          _userId = await auth.signUp(txtEmail.text, txtPassword.text);
+          print('Sign up for user $_userId');
+        }
       }
       if (_userId != null) {
-        onLoginChanged(1);
+        setState(() {
+          toProfile = 1;
+          txtEmail.text = "";
+          txtUsername.text = "";
+        });
+        // onLoginChanged(1);
         // Navigator.replace(context, PlaceholderWidget(Colors.blueGrey));
       }
     } catch (e) {
@@ -243,5 +279,18 @@ class _LoginScreenState extends State<LoginScreen> {
         _message = e.message;
       });
     }
+  }
+
+  Future<http.Response> createUser(String username, String email) {
+    return http.post(
+      Uri.https(url, 'create-profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email
+      }),
+    );
   }
 }

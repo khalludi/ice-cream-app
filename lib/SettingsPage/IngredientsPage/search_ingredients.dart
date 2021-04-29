@@ -98,7 +98,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     final response = await http.get(
       Uri.https(
         url,
-        "ingredients/nameParam",
+        "get-ingredient",
         data,
       ),
       headers: {
