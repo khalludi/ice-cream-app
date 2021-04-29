@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:ice_cream_social/HomePage/search.dart';
-import 'package:ice_cream_social/login/login_screen.dart';
-import 'package:ice_cream_social/login/profile.dart';
-import 'package:ice_cream_social/login/authentication.dart';
-import 'HomePage/filter.dart';
-import 'package:ice_cream_social/backend_data.dart';
-import 'HomePage/Products.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:ice_cream_social/HomePage/search.dart';
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'package:ice_cream_social/login/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'HomePage/Products.dart';
 
 
 void main() {
@@ -40,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   String url;
   String username;
   String password;
+  bool isUsingSearchBar;
 
   @override
   void initState() {
@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
     url = providerBackendData.url;
     username = providerBackendData.username;
     password = providerBackendData.password;
+    isUsingSearchBar = false;
     futureProducts = fetchProducts();
     super.initState();
   }
@@ -58,7 +59,6 @@ class _HomePageState extends State<HomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
-  /**Bottom navigation drawer.**/
   List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
@@ -111,6 +111,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    return FutureBuilder<List<Products>>(
+      future: futureProducts,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          products = snapshot.data;
+          //print(products);
+          return buildSearch(context);
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          return Scaffold(
+            key: scaffoldKey,
+            appBar: _buildBar(context),
+            body: Center(
+              child: Text("Error getting products data"),
+            ),
+          );
+        }
+        // By default, show a loading spinner.
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: _buildBar(context),
+        );
+      },
+    );
+  }
+
+  Widget buildSearch(BuildContext context) {
     Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
@@ -120,13 +147,42 @@ class _HomePageState extends State<HomePage> {
       context: context,
     ));
 
-    return MaterialApp(
-        home: Scaffold(
-          // appBar: _buildBar(context),
-          body: Builder(
-            //builder: (context) => chooseWidget(context),
-            builder: (context) => buildFuture(context)
-          ),
+    return Scaffold(
+          appBar: _buildBar(context),
+          body: Row(
+                children: <Widget>[
+                  Expanded(
+                    child:SearchBar<Products>(
+                      key: Key(products.length.toString()),
+                      searchBarPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      listPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      suggestions: products,
+                      onCancelled: () => isUsingSearchBar = false,
+                      hintText: "Search",
+                      shrinkWrap: true,
+                      onSearch: search,
+                      onItemFound: (Products product, int index) {
+                        return getProductsWidget(product, index);
+                      },
+                    ),
+                  ),
+                  /**
+                  Expanded(
+                    child: IconButton(
+                        icon: Icon(Icons.filter_list),
+                        onPressed: () {
+                          //navigateToFilter(context);
+                        }),
+                  ),
+                      **/
+                ],
+            ),
           floatingActionButton: Builder(
             builder: (context) => FloatingActionButton(
               //onPressed: launchAddDialog,
@@ -150,35 +206,61 @@ class _HomePageState extends State<HomePage> {
             selectedItemColor: Colors.blue,
             onTap: _onItemTapped,
           ),
-        ),
-      );
+    );
   }
 
-  Widget buildFuture(BuildContext context) {
-    return FutureBuilder<List<Products>>(
-      future: futureProducts,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          products = snapshot.data;
-          print(products);
-          return buildList(context);
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-          return Scaffold(
-            key: scaffoldKey,
-            appBar: _buildBar(context),
-            body: Center(
-              child: Text("Error getting products data"),
-            ),
-          );
-        }
-        // By default, show a loading spinner.
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: _buildBar(context),
-          //body: buildSearch(context),
-        );
+  Future<List<Products>> search(String query) async {
+    isUsingSearchBar = true;
+    await Future.delayed(Duration(seconds: 2));
+
+    var data = {'search_term': query};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(
+      Uri.https(
+        url,
+        "get-product-all",
+        data,
+      ),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
       },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Products> products =
+      (data).map((i) => Products.fromJson(i)).toList();
+      return products;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+    }
+    return null;
+  }
+
+  Widget getProductsWidget(Products product, int index) {
+    return Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text(products[index].product_name),
+              subtitle: (Text(products[index].brand_name + "\n" + products[index].subhead + products[index].description)),
+            ),
+            ButtonTheme(
+              child: ButtonBar(
+                children: <Widget>[
+                  FlatButton(
+                    child: const Text('See More'),
+                    onPressed: () {/* ... */},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
     );
   }
 
@@ -196,47 +278,6 @@ class _HomePageState extends State<HomePage> {
                 colors: <Color>[Colors.purple, Colors.blue])),
       ),
       //backgroundColor: Color(0x9C4FF2),
-    );
-  }
-
-  Widget buildList(BuildContext context) {
-    return ListView.builder(
-      //itemCount: products.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                      200.0,
-                ),
-                color: Colors.white10,
-                alignment: Alignment.center,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(products[index].product_name),
-                        subtitle: (Text(products[index].brand_name + "\n" + products[index].subhead + products[index].description)),
-                      ),
-                      ButtonTheme(
-// make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('See More'),
-                              onPressed: () {/* ... */},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-          ],
-        );
-      },
     );
   }
 }
