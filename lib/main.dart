@@ -1,12 +1,13 @@
+import 'dart:convert';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:ice_cream_social/HomePage/search.dart';
-import 'package:ice_cream_social/login/login_screen.dart';
-import 'package:ice_cream_social/login/profile.dart';
-import 'package:ice_cream_social/login/authentication.dart';
-import 'HomePage/filter.dart';
-import 'HomePage/placeholder_widget.dart';
 import 'package:ice_cream_social/backend_data.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'package:ice_cream_social/login/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'HomePage/Products.dart';
 
 
 void main() {
@@ -31,12 +32,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<List<Products>> futureProducts;
+  List<Products> products;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
+  bool isUsingSearchBar;
+
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+    isUsingSearchBar = false;
+    futureProducts = fetchProducts();
+    super.initState();
+  }
   int _selectedIndex = 0;
   int loginChanged = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
-  /**Bottom navigation drawer.**/
   List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
@@ -65,7 +87,57 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<List<Products>> fetchProducts() async {
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.https(url, "get-product-all"), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+    });
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      print(data);
+      // var rest = data as List;
+      List<Products> products =
+      (data).map((i) => Products.fromJson(i)).toList();
+      //print(product);
+      return products;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      print("Fail");
+    }
+    return null;
+  }
+
   Widget build(BuildContext context) {
+    return FutureBuilder<List<Products>>(
+      future: futureProducts,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          products = snapshot.data;
+          //print(products);
+          return buildSearch(context);
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          return Scaffold(
+            key: scaffoldKey,
+            appBar: _buildBar(context),
+            body: Center(
+              child: Text("Error getting products data"),
+            ),
+          );
+        }
+        // By default, show a loading spinner.
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: _buildBar(context),
+        );
+      },
+    );
+  }
+
+  Widget buildSearch(BuildContext context) {
     Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
@@ -75,11 +147,48 @@ class _HomePageState extends State<HomePage> {
       context: context,
     ));
 
-    return MaterialApp(
-        home: Scaffold(
-          // appBar: _buildBar(context),
-          body: Builder(
-            builder: (context) => chooseWidget(context)
+    return Scaffold(
+          appBar: _buildBar(context),
+          body: Row(
+                children: <Widget>[
+                  Expanded(
+                    child:SearchBar<Products>(
+                      key: Key(products.length.toString()),
+                      searchBarPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      listPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      suggestions: products,
+                      onCancelled: () => isUsingSearchBar = false,
+                      hintText: "Search",
+                      shrinkWrap: true,
+                      onSearch: search,
+                      onItemFound: (Products product, int index) {
+                        return getProductsWidget(product, index);
+                      },
+                    ),
+                  ),
+                  /**
+                  Expanded(
+                    child: IconButton(
+                        icon: Icon(Icons.filter_list),
+                        onPressed: () {
+                          //navigateToFilter(context);
+                        }),
+                  ),
+                      **/
+                ],
+            ),
+          floatingActionButton: Builder(
+            builder: (context) => FloatingActionButton(
+              //onPressed: launchAddDialog,
+              child: Icon(Icons.add),
+              backgroundColor: Colors.purple,
+            ),
           ),
           /**Bottom navigation drawer.**/
           bottomNavigationBar: BottomNavigationBar(
@@ -97,8 +206,42 @@ class _HomePageState extends State<HomePage> {
             selectedItemColor: Colors.blue,
             onTap: _onItemTapped,
           ),
+    );
+  }
+
+  Future<List<Products>> search(String query) async {
+    isUsingSearchBar = true;
+    List<Products> results = [];
+    for (int i = 0; i < products.length; i++){
+      if (products[i].product_name.toLowerCase().contains(query)){
+        results.add(products[i]);
+      }
+    }
+    return results;
+  }
+
+  Widget getProductsWidget(Products product, int index) {
+    return Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text(products[index].product_name),
+              subtitle: (Text(products[index].brand_name + "\n" + products[index].subhead + products[index].description)),
+            ),
+            ButtonTheme(
+              child: ButtonBar(
+                children: <Widget>[
+                  FlatButton(
+                    child: const Text('See More'),
+                    onPressed: () {/* ... */},
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      );
+    );
   }
 
   Widget _buildBar(BuildContext context) {

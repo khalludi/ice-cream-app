@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'filter.dart';
+import 'FilterProducts.dart';
 
 class SearchWidget extends StatelessWidget {
   SearchWidget();
