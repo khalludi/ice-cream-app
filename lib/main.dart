@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   Future<List<Products>> futureProducts;
   List<Products> products;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchQuery = new TextEditingController();
+  List<Products> searchResults;
   BackendData providerBackendData;
   String url;
   String username;
@@ -96,11 +98,8 @@ class _HomePageState extends State<HomePage> {
     });
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      print(data);
-      // var rest = data as List;
       List<Products> products =
       (data).map((i) => Products.fromJson(i)).toList();
-      //print(product);
       return products;
     } else {
       // If the server did not return a 200 OK response,
@@ -168,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                       shrinkWrap: true,
                       onSearch: search,
                       onItemFound: (Products product, int index) {
-                        return getProductsWidget(product, index);
+                        return getProductsWidget(product);
                       },
                     ),
                   ),
@@ -211,23 +210,24 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Products>> search(String query) async {
     isUsingSearchBar = true;
-    List<Products> results = [];
-    for (int i = 0; i < products.length; i++){
-      if (products[i].product_name.toLowerCase().contains(query)){
-        results.add(products[i]);
-      }
+    String s = query;
+    searchResults = products
+        .where((b) => b.product_name.toLowerCase().contains(s.toLowerCase()))
+        .toList();
+    for(Products p in searchResults){
+      print(p.product_name);
     }
-    return results;
+    return searchResults;
   }
 
-  Widget getProductsWidget(Products product, int index) {
+  Widget getProductsWidget(Products product) {
     return Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text(products[index].product_name),
-              subtitle: (Text(products[index].brand_name + "\n" + products[index].subhead + products[index].description)),
+              title: Text(product.product_name),
+              subtitle: (Text(product.brand_name + "\n" + product.subhead + product.description)),
             ),
             ButtonTheme(
               child: ButtonBar(
