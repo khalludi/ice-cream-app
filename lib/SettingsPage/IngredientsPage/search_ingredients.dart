@@ -133,6 +133,10 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.delete(
+<<<<<<< HEAD
+=======
+
+>>>>>>> 66979de5ca7fd9e8e7dc32ed983197984747c340
       Uri.https(
         url,
         "ingredients",
