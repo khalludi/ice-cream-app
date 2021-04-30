@@ -10,6 +10,9 @@ import 'package:ice_cream_social/login/profile.dart';
 import 'package:ice_cream_social/login/authentication.dart';
 import 'HomePage/placeholder_widget.dart';
 import 'package:ice_cream_social/backend_data.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 
 
 void main() {
