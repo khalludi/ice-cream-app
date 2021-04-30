@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'Products.dart';
 import 'ProductsDialog.dart';
 import 'ProductsTextField.dart';
-import 'package:ice_cream_social/main2.dart';
 
 class SearchProducts extends StatefulWidget {
   final List<Products> productsList;
