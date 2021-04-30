@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  int toProfile = 0;
+  int toProfile;
   bool _isLogin = true;
   String _userId;
   String _password;
@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       listen: false
     );
     url = providerBackendData.url;
+    toProfile = 0;
   }
 
   void updateProfileChanged(int newId) {
