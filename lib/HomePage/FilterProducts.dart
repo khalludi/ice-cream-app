@@ -1,45 +1,58 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../main.dart';
-import 'Products.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart' as http;
+import '../main.dart';
+import 'Products.dart';
 import 'package:provider/provider.dart';
-import 'package:ice_cream_social/backend_data.dart';
-
 
 void main() {
   runApp(new MyApp());
 }
 
-class FilterPage extends StatefulWidget {
-  BuildContext context;
-  FilterPage({ this.context });
+class MyApp extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+        home: new FilterPage());
+  }
+}
 
+class FilterPage extends StatefulWidget {
   _FilterPageState createState() => new _FilterPageState();
 }
 
 class _FilterPageState extends State<FilterPage> {
+  String url;
+  String username;
+  String password;
+
+  Future<List<Products>> filter(String query) async {
+    await Future.delayed(Duration(seconds: 2));
+
+    var data = {'filter': query};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(
+      Uri.https(
+        url,
+        //CHANGE get-ingredient
+        "get-ingredient",
+        data,
+      ),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+    );
+  }
   //used to toggle design of brand buttons
   bool _hasBeenPressed1 = false;
   bool _hasBeenPressed2 = false;
   bool _hasBeenPressed3 = false;
   bool _hasBeenPressed4 = false;
 
-  BackendData providerBackendData;
-  String url;
-  @override
-  void initState() {
-    providerBackendData = Provider.of<BackendData>(
-        widget.context,
-        listen: false
-    );
-    url = providerBackendData.url;
-  }
-
   Widget build(BuildContext context) {
-    // var myModel = Provider.of<HomePage>(context); // A
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(

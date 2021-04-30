@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
+
+import 'package:provider/provider.dart';
+import 'HomePage/Products.dart';
+import 'HomePage/filter.dart';
 import 'package:ice_cream_social/login/profile.dart';
 import 'package:ice_cream_social/login/authentication.dart';
-import 'HomePage/filter.dart';
 import 'HomePage/placeholder_widget.dart';
 import 'package:ice_cream_social/backend_data.dart';
 
@@ -15,13 +18,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => BackendData()),
-          ],
-          child: new HomePage(),
-        )
+    return ChangeNotifierProvider(
+            create: (context) => BackendData(),
+            child: MaterialApp(
+              home: HomePage()
+            ),
     );
   }
 }
@@ -31,6 +32,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<List<Products>> futureProducts;
+  List<Products> products;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchQuery = new TextEditingController();
+  List<Products> searchResults;
+  BackendData providerBackendData;
+  String url;
+  String username;
+  String password;
+  bool isUsingSearchBar;
+
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+      context,
+      listen: false,
+    );
+    url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+    isUsingSearchBar = false;
+    futureProducts = fetchProducts();
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   int loginChanged = 0;
   static const TextStyle optionStyle =
@@ -65,10 +91,79 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget HomeDisplay({BuildContext context}){
+    return Scaffold(
+        appBar: _buildBar(context),
+      body: SearchBar<Products>(
+      key: Key(products.length.toString()),
+      searchBarPadding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 10,
+      ),
+      listPadding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 10,
+      ),
+      suggestions: products,
+      onCancelled: () => isUsingSearchBar = false,
+      hintText: "Search",
+      shrinkWrap: true,
+      onSearch: search,
+      onItemFound: (Products product, int index) {
+      return getProductsWidget(product);
+      },
+      ),
+      /**
+          Expanded(
+          child: IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+          //navigateToFilter(context);
+          }),
+          ),
+       **/
+      floatingActionButton: Builder(
+      builder: (context) => FloatingActionButton(
+      onPressed: () async {
+      var result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FilterPage(context: context)));
+      // note that this context is not Screen A context, but MaterialApp context
+      // see https://stackoverflow.com/a/66485893/2301224
+      print('>>> Button1-onPressed completed, result=$result');
+      },
+      child: Icon(Icons.filter_list),
+      backgroundColor: Colors.purple,
+      ),
+      ),
+    );
+  }
+
+  Future<List<Products>> fetchProducts() async {
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.https(url, "get-product-all"), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+    });
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Products> products =
+      (data).map((i) => Products.fromJson(i)).toList();
+      return products;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      print("Fail");
+    }
+    return null;
+  }
+
   Widget build(BuildContext context) {
     Authentication auth = new Authentication();
     _widgetOptions = [];
-    _widgetOptions.add(SearchWidget());
+    _widgetOptions.add(HomeDisplay(
+      context: context,
+    ));
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
       auth: auth,
@@ -76,27 +171,64 @@ class _HomePageState extends State<HomePage> {
     ));
 
     return MaterialApp(
-        home: Scaffold(
-          // appBar: _buildBar(context),
-          body: Builder(
+      home: Scaffold(
+        // appBar: _buildBar(context),
+        body: Builder(
             builder: (context) => chooseWidget(context)
-          ),
-          /**Bottom navigation drawer.**/
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+        ),
+        /**Bottom navigation drawer.**/
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_outlined),
+              label: 'Account',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: _onItemTapped,
+        ),
+      ),
+    );
+  }
+
+  Future<List<Products>> search(String query) async {
+    isUsingSearchBar = true;
+    String s = query;
+    searchResults = products
+        .where((b) => b.product_name.toLowerCase().contains(s.toLowerCase()) || b.description.toLowerCase().contains(s.toLowerCase()))
+        .toList();
+    for(Products p in searchResults){
+      print(p.product_name);
+    }
+    return searchResults;
+  }
+
+  Widget getProductsWidget(Products product) {
+    return Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text(product.product_name),
+              subtitle: (Text(product.brand_name + "\n" + product.subhead + product.description)),
+            ),
+            ButtonTheme(
+              child: ButtonBar(
+                children: <Widget>[
+                  FlatButton(
+                    child: const Text('See More'),
+                    onPressed: () {/* ... */},
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_outlined),
-                label: 'Account',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
-            onTap: _onItemTapped,
-          ),
+            ),
+          ],
+
         ),
       );
   }
