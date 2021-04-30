@@ -88,6 +88,53 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget HomeDisplay({BuildContext context}){
+    return Scaffold(
+        appBar: _buildBar(context),
+      body: SearchBar<Products>(
+      key: Key(products.length.toString()),
+      searchBarPadding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 10,
+      ),
+      listPadding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 10,
+      ),
+      suggestions: products,
+      onCancelled: () => isUsingSearchBar = false,
+      hintText: "Search",
+      shrinkWrap: true,
+      onSearch: search,
+      onItemFound: (Products product, int index) {
+      return getProductsWidget(product);
+      },
+      ),
+      /**
+          Expanded(
+          child: IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+          //navigateToFilter(context);
+          }),
+          ),
+       **/
+      floatingActionButton: Builder(
+      builder: (context) => FloatingActionButton(
+      onPressed: () async {
+      var result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FilterPage(context: context)));
+      // note that this context is not Screen A context, but MaterialApp context
+      // see https://stackoverflow.com/a/66485893/2301224
+      print('>>> Button1-onPressed completed, result=$result');
+      },
+      child: Icon(Icons.filter_list),
+      backgroundColor: Colors.purple,
+      ),
+      ),
+    );
+  }
+
   Future<List<Products>> fetchProducts() async {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
@@ -136,81 +183,41 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildSearch(BuildContext context) {
-    const List<IconData> icons = const [ Icons.sms, Icons.mail, Icons.phone ];
     Authentication auth = new Authentication();
     _widgetOptions = [];
-    _widgetOptions.add(SearchWidget());
+    _widgetOptions.add(HomeDisplay(
+      context: context,
+    ));
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
       auth: auth,
       context: context,
     ));
 
-    return Scaffold(
-          appBar: _buildBar(context),
-          body: SearchBar<Products>(
-                      key: Key(products.length.toString()),
-                      searchBarPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      listPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      suggestions: products,
-                      onCancelled: () => isUsingSearchBar = false,
-                      hintText: "Search",
-                      shrinkWrap: true,
-                      onSearch: search,
-                      onItemFound: (Products product, int index) {
-                        return getProductsWidget(product);
-                      },
-                    ),
-                  /**
-                  Expanded(
-                    child: IconButton(
-                        icon: Icon(Icons.filter_list),
-                        onPressed: () {
-                          //navigateToFilter(context);
-                        }),
-                  ),
-                      **/
-          floatingActionButton: Builder(
-            builder: (context) => FloatingActionButton(
-                onPressed: () async {
-                  var result = await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => FilterPage(context: context)));
-                  // note that this context is not Screen A context, but MaterialApp context
-                  // see https://stackoverflow.com/a/66485893/2301224
-                  print('>>> Button1-onPressed completed, result=$result');
-                },
-              child: Icon(Icons.filter_list),
-              backgroundColor: Colors.purple,
+    return MaterialApp(
+      home: Scaffold(
+        // appBar: _buildBar(context),
+        body: Builder(
+            builder: (context) => chooseWidget(context)
+        ),
+        /**Bottom navigation drawer.**/
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-          ),
-      /**Bottom navigation drawer.**/
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_outlined),
-                label: 'Account',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
-            onTap: _onItemTapped,
-          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_outlined),
+              label: 'Account',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: _onItemTapped,
+        ),
+      ),
     );
-  }
-
-  Future navigateToFilter(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FilterPage()));
   }
 
   Future<List<Products>> search(String query) async {
