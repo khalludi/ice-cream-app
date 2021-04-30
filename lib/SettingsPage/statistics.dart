@@ -167,7 +167,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
       'authorization': basicAuth,
     });
 
-    log("statistics response body: " + response.body);
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<String> results = (data).map((i) => mapper(i)).toList();

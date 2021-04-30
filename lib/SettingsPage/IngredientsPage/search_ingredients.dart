@@ -133,7 +133,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.delete(
-
       Uri.https(
         url,
         "ingredients",
@@ -147,9 +146,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       }),
     );
 
-    log("statuscode=" + response.statusCode.toString());
     if (response.statusCode == 200) {
-      log("delete ingredient response: " + response.body);
       ingredients.removeAt(index);
       setState(() {});
       return true;
@@ -189,7 +186,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       print("ingredientAdmin success");
       var data = json.decode(response.body);
     } else {
-      print("ingredientAdmin fail");
+      print("updateIngredient fail");
     }
   }
 

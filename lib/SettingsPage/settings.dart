@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:ice_cream_social/FlavorPage/flavor_page.dart';
 import 'package:ice_cream_social/backend_data.dart';
 import 'IngredientsPage/ingredients_admin.dart';
-import './statistics.dart';
+import 'statistics.dart';
+import 'statistics_grades.dart';
 
 /// The [Settings] page widget enables the user to change their system preferences.
 /// Admin users can access the modify ingredients page and statistics page.
@@ -37,7 +38,12 @@ class SettingsPage extends StatelessWidget {
       'route': null,
     },
     {
-      'text': "View Statistics",
+      'text': "View Statistics: Visualization",
+      'isTitle': false,
+      'route': null,
+    },
+    {
+      'text': "View Statistics: Grades",
       'isTitle': false,
       'route': null,
     },
@@ -90,8 +96,11 @@ class SettingsPage extends StatelessWidget {
       route = routeIngredients;
     else if (settingOptions[index]['text'] == "Log Out") {
       Navigator.pop(context);
-    } else if (settingOptions[index]['text'] == "View Statistics") {
+    } else if (settingOptions[index]['text'] ==
+        "View Statistics: Visualization") {
       route = routeStatistics;
+    } else if (settingOptions[index]['text'] == "View Statistics: Grades") {
+      route = routeStatisticsGrades;
     } else if (settingOptions[index]['text'] == "View Example Flavor Page") {
       route = routeFlavorPage;
     }
@@ -106,6 +115,10 @@ class SettingsPage extends StatelessWidget {
 
   Widget routeStatistics(BuildContext context) {
     return StatisticsPage();
+  }
+
+  Widget routeStatisticsGrades(BuildContext context) {
+    return StatisticsGradesPage();
   }
 
   Widget routeFlavorPage(BuildContext context) {

@@ -36,7 +36,6 @@ class _SearchReviewsState extends State<SearchReviews> {
   void initState() {
     brand = widget.brand;
     productId = widget.productId;
-    log("initState productId=" + productId.toString());
     providerBackendData = Provider.of<BackendData>(
       context,
       listen: false,
@@ -48,10 +47,9 @@ class _SearchReviewsState extends State<SearchReviews> {
   }
 
   Future<List<Review>> searchReviews(String query) async {
-    log("productId: " + widget.productId.toString());
     var queryParameters = {
       'search_term': query,
-      'productId': widget.productId.toString(),
+      'product_id': widget.productId.toString(),
       'brand': widget.brand,
     };
 
