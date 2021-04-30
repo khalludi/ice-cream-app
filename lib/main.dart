@@ -1,14 +1,15 @@
-import 'dart:convert';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
-import 'package:ice_cream_social/backend_data.dart';
-import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'HomePage/Products.dart';
 import 'HomePage/filter.dart';
+import 'package:ice_cream_social/login/profile.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'HomePage/placeholder_widget.dart';
+import 'package:ice_cream_social/backend_data.dart';
 
 
 void main() {
@@ -55,11 +56,13 @@ class _HomePageState extends State<HomePage> {
     futureProducts = fetchProducts();
     super.initState();
   }
+
   int _selectedIndex = 0;
   int loginChanged = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
+  /**Bottom navigation drawer.**/
   List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
@@ -156,33 +159,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Products>>(
-      future: futureProducts,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          products = snapshot.data;
-          //print(products);
-          return buildSearch(context);
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-          return Scaffold(
-            key: scaffoldKey,
-            appBar: _buildBar(context),
-            body: Center(
-              child: Text("Error getting products data"),
-            ),
-          );
-        }
-        // By default, show a loading spinner.
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: _buildBar(context),
-        );
-      },
-    );
-  }
-
-  Widget buildSearch(BuildContext context) {
     Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(HomeDisplay(
@@ -252,8 +228,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
+
         ),
-    );
+      );
   }
 
   Widget _buildBar(BuildContext context) {
