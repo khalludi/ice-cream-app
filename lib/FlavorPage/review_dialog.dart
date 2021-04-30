@@ -22,7 +22,6 @@ class ReviewDialog extends StatefulWidget {
 
 class ReviewDialogState extends State<ReviewDialog> {
   TextEditingController titleController = TextEditingController();
-  TextEditingController authorController = TextEditingController();
   TextEditingController textController = TextEditingController();
   double rating;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -30,7 +29,6 @@ class ReviewDialogState extends State<ReviewDialog> {
   @override
   void initState() {
     titleController.text = widget.review != null ? widget.review.title : "";
-    authorController.text = widget.review != null ? widget.review.author : "";
     textController.text =
     widget.review != null ? widget.review.review_text : "";
     rating = widget.review != null ? widget.review.stars : 5.0;
@@ -46,14 +44,6 @@ class ReviewDialogState extends State<ReviewDialog> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              controller: authorController,
-              maxLines: null,
-              validator: (value) {
-                return value.isNotEmpty ? null : 'Invalid field';
-              },
-              decoration: InputDecoration(hintText: 'username'),
-            ),
             SmoothStarRating(
               allowHalfRating: true,
               onRated: (v) {
@@ -116,7 +106,6 @@ class ReviewDialogState extends State<ReviewDialog> {
                   // DateTime dateTime = formatter.parse(currentTime);
                   // String formattedDate = formatter.format(currentTime);
                   Review newReview = Review(
-                    author: authorController.text,
                     review_text: textController.text,
                     title: titleController.text,
                     stars: rating,

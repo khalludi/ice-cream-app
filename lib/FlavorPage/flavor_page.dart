@@ -31,6 +31,7 @@ class FlavorPage extends StatefulWidget {
     @required this.description,
     @required this.pngFile,
     @required this.context,
+    @required this.avgRating,
   });
 
   final String flavorName;
@@ -39,6 +40,7 @@ class FlavorPage extends StatefulWidget {
   final String description;
   final String pngFile;
   final BuildContext context;
+  final double avgRating;
 
   @override
   _FlavorPageState createState() => _FlavorPageState();
@@ -307,7 +309,7 @@ class _FlavorPageState extends State<FlavorPage> {
         flavorImageUrl: widget.pngFile,
         description: widget.description,
         passedReviews: reviews,
-        avgRating: 2.5,
+        avgRating: widget.avgRating,
         createEditDialog: createEditDialog,
       ),
       floatingActionButton: Visibility(

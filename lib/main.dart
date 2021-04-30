@@ -286,6 +286,7 @@ class _HomePageState extends State<HomePage> {
       description: product.description,
       pngFile: null,
       context: context,
+      avgRating: product.avg_rating,
     );
     Navigator.push(context, CupertinoPageRoute(builder: (context) => route));
   }
