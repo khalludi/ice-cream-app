@@ -5,14 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:ice_cream_social/FlavorPage/flavor_page.dart';
 import 'package:ice_cream_social/backend_data.dart';
 import 'IngredientsPage/ingredients_admin.dart';
-import './statistics.dart';
+import 'statistics.dart';
+import 'statistics_grades.dart';
 
 /// The [Settings] page widget enables the user to change their system preferences.
 /// Admin users can access the modify ingredients page and statistics page.
 ///
 /// Note: the ingredients and litems lists are used for testing purposes but they
 /// will be removed once SQL integration is set up.
-
 int buildNumber = 0;
 typedef Callback = Function(int);
 typedef Callback2 = Function(String);
@@ -27,22 +27,17 @@ class SettingsPage extends StatelessWidget {
       'route': null,
     },
     {
-      'text': "Modify Products",
-      'isTitle': false,
-      'route': null,
-    },
-    {
       'text': "Modify Ingredients",
       'isTitle': false,
       'route': null,
     },
     {
-      'text': "View Statistics",
+      'text': "View Statistics: Visualization",
       'isTitle': false,
       'route': null,
     },
     {
-      'text': "View Example Flavor Page",
+      'text': "View Statistics: Grades",
       'isTitle': false,
       'route': null,
     },
@@ -90,10 +85,11 @@ class SettingsPage extends StatelessWidget {
       route = routeIngredients;
     else if (settingOptions[index]['text'] == "Log Out") {
       Navigator.pop(context);
-    } else if (settingOptions[index]['text'] == "View Statistics") {
+    } else if (settingOptions[index]['text'] ==
+        "View Statistics: Visualization") {
       route = routeStatistics;
-    } else if (settingOptions[index]['text'] == "View Example Flavor Page") {
-      route = routeFlavorPage;
+    } else if (settingOptions[index]['text'] == "View Statistics: Grades") {
+      route = routeStatisticsGrades;
     }
     if (route != null)
       Navigator.push(
@@ -108,16 +104,8 @@ class SettingsPage extends StatelessWidget {
     return StatisticsPage();
   }
 
-  Widget routeFlavorPage(BuildContext context) {
-    return FlavorPage(
-      flavorName: "Cookies and Cream",
-      productId: 15,
-      brand: "Breyers",
-      description:
-          "Breyers? vanilla and heaps of OREO? cookies? Yes please! If you?re anything like us, you love Breyers? vanilla and OREO? cookies. So why not combine your love into one tub with Breyers? OREO? Cookies & Cream? Rich, creamy vanilla goodness surrounds those chunks of 100% REAL OREO? cookies and will be sure to bring a smile to your face.",
-      pngFile: "15_breyers.png",
-      context: context,
-    );
+  Widget routeStatisticsGrades(BuildContext context) {
+    return StatisticsGradesPage();
   }
 
   Widget buildBody(BuildContext context, int index) {
