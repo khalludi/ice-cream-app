@@ -144,6 +144,8 @@ class _FlavorPageState extends State<FlavorPage> {
 
   void addReviewToDatabase(Review review) async {
     review.author = currentAuthor;
+    review.product_id = widget.productId;
+    review.brand = widget.brand;
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final String body = json.encode(review.toJson());
@@ -159,6 +161,8 @@ class _FlavorPageState extends State<FlavorPage> {
       },
       body: jsonEncode(review.toJson()),
     );
+    print(body);
+    print("addReview response:" + response.body.toString());
   }
 
   void loadUsername() async {
@@ -199,6 +203,7 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void deleteReviewFromDatabase(Review review) async {
+    // print("product_id="+review.product_id.toString()+", brand="+review.brand+ "currentAuthor="+currentAuthor);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     http.Response response = await http.delete(
@@ -212,10 +217,11 @@ class _FlavorPageState extends State<FlavorPage> {
       },
       body: jsonEncode(<String, String>{
         'product_id': widget.productId.toString(),
-        'brand': brandId,
-        'author': review.author,
+        'brand': widget.brand,
+        'author': currentAuthor,
       }),
     );
+    print(response.statusCode);
   }
 
   void editReview(newReview, index) {
@@ -236,9 +242,9 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void editReviewInDatabase(Review review) async {
-    review.author = currentAuthor;
-    review.brand = brandId;
     review.product_id = widget.productId;
+    review.brand = widget.brand;
+    review.author = currentAuthor;
     Map<String, String> data = review.toJson();
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
