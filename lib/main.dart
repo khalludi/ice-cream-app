@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildSearch(BuildContext context) {
+    const List<IconData> icons = const [ Icons.sms, Icons.mail, Icons.phone ];
     Authentication auth = new Authentication();
     _widgetOptions = [];
     _widgetOptions.add(SearchWidget());
@@ -182,6 +183,7 @@ class _HomePageState extends State<HomePage> {
                       **/
                 ],
             ),
+          
           floatingActionButton: Builder(
             builder: (context) => FloatingActionButton(
               //onPressed: launchAddDialog,
@@ -189,6 +191,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.purple,
             ),
           ),
+
           /**Bottom navigation drawer.**/
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
