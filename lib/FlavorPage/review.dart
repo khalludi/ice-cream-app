@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
+import 'package:intl/intl.dart';
 
 /// The [Review] class describes an ice cream review.
 ///
@@ -18,7 +19,6 @@ import 'dart:developer';
 /// helpful_yes: how many people marked this review as helpful.
 /// helpful_no: how many people marked this review as not helpful.
 /// is_editable: whether the user that's currently signed in can edit this review.
-
 class Review {
   // ignore: non_constant_identifier_names
   int review_id;
@@ -26,7 +26,7 @@ class Review {
   int product_id;
   String author;
   String brand;
-  String date_updated;
+  DateTime date_updated;
   String title;
   double stars;
   String review_text;
@@ -50,11 +50,12 @@ class Review {
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
-      review_id: json['review_id'],
+      review_id: json['review_id'] as int,
       product_id: json['product_id'],
       author: json['author'],
       brand: json['brand'],
-      date_updated: json['date_updated'],
+      date_updated: DateFormat('yyyy-MM-dd').parse(json['date_updated']),
+      // date_updated: DateTime.now(),
       title: json['title'],
       stars: json['stars'] + .0,
       review_text: json['review_text'],
@@ -63,4 +64,15 @@ class Review {
       is_editable: false,
     );
   }
+  Map<String, String> toJson() => {
+    'product_id': product_id.toString(),
+    'brand': brand,
+    'author': author,
+    'date_updated': DateFormat('yyyy-MM-dd').format(date_updated),
+    'title': title,
+    'stars': stars.toString(),
+    'helpful_yes': helpful_yes.toString(),
+    'helpful_no': helpful_no.toString(),
+    'review_text': review_text.toString(),
+  };
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import './review.dart';
+import 'dart:async';
 
 enum DialogAction { Add, Edit, Delete }
 
@@ -11,7 +11,6 @@ enum DialogAction { Add, Edit, Delete }
 /// To use the international package, update pubspec.yaml, navigate to project folder, and run "flutter packages get".
 ///
 /// Some code from https://www.youtube.com/watch?v=Fd5ZlOxyZJ4.
-
 class ReviewDialog extends StatefulWidget {
   final BuildContext context;
   final Review review;
@@ -33,7 +32,7 @@ class ReviewDialogState extends State<ReviewDialog> {
     titleController.text = widget.review != null ? widget.review.title : "";
     authorController.text = widget.review != null ? widget.review.author : "";
     textController.text =
-        widget.review != null ? widget.review.review_text : "";
+    widget.review != null ? widget.review.review_text : "";
     rating = widget.review != null ? widget.review.stars : 5.0;
     super.initState();
   }
@@ -113,8 +112,9 @@ class ReviewDialogState extends State<ReviewDialog> {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   var currentTime = new DateTime.now();
-                  var formatter = new DateFormat('yyyy-MM-dd');
-                  String formattedDate = formatter.format(currentTime);
+                  // var formatter = new DateFormat('yyyy-MM-dd');
+                  // DateTime dateTime = formatter.parse(currentTime);
+                  // String formattedDate = formatter.format(currentTime);
                   Review newReview = Review(
                     author: authorController.text,
                     review_text: textController.text,
@@ -122,18 +122,18 @@ class ReviewDialogState extends State<ReviewDialog> {
                     stars: rating,
                     helpful_yes: 0,
                     helpful_no: 0,
-                    date_updated: formattedDate,
+                    date_updated: currentTime,
                     is_editable: true,
                   );
                   widget.review == null
                       ? Navigator.pop(
-                          context,
-                          [newReview, DialogAction.Add.index],
-                        )
+                    context,
+                    [newReview, DialogAction.Add.index],
+                  )
                       : Navigator.pop(
-                          context,
-                          [newReview, DialogAction.Edit.index],
-                        ); // 0 = new review, 1 = edit review
+                    context,
+                    [newReview, DialogAction.Edit.index],
+                  ); // 0 = new review, 1 = edit review
                 }
               },
             ),
