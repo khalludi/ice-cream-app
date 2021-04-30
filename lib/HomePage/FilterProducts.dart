@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
 import 'Products.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(new MyApp());

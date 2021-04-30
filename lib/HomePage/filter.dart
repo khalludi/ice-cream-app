@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../main.dart';
+import 'Products.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:ice_cream_social/backend_data.dart';
+
 
 void main() {
   runApp(new MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: new FilterPage());
-  }
 }
 
 class FilterPage extends StatefulWidget {
@@ -25,6 +25,7 @@ class _FilterPageState extends State<FilterPage> {
   bool _hasBeenPressed4 = false;
 
   Widget build(BuildContext context) {
+    var myModel = Provider.of<HomePage>(context); // A
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(

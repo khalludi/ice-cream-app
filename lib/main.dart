@@ -8,6 +8,7 @@ import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'HomePage/Products.dart';
+import 'HomePage/filter.dart';
 
 
 void main() {
@@ -16,13 +17,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => BackendData()),
-          ],
-          child: new HomePage(),
-        )
+    return ChangeNotifierProvider(
+            create: (context) => BackendData(),
+            child: MaterialApp(
+              home: HomePage()
+            ),
     );
   }
 }
@@ -149,10 +148,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
           appBar: _buildBar(context),
-          body: Row(
-                children: <Widget>[
-                  Expanded(
-                    child:SearchBar<Products>(
+          body: SearchBar<Products>(
                       key: Key(products.length.toString()),
                       searchBarPadding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -171,7 +167,6 @@ class _HomePageState extends State<HomePage> {
                         return getProductsWidget(product);
                       },
                     ),
-                  ),
                   /**
                   Expanded(
                     child: IconButton(
@@ -181,18 +176,20 @@ class _HomePageState extends State<HomePage> {
                         }),
                   ),
                       **/
-                ],
-            ),
-          
           floatingActionButton: Builder(
             builder: (context) => FloatingActionButton(
-              //onPressed: launchAddDialog,
-              child: Icon(Icons.add),
+                onPressed: () async {
+                  var result = await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => FilterPage()));
+                  // note that this context is not Screen A context, but MaterialApp context
+                  // see https://stackoverflow.com/a/66485893/2301224
+                  print('>>> Button1-onPressed completed, result=$result');
+                },
+              child: Icon(Icons.filter_list),
               backgroundColor: Colors.purple,
             ),
           ),
-
-          /**Bottom navigation drawer.**/
+      /**Bottom navigation drawer.**/
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -211,11 +208,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future navigateToFilter(context) async {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FilterPage()));
+  }
+
   Future<List<Products>> search(String query) async {
     isUsingSearchBar = true;
     String s = query;
     searchResults = products
-        .where((b) => b.product_name.toLowerCase().contains(s.toLowerCase()))
+        .where((b) => b.product_name.toLowerCase().contains(s.toLowerCase()) || b.description.toLowerCase().contains(s.toLowerCase()))
         .toList();
     for(Products p in searchResults){
       print(p.product_name);
