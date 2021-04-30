@@ -125,6 +125,15 @@ paths:
       responses:
         200:
           description: OK
+  /get-review-username:
+    get:
+      summary: Returns all reviews
+      operationId: getReviewUsername
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-username
+      responses:
+        200:
+          description: OK
   /hadvanced:
     get:
       summary: Hannah's advanced query

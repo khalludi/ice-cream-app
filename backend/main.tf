@@ -900,6 +900,37 @@ resource "google_cloudfunctions_function_iam_binding" "binding27" {
   ]
 }
 
+### Get Review by Usernmae
+resource "google_storage_bucket_object" "archive28" {
+  provider = google-beta
+  name   = "get_review_username.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./get_review_username/get_review_username.zip"
+}
+
+resource "google_cloudfunctions_function" "function28" {
+  provider = google-beta
+  name        = "function-get-review-username"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive28.name
+  trigger_http          = true
+  entry_point           = "getReviewUsername"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding28" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function28.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
 output "function_url" {
   value = google_cloudfunctions_function.function2.https_trigger_url
 }

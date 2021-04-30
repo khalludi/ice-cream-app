@@ -50,25 +50,8 @@ const createPool = async () => {
 
 let pool;
 
-exports.usersAdvQuery = async (req, res) => {
+exports.getReviewUsername = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query('SELECT * FROM Users WHERE email = "' + req.body.oldEmail + '"');
-  if (output.length <= 0) {
-    return res.status(400).send("User not found");
-  }
-
-  const out3 = await pool.query('SELECT * FROM Users WHERE username = "' + req.body.username +
-                                                          '" OR email = "' + req.body.email+'"');
-  if (out3.length > 0) {
-    return res.status(401).send("Username or Email already exists");
-  }
-
-  const out2 = await pool.query("UPDATE Users SET username = '" + req.body.username +
-                  "', email = '" + req.body.email + "' WHERE username = '" + output[0]["username"]+"'");
-
-  // Update reviews table
-  await pool.query("UPDATE Reviews SET author = '" + req.body.username + "' WHERE author = '" +
-    output[0]["username"] + "'");
-  
-  res.status(200).send(JSON.parse(JSON.stringify(out2)));
+  const out = await pool.query("SELECT * FROM Reviews WHERE author = '" + req.query.username + "'");
+  res.status(200).send(JSON.parse(JSON.stringify(out)));
 }
