@@ -52,6 +52,7 @@ class _IngredientTextFieldState extends State<IngredientTextField> {
       SnackBar snackBar = SnackBar(content: Text('Updated ingredient!'));
       widget.scaffoldKey.currentState.showSnackBar(snackBar);
       ingredientName = controller.text;
+      log("New ingredient id: " + widget.ingredient.ingredient_id);
       widget.updateIngredient(
           Ingredient(
             name: controller.text,
