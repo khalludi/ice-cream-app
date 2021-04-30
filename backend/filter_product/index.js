@@ -52,19 +52,34 @@ let pool;
 
 exports.filterProduct = async (req, res) => {
   pool = await createPool();
+
+  brand_cols = "";
+  if (req.query.filter_brand) {
+    first = true;
+    arr = req.query.filter_brand.split(",");
+    for (let val of arr) {
+      if (first) {
+        brand_cols = brand_cols.concat("'").concat(val).concat("'");
+        first = false;
+      } else {
+        brand_cols = brand_cols.concat(",'").concat(val).concat("'");
+      }
+    }
+  }
+
   let out;
   if (req.query.filter_rating && req.query.filter_brand) {
     out = await pool.query("SELECT * FROM Products WHERE avg_rating >= " + 
-      req.query.filter_rating + " AND brand_name = '" + req.query.filter_brand + 
-      "' ORDER BY title");
+      req.query.filter_rating + " AND brand_name IN (" + brand_cols + 
+      ") ORDER BY brand_name, avg_rating");
   } else if (req.query.filter_rating) {
     out = await pool.query("SELECT * FROM Products WHERE avg_rating >= " + 
-      req.query.filter_rating + " ORDER BY title");
+      req.query.filter_rating + " ORDER BY avg_rating");
   } else if (req.query.filter_brand) {
-    out = await pool.query("SELECT * FROM Products WHERE brand_name = " + 
-      req.query.filter_brand + "' ORDER BY title");
+    out = await pool.query("SELECT * FROM Products WHERE brand_name IN (" + 
+      brand_cols + ") ORDER BY brand_name");
   } else {
-    out = await pool.query("SELECT * FROM Products ORDER BY title");
+    out = await pool.query("SELECT * FROM Products ORDER BY brand_name, avg_rating");
   }
   res.status(200).send(JSON.parse(JSON.stringify(out)));
 }

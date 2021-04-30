@@ -26,6 +26,9 @@ class _FilterPageState extends State<FilterPage> {
   bool _hasBeenPressed3 = false;
   bool _hasBeenPressed4 = false;
 
+  double filterRating;
+  List<String> filterBrand;
+
   BackendData providerBackendData;
   String url;
   String username;
@@ -41,10 +44,25 @@ class _FilterPageState extends State<FilterPage> {
     url = providerBackendData.url;
     username = providerBackendData.username;
     password = providerBackendData.password;
+
+    filterRating = 0.0;
+    filterBrand = [];
   }
 
-   void filterProducts(String filterRating, List<String> filterBrand) async {
-    var queryParameters = {"filter_rating": filterRating, "filter_brand": filterBrand};
+   void filterProducts(double filterRating, List<String> filterBrand) async {
+    String brand_cols = "";
+    int first = 1;
+    for (String val in filterBrand) {
+      if (first == 1) {
+        brand_cols += val;
+        first = 0;
+      } else {
+        brand_cols += ',';
+        brand_cols += val;
+      }
+    }
+
+    var queryParameters = {"filter_rating": filterRating.toString(), "filter_brand": brand_cols};
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(Uri.https(url, "filter-product", queryParameters), headers: {
@@ -75,8 +93,6 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   Widget build(BuildContext context) {
-    String filterRating;
-    List<String> filterBrand = [];
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(
@@ -93,7 +109,7 @@ class _FilterPageState extends State<FilterPage> {
 
             /**Feature to allow users to filter by rating.**/
             RatingBar.builder(
-              initialRating: 3,
+              initialRating: 0,
               minRating: 1,
               //direction: Axis.horizontal,
               allowHalfRating: true,
@@ -105,7 +121,7 @@ class _FilterPageState extends State<FilterPage> {
                     color: Colors.amber,
                   ),
               onRatingUpdate: (rating) {
-                filterRating = rating.toString();
+                filterRating = rating;
                 print(filterRating);
               },
             ),
