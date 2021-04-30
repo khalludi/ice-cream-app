@@ -50,10 +50,21 @@ const createPool = async () => {
 
 let pool;
 
-exports.getReviewKey = async (req, res) => {
+exports.filterProduct = async (req, res) => {
   pool = await createPool();
-  console.log(req.query.product_id);
-  console.log(typeof(req.query.product_id));
-  const out = await pool.query("SELECT * FROM Reviews WHERE product_id = " + req.query.product_id + " AND brand = '" + req.query.brand+"' ORDER BY date_updated DESC");
+  let out;
+  if (req.query.filter_rating && req.query.filter_brand) {
+    out = await pool.query("SELECT * FROM Products WHERE avg_rating >= " + 
+      req.query.filter_rating + " AND brand_name = '" + req.query.filter_brand + 
+      "' ORDER BY title");
+  } else if (req.query.filter_rating) {
+    out = await pool.query("SELECT * FROM Products WHERE avg_rating >= " + 
+      req.query.filter_rating + " ORDER BY title");
+  } else if (req.query.filter_brand) {
+    out = await pool.query("SELECT * FROM Products WHERE brand_name = " + 
+      req.query.filter_brand + "' ORDER BY title");
+  } else {
+    out = await pool.query("SELECT * FROM Products ORDER BY title");
+  }
   res.status(200).send(JSON.parse(JSON.stringify(out)));
 }

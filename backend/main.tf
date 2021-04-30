@@ -64,7 +64,7 @@ resource "google_sql_database_instance" "instance" {
   deletion_protection = true
   lifecycle {
     # prevent_destroy = true
-    # ignore_changes = all
+    ignore_changes = all
   }
 }
 
@@ -863,6 +863,37 @@ resource "google_cloudfunctions_function" "function26" {
 resource "google_cloudfunctions_function_iam_binding" "binding26" {
   provider = google-beta
   cloud_function = google_cloudfunctions_function.function26.name
+  role = "roles/cloudfunctions.invoker"
+  members = [
+    "allUsers",
+  ]
+}
+
+### Filter Product
+resource "google_storage_bucket_object" "archive27" {
+  provider = google-beta
+  name   = "filter_product.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "./filter_product/filter_product.zip"
+}
+
+resource "google_cloudfunctions_function" "function27" {
+  provider = google-beta
+  name        = "function-filter-product"
+  description = "My function"
+  runtime     = "nodejs10"
+
+  vpc_connector         = google_vpc_access_connector.connector.id
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_object = google_storage_bucket_object.archive27.name
+  trigger_http          = true
+  entry_point           = "filterProduct"
+}
+
+resource "google_cloudfunctions_function_iam_binding" "binding27" {
+  provider = google-beta
+  cloud_function = google_cloudfunctions_function.function27.name
   role = "roles/cloudfunctions.invoker"
   members = [
     "allUsers",

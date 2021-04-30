@@ -71,6 +71,15 @@ paths:
       responses:
         200:
           description: Profile edited
+  /filter-product:
+    get:
+      summary: Returns products filtered
+      operationId: filterProduct
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-filter-product
+      responses:
+        200:
+          description: OK
   /get-ingredient:
     get:
       summary: Returns ingredient by search term
