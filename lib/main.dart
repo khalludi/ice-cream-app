@@ -34,6 +34,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<List<Products>> futureProducts;
   List<Products> products;
+  List<Products> filteredProducts;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _searchQuery = new TextEditingController();
   List<Products> searchResults;
@@ -90,10 +91,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget HomeDisplay({BuildContext context}){
+    List<Products> p;
+    if(filteredProducts != null){
+      p = filteredProducts;
+    } else{
+      p = products;
+    }
     return Scaffold(
         appBar: _buildBar(context),
       body: SearchBar<Products>(
-        key: Key(products.length.toString()),
+        key: scaffoldKey,
         searchBarPadding: const EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 10,
@@ -102,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           horizontal: 10,
           vertical: 10,
         ),
-        suggestions: products,
+        suggestions: p,
         onCancelled: () => isUsingSearchBar = false,
         hintText: "Search",
         shrinkWrap: true,
@@ -123,15 +130,12 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: Builder(
       builder: (context) => FloatingActionButton(
       onPressed: () async {
-        print("here");
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => FilterPage(context: context)))
             .then((completion){
+
           setState(() {
-            print(completion);
-            for(Products p in completion){
-              getProductsWidget(p);
-            }
+            filteredProducts = completion;
           });
         });
         /**
@@ -271,7 +275,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void routeFlavorPage(BuildContext context, Products product) {
-    print(product.product_id);
     Widget route = FlavorPage(
       flavorName: product.product_name,
       productId: product.product_id,
