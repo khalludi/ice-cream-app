@@ -50,11 +50,10 @@ const createPool = async () => {
 
 let pool;
 
-exports.updateReview = async (req, res) => {
+exports.deleteProduct = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query("UPDATE Reviews SET review_text = '" + req.body.review_text + 
-    "', stars = " + req.body.stars + ", title = '" + req.body.title + "' WHERE product_id = " + 
-    req.body.product_id + " AND brand = '" + req.body.brand + "' AND author = '" + 
-    req.body.author + "'");
+  const talentiQuery = pool.query("DELETE FROM Products WHERE product_id = " + req.body.product_id + 
+    ", '" + req.body.brand_name + "'");
+  const output = await talentiQuery;
   res.send(JSON.parse(JSON.stringify(output)));
 }

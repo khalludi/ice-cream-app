@@ -52,6 +52,8 @@ let pool;
 
 exports.getReviewKey = async (req, res) => {
   pool = await createPool();
-  const out = await pool.query("SELECT * FROM Reviews WHERE product_id = '" + req.query.product_id + "' AND brand = '" + req.query.brand+"'");
+  console.log(req.query.product_id);
+  console.log(typeof(req.query.product_id));
+  const out = await pool.query("SELECT * FROM Reviews WHERE product_id = " + req.query.product_id + " AND brand = '" + req.query.brand+"' ORDER BY date_updated DESC");
   res.status(200).send(JSON.parse(JSON.stringify(out)));
 }
