@@ -45,6 +45,13 @@ class _HomePageState extends State<HomePage> {
   String password;
   bool isUsingSearchBar;
 
+  Map<String, String> brandIdMap = {
+    'breyers': 'Breyers',
+    'bj': 'Ben & Jerry\'s',
+    'talenti': 'Talenti',
+    'hd': 'Haagen Daaz',
+  };
+
   @override
   void initState() {
     providerBackendData = Provider.of<BackendData>(
@@ -269,7 +276,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text(product.product_name),
+              title:  Text(
+                product.product_name,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               subtitle: (Text(product.brand_name + "\n" + product.subhead + product.description + "\nAvg. Rating: " + product.avg_rating.toString())),
             ),
             ButtonTheme(
