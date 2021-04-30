@@ -43,7 +43,7 @@ class _FilterPageState extends State<FilterPage> {
     password = providerBackendData.password;
   }
 
-   void filterProducts(double filterRating, List<String> filterBrand) async {
+   void filterProducts(String filterRating, List<String> filterBrand) async {
     var queryParameters = {"filter_rating": filterRating, "filter_brand": filterBrand};
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
@@ -52,7 +52,8 @@ class _FilterPageState extends State<FilterPage> {
       'authorization': basicAuth,
       'Content-Type': 'application/json; charset=UTF-8',
     });
-    print(response.body);
+    print(Uri.https(url, "filter-product", queryParameters));
+    print(queryParameters);
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Products> products =
@@ -61,7 +62,10 @@ class _FilterPageState extends State<FilterPage> {
       setState(() {
         productsFiltered = products;
       });
-      print(productsFiltered);
+      for(Products p in productsFiltered){
+        print(p.brand_name);
+      }
+      print("*****************************");
       Navigator.pop(context, productsFiltered);
     } else {
       // If the server did not return a 200 OK response,
@@ -71,7 +75,7 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   Widget build(BuildContext context) {
-    double filterRating;
+    String filterRating;
     List<String> filterBrand = [];
     return Scaffold(
       appBar: _buildBar(context),
@@ -101,8 +105,8 @@ class _FilterPageState extends State<FilterPage> {
                     color: Colors.amber,
                   ),
               onRatingUpdate: (rating) {
-                print(rating);
-                filterRating = rating;
+                filterRating = rating.toString();
+                print(filterRating);
               },
             ),
             SizedBox(height: 100),  //used to space out components
@@ -231,7 +235,8 @@ class _FilterPageState extends State<FilterPage> {
             Container(
               child: RaisedButton(
                 onPressed: (){
-                  navigateToHome(context);
+                  print(filterRating);
+                  filterProducts(filterRating, filterBrand);
                 },
                 padding: EdgeInsets.all(0.0),
                 shape: StadiumBorder(),

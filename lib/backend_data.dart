@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BackendData extends ChangeNotifier {
-  String _url = '10.0.2.2:3000';
+  //String _url = '10.0.2.2:3000';
+  String _url = 'my-gateway-1j4bd062.uc.gateway.dev';
   String _username = 'root';
   String _password = 'testtest';
 
