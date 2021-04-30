@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ice_cream_social/HomePage/search.dart';
@@ -101,13 +102,17 @@ class _HomePageState extends State<HomePage> {
         // appBar: _buildBar(context),
       body: SearchBar<Products>(
         key: scaffoldKey,
-        searchBarPadding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 10,
+        searchBarPadding: EdgeInsets.symmetric(horizontal: 10),
+        headerPadding: EdgeInsets.symmetric(horizontal: 10),
+        // listPadding: EdgeInsets.symmetric(horizontal: 10),
+        // mainAxisSpacing: 10,
+        searchBarStyle: SearchBarStyle(
+            padding: EdgeInsets.only(left: 15),
+            borderRadius: BorderRadius.all(Radius.circular(30))
         ),
         listPadding: const EdgeInsets.symmetric(
           horizontal: 10,
-          vertical: 10,
+          // vertical: 10,
         ),
         suggestions: p,
         onCancelled: () => isUsingSearchBar = false,
