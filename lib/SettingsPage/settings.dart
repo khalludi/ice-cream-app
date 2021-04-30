@@ -32,7 +32,7 @@ class SettingsPage extends StatelessWidget {
       'route': null,
     },
     {
-      'text': "View Statistics: Visualization",
+      'text': "View Statistics: Queries",
       'isTitle': false,
       'route': null,
     },
@@ -86,7 +86,7 @@ class SettingsPage extends StatelessWidget {
     else if (settingOptions[index]['text'] == "Log Out") {
       Navigator.pop(context);
     } else if (settingOptions[index]['text'] ==
-        "View Statistics: Visualization") {
+        "View Statistics: Queries") {
       route = routeStatistics;
     } else if (settingOptions[index]['text'] == "View Statistics: Grades") {
       route = routeStatisticsGrades;

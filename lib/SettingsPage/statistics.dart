@@ -101,7 +101,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 listItems[index],
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
             ),
