@@ -69,7 +69,7 @@ class _FlavorPageState extends State<FlavorPage> {
       listen: false,
     );
     url = providerBackendData.url;
-    currentAuthor = "annaz2";
+    currentAuthor = "Anonymous";
     loadUsername();
     username = providerBackendData.username;
     password = providerBackendData.password;

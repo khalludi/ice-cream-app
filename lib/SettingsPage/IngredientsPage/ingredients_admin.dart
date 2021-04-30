@@ -16,7 +16,6 @@ import 'package:ice_cream_social/backend_data.dart';
 /// Read:   use the search bar at the top to search for ingredients in the SQL database.
 /// Update: tap on ingredients (represented as TextFields) and edit the ingredient name in the SQL database and the UI.
 /// Delete: tap the delete icon to the right of the ingredient you want to delete in the SQL database and the UI.
-
 typedef Callback = Function(int);
 
 class IngredientsAdmin extends StatefulWidget {
@@ -53,13 +52,15 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   Future<List<Ingredient>> fetchIngredients() async {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await http.get(Uri.https(url, "get-ingredient-all"), headers: {
-      "Accept": "application/json",
-      'authorization': basicAuth,
-    });
+    final response = await http.get(
+      Uri.https(url, "get-ingredient-all"),
+      headers: {
+        "Accept": "application/json",
+        'authorization': basicAuth,
+      },
+    );
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      // var rest = data as List;
       List<Ingredient> ingredients =
           (data).map((i) => Ingredient.fromJson(i)).toList();
       return ingredients;
@@ -152,30 +153,31 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   void addIngredient(Ingredient ingredient) {
     ingredients.insert(0, ingredient);
     setState(() {});
-    // addIngredientToDatabase(ingredient);
+    addIngredientToDatabase(ingredient);
   }
 
   void addIngredientToDatabase(Ingredient ingredient) async {
-    var data = {
-      'ingredient_id': (ingredients.length + 1).toString(),
-      'name': ingredient.name,
-    };
+    String newIngredientId = ingredient.name.hashCode.toString().substring(1,5);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    String body = json.encode(data);
     http.Response response = await http.post(
       Uri.https(
         url,
         "ingredients",
       ),
       headers: {
-        // "Accept": "application/json",
+        'Content-Type': 'application/json; charset=UTF-8',
         'authorization': basicAuth,
       },
-      body: body,
+      body: jsonEncode(
+        <String, dynamic>{
+          'ingredient_id': newIngredientId.toString(),
+          'name': ingredient.name,
+        },
+      ),
     );
-    if (response.statusCode == 200) {
-      print("ingredientAdmin success");
+    if (response.statusCode == 201) {
+      print("ingredientAdmin add ingredient success");
       var data = json.decode(response.body);
     } else {
       print("ingredientAdmin fail");
