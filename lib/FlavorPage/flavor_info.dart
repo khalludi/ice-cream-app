@@ -119,12 +119,13 @@ class _FlavorInfoState extends State<FlavorInfo> {
   }
 
   void routeSearchReviews(BuildContext context) {
+
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (_) => SearchReviews(
           productId: widget.productId,
-          brandId: brandId,
+          brandId: widget.brand,
           context: context,
         ),
       ),

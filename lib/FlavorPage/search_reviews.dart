@@ -11,13 +11,13 @@ import 'package:ice_cream_social/backend_data.dart';
 
 class SearchReviews extends StatefulWidget {
   int productId;
-  int brandId;
+  String brandId;
   BuildContext context;
   SearchReviews({
     Key key,
-    @required productId,
-    @required brandId,
-    @required context,
+    @required this.productId,
+    @required this.brandId,
+    @required this.context,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class SearchReviews extends StatefulWidget {
 
 class _SearchReviewsState extends State<SearchReviews> {
   int productId;
-  int brandId;
+  String brandId;
   BackendData providerBackendData;
   String url;
   String username;
@@ -47,7 +47,13 @@ class _SearchReviewsState extends State<SearchReviews> {
   }
 
   Future<List<Review>> searchReviews(String query) async {
-    var data = {'search_term': query};
+    var data = {
+      'search_term': query,
+      'productId': productId.toString(),
+      'brand': brandId.toString(),
+    };
+
+    print("data="+data.toString());
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
