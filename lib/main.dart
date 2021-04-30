@@ -56,10 +56,12 @@ class _HomePageState extends State<HomePage> {
     password = providerBackendData.password;
     isUsingSearchBar = false;
     futureProducts = fetchProducts();
+    toProfile = 0;
     super.initState();
   }
   int _selectedIndex = 0;
   int loginChanged = 0;
+  int toProfile;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
@@ -75,6 +77,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       loginChanged = newId;
     });
+  }
+
+  void updateToProfile(int newId) {
+    toProfile = newId;
+    print("Updated toProfile to $toProfile\n");
   }
 
   Widget chooseWidget(BuildContext context) {
@@ -217,6 +224,8 @@ class _HomePageState extends State<HomePage> {
       onLoginChanged: updateLoginChanged,
       auth: auth,
       context: context,
+      toProfile: toProfile,
+      onProfileChanged: updateToProfile,
     ));
 
     return MaterialApp(
