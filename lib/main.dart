@@ -9,7 +9,8 @@ import 'package:ice_cream_social/login/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'HomePage/Products.dart';
 import 'HomePage/filter.dart';
-
+import 'FlavorPage/flavor_page.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(new MyApp());
@@ -92,23 +93,23 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: _buildBar(context),
       body: SearchBar<Products>(
-      key: Key(products.length.toString()),
-      searchBarPadding: const EdgeInsets.symmetric(
-      horizontal: 10,
-      vertical: 10,
-      ),
-      listPadding: const EdgeInsets.symmetric(
-      horizontal: 10,
-      vertical: 10,
-      ),
-      suggestions: products,
-      onCancelled: () => isUsingSearchBar = false,
-      hintText: "Search",
-      shrinkWrap: true,
-      onSearch: search,
-      onItemFound: (Products product, int index) {
-      return getProductsWidget(product);
-      },
+        key: Key(products.length.toString()),
+        searchBarPadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+        listPadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+        suggestions: products,
+        onCancelled: () => isUsingSearchBar = false,
+        hintText: "Search",
+        shrinkWrap: true,
+        onSearch: search,
+        onItemFound: (Products product, int index) {
+          return getProductsWidget(product);
+        },
       ),
       /**
           Expanded(
@@ -122,11 +123,27 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: Builder(
       builder: (context) => FloatingActionButton(
       onPressed: () async {
-      var result = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => FilterPage(context: context)));
-      // note that this context is not Screen A context, but MaterialApp context
-      // see https://stackoverflow.com/a/66485893/2301224
-      print('>>> Button1-onPressed completed, result=$result');
+        print("here");
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => FilterPage(context: context)))
+            .then((completion){
+          setState(() {
+            print(completion);
+            for(Products p in completion){
+              getProductsWidget(p);
+            }
+          });
+        });
+        /**
+        List<Products> filteredProducts = await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => FilterPage(context: context)));
+        print("here");
+        print(filteredProducts);
+        setState(() {
+          for(Products p in filteredProducts){
+            getProductsWidget(p);
+          }
+        });**/
       },
       child: Icon(Icons.filter_list),
       backgroundColor: Colors.purple,
@@ -226,9 +243,6 @@ class _HomePageState extends State<HomePage> {
     searchResults = products
         .where((b) => b.product_name.toLowerCase().contains(s.toLowerCase()) || b.description.toLowerCase().contains(s.toLowerCase()))
         .toList();
-    for(Products p in searchResults){
-      print(p.product_name);
-    }
     return searchResults;
   }
 
@@ -239,14 +253,14 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             ListTile(
               title: Text(product.product_name),
-              subtitle: (Text(product.brand_name + "\n" + product.subhead + product.description)),
+              subtitle: (Text(product.brand_name + "\n" + product.subhead + product.description + "\nAvg. Rating: " + product.avg_rating.toString())),
             ),
             ButtonTheme(
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
                     child: const Text('See More'),
-                    onPressed: () {/* ... */},
+                    onPressed: () => routeFlavorPage(context, product),
                   ),
                 ],
               ),
@@ -254,6 +268,19 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
     );
+  }
+
+  void routeFlavorPage(BuildContext context, Products product) {
+    print(product.product_id);
+    Widget route = FlavorPage(
+      flavorName: product.product_name,
+      productId: product.product_id,
+      brand: product.brand_name,
+      description: product.description,
+      pngFile: null,
+      context: context,
+    );
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => route));
   }
 
   Widget _buildBar(BuildContext context) {
