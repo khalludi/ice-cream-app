@@ -14,6 +14,9 @@ void main() {
 }
 
 class FilterPage extends StatefulWidget {
+  BuildContext context;
+  FilterPage({ this.context });
+
   _FilterPageState createState() => new _FilterPageState();
 }
 
@@ -24,8 +27,19 @@ class _FilterPageState extends State<FilterPage> {
   bool _hasBeenPressed3 = false;
   bool _hasBeenPressed4 = false;
 
+  BackendData providerBackendData;
+  String url;
+  @override
+  void initState() {
+    providerBackendData = Provider.of<BackendData>(
+        widget.context,
+        listen: false
+    );
+    url = providerBackendData.url;
+  }
+
   Widget build(BuildContext context) {
-    var myModel = Provider.of<HomePage>(context); // A
+    // var myModel = Provider.of<HomePage>(context); // A
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(

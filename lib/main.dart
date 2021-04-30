@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => FloatingActionButton(
                 onPressed: () async {
                   var result = await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => FilterPage()));
+                      MaterialPageRoute(builder: (context) => FilterPage(context: context)));
                   // note that this context is not Screen A context, but MaterialApp context
                   // see https://stackoverflow.com/a/66485893/2301224
                   print('>>> Button1-onPressed completed, result=$result');
