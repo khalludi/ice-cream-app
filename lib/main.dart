@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       p = products;
     }
     return Scaffold(
-        appBar: _buildBar(context),
+        // appBar: _buildBar(context),
       body: SearchBar<Products>(
         key: scaffoldKey,
         searchBarPadding: const EdgeInsets.symmetric(
@@ -176,19 +176,19 @@ class _HomePageState extends State<HomePage> {
     return null;
   }
 
-  Widget build(BuildContext context) {
+  Widget buildSearch(BuildContext context) {
     return FutureBuilder<List<Products>>(
       future: futureProducts,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           products = snapshot.data;
           //print(products);
-          return buildSearch(context);
+          return HomeDisplay(context: context);
         } else if (snapshot.hasError) {
           print(snapshot.error);
           return Scaffold(
             key: scaffoldKey,
-            appBar: _buildBar(context),
+            // appBar: _buildBar(context),
             body: Center(
               child: Text("Error getting products data"),
             ),
@@ -197,18 +197,17 @@ class _HomePageState extends State<HomePage> {
         // By default, show a loading spinner.
         return Scaffold(
           key: scaffoldKey,
-          appBar: _buildBar(context),
+          body: Center(child: CircularProgressIndicator()),
+          // appBar: _buildBar(context),
         );
       },
     );
   }
 
-  Widget buildSearch(BuildContext context) {
+  Widget build(BuildContext context) {
     Authentication auth = new Authentication();
     _widgetOptions = [];
-    _widgetOptions.add(HomeDisplay(
-      context: context,
-    ));
+    _widgetOptions.add(buildSearch(context));
     _widgetOptions.add(LoginScreen(
       onLoginChanged: updateLoginChanged,
       auth: auth,
@@ -217,7 +216,7 @@ class _HomePageState extends State<HomePage> {
 
     return MaterialApp(
       home: Scaffold(
-        // appBar: _buildBar(context),
+        appBar: _buildBar(context),
         body: Builder(
             builder: (context) => chooseWidget(context)
         ),

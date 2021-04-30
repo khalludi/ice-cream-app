@@ -7,6 +7,13 @@ class FlavorTitle extends StatelessWidget {
   final String flavor; // Stateless Widget, so can't change text
   final String brand; // Stateless Widget, so can't change text
 
+  Map<String, String> brandIdMap = {
+    'breyers': 'Breyers',
+    'bj': 'Ben & Jerry\'s',
+    'talenti': 'Talenti',
+    'hd': 'Haagen Daz'
+  };
+
   FlavorTitle(this.flavor, this.brand);
 
   @override
@@ -18,12 +25,12 @@ class FlavorTitle extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            flavor,
+            brandIdMap[brand],
             style: TextStyle(fontSize: 28),
             textAlign: TextAlign.center,
           ),
           Text(
-            "Brand: " + brand,
+            flavor,
             style: TextStyle(fontSize: 28),
             textAlign: TextAlign.center,
           ),
