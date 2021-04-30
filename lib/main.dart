@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       p = products;
     }
     return Scaffold(
-        // appBar: _buildBar(context),
+        appBar: _buildBar(context),
       body: SearchBar<Products>(
         key: scaffoldKey,
         searchBarPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -187,13 +187,13 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           products = snapshot.data;
-          //print(products);
+          print(products);
           return HomeDisplay(context: context);
         } else if (snapshot.hasError) {
           print(snapshot.error);
           return Scaffold(
             key: scaffoldKey,
-            // appBar: _buildBar(context),
+            appBar: _buildBar(context),
             body: Center(
               child: Text("Error getting products data"),
             ),
@@ -203,7 +203,7 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           key: scaffoldKey,
           body: Center(child: CircularProgressIndicator()),
-          // appBar: _buildBar(context),
+          appBar: _buildBar(context),
         );
       },
     );
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
 
     return MaterialApp(
       home: Scaffold(
-        appBar: _buildBar(context),
+        // appBar: _buildBar(context),
         body: Builder(
             builder: (context) => chooseWidget(context)
         ),
