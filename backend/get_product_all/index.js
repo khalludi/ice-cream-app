@@ -52,7 +52,6 @@ let pool;
 
 exports.getProductAll = async (req, res) => {
   pool = await createPool();
-  const out = await pool.query("SELECT product_name, brand_name, subhead, description, " +
-  "avg_rating, num_ratings FROM Products ORDER BY product_id");
+  const out = await pool.query("SELECT * FROM Products ORDER BY product_id");
   res.status(200).send(JSON.parse(JSON.stringify(out)));
 }

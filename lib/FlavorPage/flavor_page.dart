@@ -278,6 +278,7 @@ class _FlavorPageState extends State<FlavorPage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           reviews = snapshot.data;
+          print(reviews);
           return buildScaffold(context);
         } else if (snapshot.hasError) {
           return Scaffold(
