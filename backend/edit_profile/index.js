@@ -66,5 +66,9 @@ exports.usersAdvQuery = async (req, res) => {
   const out2 = await pool.query("UPDATE Users SET username = '" + req.body.username +
                   "', email = '" + req.body.email + "' WHERE username = '" + output[0]["username"]+"'");
 
+  // Update reviews table
+  await pool.query("UPDATE Reviews SET author = '" + req.body.username + "' WHERE author = '" +
+    output[0]["username"] + "'");
+  
   res.status(200).send(JSON.parse(JSON.stringify(out2)));
 }

@@ -12,17 +12,19 @@ typedef void IntCallback(int id);
 
 class LoginScreen extends StatefulWidget {
   final IntCallback onLoginChanged;
+  final IntCallback onProfileChanged;
   Authentication auth;
   BuildContext context;
-  LoginScreen({ @required this.onLoginChanged, this.auth, this.context });
+  int toProfile;
+  LoginScreen({ @required this.onLoginChanged, this.auth, this.context, this.toProfile, this.onProfileChanged });
 
   @override
-  _LoginScreenState createState() => _LoginScreenState(onLoginChanged, auth);
+  _LoginScreenState createState() => _LoginScreenState(onLoginChanged, auth, toProfile, onProfileChanged);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  int toProfile = 0;
+  int toProfile;
   bool _isLogin = true;
   String _userId;
   String _password;
@@ -37,9 +39,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   IntCallback onLoginChanged;
   IntCallback onProfileChanged;
-  _LoginScreenState(IntCallback onLoginChanged, Authentication auth) {
+  _LoginScreenState(IntCallback onLoginChanged, Authentication auth, int toProfile, IntCallback onProfileChanged) {
     this.onLoginChanged = onLoginChanged;
     this.auth = auth;
+    this.toProfile = toProfile;
+    this.onProfileChanged = onProfileChanged;
   }
 
   BackendData providerBackendData;
@@ -54,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void updateProfileChanged(int newId) {
+    onProfileChanged(newId);
     setState(() {
       toProfile = newId;
     });
@@ -265,6 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
       if (_userId != null) {
+        onProfileChanged(1);
         setState(() {
           toProfile = 1;
           txtEmail.text = "";

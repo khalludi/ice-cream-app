@@ -12,7 +12,6 @@ import 'package:ice_cream_social/backend_data.dart';
 
 /// The [SearchIngredients] widget uses the FlappySearchBar so that the user can search, edit, and
 /// delete ingredients.
-
 class SearchIngredients extends StatefulWidget {
   final List<Ingredient> ingredients;
   final scaffoldKey;
@@ -110,7 +109,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Ingredient> ingredients =
-          (data).map((i) => Ingredient.fromJson(i)).toList();
+      (data).map((i) => Ingredient.fromJson(i)).toList();
       return ingredients;
     } else {
       // If the server did not return a 200 OK response,
@@ -133,7 +132,6 @@ class _SearchIngredientsState extends State<SearchIngredients> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.delete(
-
       Uri.https(
         url,
         "ingredients",
@@ -147,9 +145,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       }),
     );
 
-    log("statuscode=" + response.statusCode.toString());
     if (response.statusCode == 200) {
-      log("delete ingredient response: " + response.body);
       ingredients.removeAt(index);
       setState(() {});
       return true;
@@ -189,7 +185,7 @@ class _SearchIngredientsState extends State<SearchIngredients> {
       print("ingredientAdmin success");
       var data = json.decode(response.body);
     } else {
-      print("ingredientAdmin fail");
+      print("updateIngredient fail");
     }
   }
 

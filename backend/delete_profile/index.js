@@ -52,6 +52,7 @@ let pool;
 
 exports.usersAdvQuery = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query('DELETE FROM Users WHERE username = "' + req.body.username + '"')
+  const output = await pool.query('DELETE FROM Users WHERE username = "' + req.body.username + '"');
+  await pool.query('DELETE FROM Reviews WHERE author = "' + req.body.username + '"');
   res.status(200).send({});
 }

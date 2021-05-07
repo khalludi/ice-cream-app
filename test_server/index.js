@@ -57,16 +57,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', async (req, res) => {
-  pool = await createPool();
-  const talentiQuery = pool.query('SELECT username FROM Users WHERE email = "tigers@ringleader.org"');
-//  const talentiQuery = pool.query('SELECT email, count(username) as cnt FROM Users GROUP BY email ORDER BY cnt DESC LIMIT 30;');
-//  const talentiQuery = pool.query('SELECT u.email, drv.max_len FROM Users u JOIN (SELECT r.author as author, MAX(LENGTH(r.review_text)) as max_len FROM Reviews r GROUP BY r.author) as drv ON drv.author = u.username ORDER BY drv.max_len DESC LIMIT 15')
-  const output = await talentiQuery;
-  if (output.length <= 0) {
-    return res.status(400).send("User not found");
+  brand_cols = "";
+  if (req.query.filter_brand) {
+    first = true;
+    arr = req.query.filter_brand.split(",");
+    for (let val of arr) {
+      if (first) {
+        brand_cols = brand_cols.concat("'").concat(val).concat("'");
+        first = false;
+      } else {
+        brand_cols = brand_cols.concat(",'").concat(val).concat("'");
+      }
+    }
   }
 
-  res.status(200).send(JSON.parse(JSON.stringify(output)));
+  // res.send(brand_cols);
+  res.send(req.query.filter_ratings);
 })
 
 app.get('/advanced-query', async (req, res) => {

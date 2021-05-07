@@ -52,6 +52,9 @@ let pool;
 
 exports.updateReview = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query("UPDATE Reviews SET review_id = " + req.body.review_id + ", product_id = " + req.body.product_id + ", brand = '" + req.body.brand + "', author = '" + req.body.author + "', date_updated = " + req.body.date_updated + ", stars = " + req.body.stars + ", title = '" + req.body.title + "', helpful_yes = " + req.body.helpful_yes + ", helpful_no = " + req.body.helpful_no + ", review_text = '" + req.body.review_text + "'")
+  const output = await pool.query("UPDATE Reviews SET review_text = '" + req.body.review_text + 
+    "', stars = " + req.body.stars + ", title = '" + req.body.title + "' WHERE product_id = " + 
+    req.body.product_id + " AND brand = '" + req.body.brand + "' AND author = '" + 
+    req.body.author + "'");
   res.send(JSON.parse(JSON.stringify(output)));
 }

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:ice_cream_social/FlavorPage/review.dart';
+import 'package:ice_cream_social/FlavorPage/review_card.dart';
 import 'package:ice_cream_social/backend_data.dart';
 import 'package:ice_cream_social/login/advanced_item.dart';
 import 'package:ice_cream_social/login/authentication.dart';
@@ -33,6 +35,8 @@ class _ProfileState extends State<Profile> {
   String oldUsername;
   String oldEmail;
 
+  Future<List<Review>> futureReviews;
+  List<Review> reviews;
   Future<String> username;
   Future<String> email;
   String title = '';
@@ -70,6 +74,7 @@ class _ProfileState extends State<Profile> {
       oldUsername = obj[0]["username"];
       oldEmail = queryParameters["email"];
       title = obj[0]["username"];
+      futureReviews = getReviews(obj[0]["username"]);
     });
 
     return obj[0]["username"];
@@ -89,9 +94,11 @@ class _ProfileState extends State<Profile> {
               editProfileCard(),
               Padding(padding: EdgeInsets.only(top: 14)),
               deleteButton(),
-              // Padding(padding: EdgeInsets.only(top: 14)),
-              // maxReviewHeader(),
-              // Padding(padding: EdgeInsets.only(top: 10)),
+              Padding(padding: EdgeInsets.only(top: 14)),
+              myReviews(),
+              Padding(padding: EdgeInsets.only(top: 10)),
+              myReviewsWidget()
+              // myReviewsWidget()
               // Container(
               //   padding: EdgeInsets.only(left: 10, right: 10),
               //   child: Card(
@@ -120,6 +127,23 @@ class _ProfileState extends State<Profile> {
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ))),
+    );
+  }
+
+  Widget myReviews() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: //Center(
+      Container(
+          padding: EdgeInsets.only(left: 11, right: 10, top: 11, bottom: 8),
+          child: Text('My Reviews',
+              style: TextStyle(
+                fontFamily: 'Nexa',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ))),
     );
   }
 
@@ -350,6 +374,53 @@ class _ProfileState extends State<Profile> {
     var tagObjsJson = jsonDecode(result.body) as List;
     List<AdvancedItem> tagObjs = tagObjsJson.map((tagJson) => AdvancedItem.fromJson(tagJson)).toList();
     return tagObjs;
+  }
+
+  Future<List<Review>> getReviews(String username) async {
+    var queryParameters = {"username": username};
+    var result = await http.get(Uri.https(url, 'get-review-username', queryParameters));
+    var tagObjsJson = jsonDecode(result.body) as List;
+    List<Review> tagObjs = tagObjsJson.map((tagJson) => Review.fromJson(tagJson)).toList();
+    print(tagObjs);
+    return tagObjs;
+  }
+
+  Widget myReviewsWidget() {
+    return FutureBuilder<List<Review>>(
+      future: futureReviews,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          reviews = snapshot.data;
+          return buildReviewList();
+        } else if (snapshot.hasError) {
+          return Center(
+              child: Text("Error getting reviews"),
+            );
+        }
+        // By default, show a loading spinner.
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  empty(int) {
+
+  }
+
+  Widget buildReviewList() {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: reviews.length,
+      itemBuilder: (context, index) {
+          return ReviewCard(
+            review: reviews[index],
+            index: index,
+            allowEditing: true,
+            createEditDialog: empty,
+          );
+        }
+    );
   }
 
   Widget advancedWidget() {

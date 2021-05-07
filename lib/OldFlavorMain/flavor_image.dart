@@ -13,7 +13,7 @@ class FlavorImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return pngFileName.length > 0 ?  
+   return pngFileName != null ?
    Image(image: AssetImage(getPath(pngFileName)))
    : SizedBox.shrink(); // if no png, return empty view
   }

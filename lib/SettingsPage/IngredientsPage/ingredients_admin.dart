@@ -16,7 +16,6 @@ import 'package:ice_cream_social/backend_data.dart';
 /// Read:   use the search bar at the top to search for ingredients in the SQL database.
 /// Update: tap on ingredients (represented as TextFields) and edit the ingredient name in the SQL database and the UI.
 /// Delete: tap the delete icon to the right of the ingredient you want to delete in the SQL database and the UI.
-
 typedef Callback = Function(int);
 
 class IngredientsAdmin extends StatefulWidget {
@@ -159,6 +158,7 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
   }
 
   void addIngredientToDatabase(Ingredient ingredient) async {
+    String newIngredientId = ingredient.name.hashCode.toString().substring(1,5);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     http.Response response = await http.post(
@@ -171,8 +171,8 @@ class _IngredientsAdminState extends State<IngredientsAdmin> {
         'authorization': basicAuth,
       },
       body: jsonEncode(
-        <String, String>{
-          'ingredient_id': (ingredients.length + 1).toString(),
+        <String, dynamic>{
+          'ingredient_id': newIngredientId.toString(),
           'name': ingredient.name,
         },
       ),

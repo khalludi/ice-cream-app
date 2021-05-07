@@ -11,14 +11,15 @@ import 'package:ice_cream_social/backend_data.dart';
 
 class SearchReviews extends StatefulWidget {
   int productId;
-  String brand;
+  String brandId;
   BuildContext context;
 
   SearchReviews({
+    Key key,
     @required this.productId,
-    @required this.brand,
+    @required this.brandId,
     @required this.context,
-  });
+  }) : super(key: key);
 
   @override
   _SearchReviewsState createState() => _SearchReviewsState();
@@ -26,7 +27,7 @@ class SearchReviews extends StatefulWidget {
 
 class _SearchReviewsState extends State<SearchReviews> {
   int productId;
-  String brand;
+  String brandId;
   BackendData providerBackendData;
   String url;
   String username;
@@ -34,7 +35,7 @@ class _SearchReviewsState extends State<SearchReviews> {
 
   @override
   void initState() {
-    brand = widget.brand;
+    brandId = widget.brandId;
     productId = widget.productId;
     log("initState productId=" + productId.toString());
     providerBackendData = Provider.of<BackendData>(
@@ -48,20 +49,20 @@ class _SearchReviewsState extends State<SearchReviews> {
   }
 
   Future<List<Review>> searchReviews(String query) async {
-    log("productId: " + widget.productId.toString());
-    var queryParameters = {
+    var data = {
       'search_term': query,
-      'productId': widget.productId.toString(),
-      'brand': widget.brand,
+      'productId': productId.toString(),
+      'brand': brandId.toString(),
     };
 
+    print("data="+data.toString());
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await http.get(
       Uri.https(
         url,
         "reviews/text",
-        queryParameters,
+        data,
       ),
       headers: {
         "Accept": "application/json",

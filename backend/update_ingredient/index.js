@@ -52,6 +52,7 @@ let pool;
 
 exports.updateIngredient = async (req, res) => {
   pool = await createPool();
-  const output = await pool.query("UPDATE Ingredients SET name = '" + req.body.name + "' WHERE ingredient_id = " + req.body.ingredient_id);
+  const output = await pool.query("UPDATE Ingredients SET name = '" + req.body.name + 
+    "' WHERE ingredient_id = '" + req.body.old_ingredient_id + "'");
   res.send(JSON.parse(JSON.stringify(output)));
 }

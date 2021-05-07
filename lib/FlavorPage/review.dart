@@ -19,7 +19,6 @@ import 'package:intl/intl.dart';
 /// helpful_yes: how many people marked this review as helpful.
 /// helpful_no: how many people marked this review as not helpful.
 /// is_editable: whether the user that's currently signed in can edit this review.
-
 class Review {
   // ignore: non_constant_identifier_names
   int review_id;
@@ -66,14 +65,14 @@ class Review {
     );
   }
   Map<String, String> toJson() => {
-        'product_id': product_id.toString(),
-        'brand': brand,
-        'author': author,
-        'date_updated': DateFormat('yyyy-MM-dd').format(date_updated),
-        'title': title,
-        'stars': stars.toString(),
-        'helpful_yes': helpful_yes.toString(),
-        'helpful_no': helpful_no.toString(),
-        'review_text': review_text.toString(),
-      };
+    'product_id': product_id.toString(),
+    'brand': brand,
+    'author': author,
+    'date_updated': DateFormat('yyyy-MM-dd').format(date_updated),
+    'title': title,
+    'stars': stars.toString(),
+    'helpful_yes': helpful_yes.toString(),
+    'helpful_no': helpful_no.toString(),
+    'review_text': review_text.toString(),
+  };
 }

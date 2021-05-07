@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer';
@@ -17,7 +18,6 @@ import 'package:ice_cream_social/login/authentication.dart';
 ///
 /// Specifically, [FlavorPage] combines the [FlavorInfo] + [ReviewDialog] widgets.
 /// See example_flavor_page, an example of how to combine [FlavorPage] with the rest of an application.
-
 int buildNumber = 0;
 typedef Callback = Function(int);
 typedef Callback2 = Function(String);
@@ -31,6 +31,7 @@ class FlavorPage extends StatefulWidget {
     @required this.description,
     @required this.pngFile,
     @required this.context,
+    @required this.avgRating,
   });
 
   final String flavorName;
@@ -39,6 +40,7 @@ class FlavorPage extends StatefulWidget {
   final String description;
   final String pngFile;
   final BuildContext context;
+  final double avgRating;
 
   @override
   _FlavorPageState createState() => _FlavorPageState();
@@ -69,27 +71,28 @@ class _FlavorPageState extends State<FlavorPage> {
       listen: false,
     );
     url = providerBackendData.url;
-    currentAuthor = "annaz2";
-    getUsername().then((value) {
-      currentAuthor = value;
-    });
+    currentAuthor = "Anonymous";
+    loadUsername();
     username = providerBackendData.username;
     password = providerBackendData.password;
     futureReviews = fetchReviews();
+    print(widget.productId.toString());
+    print(widget.brand);
     super.initState();
   }
 
   Future<List<Review>> fetchReviews() async {
     Map<String, dynamic> queryParameters = {
-      'productId': widget.productId.toString(),
-      'brand': brandId,
+      'product_id': widget.productId.toString(),
+      'brand': widget.brand,
     };
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
+
     final response = await http.get(
       Uri.https(
         url,
-        "get_review_all",
+        "reviews/product",
         queryParameters,
       ),
       headers: {
@@ -98,7 +101,9 @@ class _FlavorPageState extends State<FlavorPage> {
         'authorization': basicAuth,
       },
     );
+
     if (response.statusCode == 200) {
+      print("Success");
       List<dynamic> data = json.decode(response.body);
       List<Review> reviews = (data).map((i) => Review.fromJson(i)).toList();
       for (Review review in reviews) {
@@ -109,7 +114,9 @@ class _FlavorPageState extends State<FlavorPage> {
       }
       setState(() {});
       return reviews;
-    } else {}
+    } else {
+      print("Fail");
+    }
     return null;
   }
 
@@ -129,6 +136,7 @@ class _FlavorPageState extends State<FlavorPage> {
         is_editable: true,
       ),
     );
+    hasAddedReview = true;
     setState(() {});
     final snackBar = SnackBar(content: Text('Added review!'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -137,7 +145,8 @@ class _FlavorPageState extends State<FlavorPage> {
 
   void addReviewToDatabase(Review review) async {
     review.author = currentAuthor;
-    log("addReview username=" + review.author);
+    review.product_id = widget.productId;
+    review.brand = widget.brand;
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final String body = json.encode(review.toJson());
@@ -153,20 +162,25 @@ class _FlavorPageState extends State<FlavorPage> {
       },
       body: jsonEncode(review.toJson()),
     );
+    print(body);
+    print("addReview response:" + response.body.toString());
   }
 
-  Future<String> getUsername() async {
-    return "annaz2";
-    // TODO: uncomment out other code once GCP integrated
-    // Authentication auth = new Authentication();
-    // var email = auth.getEmail();
-    // var queryParameters = {
-    //   "email": await email,
-    // };
-    // var response =
-    //     await http.get(Uri.https(url, 'get-profile', queryParameters));
-    // var obj = jsonDecode(response.body) as List;
-    // return obj[0]["username"];
+  void loadUsername() async {
+    if (await FirebaseAuth.instance.currentUser == null) return;
+    Authentication auth = new Authentication();
+    var email = auth.getEmail();
+
+    var queryParameters = {
+      "email": await email,
+    };
+    var response = await http.get(Uri.https(
+      url,
+      'get-profile',
+      queryParameters,
+    ));
+    var obj = jsonDecode(response.body) as List;
+    currentAuthor = obj[0]["username"];
   }
 
   void createEditDialog(int index) async {
@@ -203,10 +217,11 @@ class _FlavorPageState extends State<FlavorPage> {
       },
       body: jsonEncode(<String, String>{
         'product_id': widget.productId.toString(),
-        'brand': brandId,
-        'author': review.author,
+        'brand': widget.brand,
+        'author': currentAuthor,
       }),
     );
+    print(response.statusCode);
   }
 
   void editReview(newReview, index) {
@@ -227,16 +242,14 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void editReviewInDatabase(Review review) async {
-    review.author = currentAuthor;
-    review.brand = brandId;
     review.product_id = widget.productId;
-    log("productid=" + widget.productId.toString());
+    review.brand = widget.brand;
+    review.author = currentAuthor;
     Map<String, String> data = review.toJson();
-    log("review toJson productid=" + data['product_id']);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     String body = json.encode(data);
-    http.Response response = await http.post(
+    http.Response response = await http.put(
       Uri.https(
         url,
         "/reviews/update",
@@ -249,10 +262,10 @@ class _FlavorPageState extends State<FlavorPage> {
       body: body,
     );
     if (response.statusCode == 200) {
-      print("ingredientAdmin success");
+      print("editReview success");
       var data = json.decode(response.body);
     } else {
-      print("ingredientAdmin fail");
+      print("editReview fail");
     }
   }
 
@@ -263,6 +276,7 @@ class _FlavorPageState extends State<FlavorPage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           reviews = snapshot.data;
+          print(reviews);
           return buildScaffold(context);
         } else if (snapshot.hasError) {
           return Scaffold(
@@ -294,7 +308,7 @@ class _FlavorPageState extends State<FlavorPage> {
         flavorImageUrl: widget.pngFile,
         description: widget.description,
         passedReviews: reviews,
-        avgRating: 2.5,
+        avgRating: widget.avgRating,
         createEditDialog: createEditDialog,
       ),
       floatingActionButton: Visibility(

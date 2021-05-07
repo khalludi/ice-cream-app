@@ -32,7 +32,7 @@ class _ReviewCardState extends State<ReviewCard> {
     super.initState();
   }
 
-  String getFormattedDate(DateTime date) {
+  String getFormattedDate(date) {
     DateFormat formatter = new DateFormat('MMMM dd, yyyy');
     return formatter.format(date);
   }

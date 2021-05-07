@@ -75,6 +75,10 @@ class _SearchProductsState extends State<SearchProducts> {
   Widget getProductsWidget(Products product, int index) {
     return Card(
       child: ListTile(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.grey[600], width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
         title: ProductsTextField(
           product: product,
           index: index,
@@ -82,7 +86,7 @@ class _SearchProductsState extends State<SearchProducts> {
           scaffoldKey: widget.scaffoldKey,
         ),
         trailing: Padding(
-          padding: const EdgeInsets.only(right: 20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Visibility(
             visible: !isUsingSearchBar,
             child: IconButton(

@@ -26,42 +26,33 @@ paths:
       responses:
         200:
           description: OK
-  /create-ingredient:
+  /create-product:
     post:
-      summary: Create the ingredient
-      operationId: createIngredient
+      summary: Create a product
+      operationId: createProduct
       x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-ingredient
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-product
       responses:
         201:
-          description: Ingredient created
+          description: Product created
   /create-profile:
     post:
-      summary: Returns the specified user profile
+      summary: Create the specified user profile
       operationId: createProfile
       x-google-backend:
         address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-profile
       responses:
         201:
           description: Profile created
-  /get-profile:
-    get:
-      summary: Returns the specified user profile
-      operationId: getProfile
+  /delete-product:
+    delete:
+      summary: Deletes the product if it exists
+      operationId: deleteProduct
       x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-profile
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-product
       responses:
         200:
-          description: OK
-  /edit-profile:
-    post:
-      summary: Edits the profile if it exists
-      operationId: editProfile
-      x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-edit-profile
-      responses:
-        200:
-          description: Profile edited
+          description: Product deleted
   /delete-profile:
     delete:
       summary: Deletes the profile if it exists
@@ -71,24 +62,24 @@ paths:
       responses:
         200:
           description: Profile deleted
-  /delete-ingredient:
-    delete:
-      summary: Deletes the Ingredient if it exists
-      operationId: deleteIngredient
+  /edit-profile:
+    post:
+      summary: Edits the profile if it exists
+      operationId: editProfile
       x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-ingredient
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-edit-profile
       responses:
         200:
-          description: Ingredient deleted
-  /delete-review:
-    delete:
-      summary: Deletes the review if it exists
-      operationId: deleteReview
+          description: Profile edited
+  /filter-product:
+    get:
+      summary: Returns products filtered
+      operationId: filterProduct
       x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-review
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-filter-product
       responses:
         200:
-          description: Review deleted
+          description: OK
   /get-ingredient:
     get:
       summary: Returns ingredient by search term
@@ -107,6 +98,24 @@ paths:
       responses:
         200:
           description: OK
+  /get-product-all:
+    get:
+      summary: Returns all products
+      operationId: getProductAll
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-product-all
+      responses:
+        200:
+          description: OK
+  /get-profile:
+    get:
+      summary: Returns the specified user profile
+      operationId: getProfile
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-profile
+      responses:
+        200:
+          description: OK
   /get-review-all:
     get:
       summary: Returns all reviews
@@ -116,21 +125,12 @@ paths:
       responses:
         200:
           description: OK
-  /get-review-key:
+  /get-review-username:
     get:
-      summary: Returns the specified user review
-      operationId: getReviewKey
+      summary: Returns all reviews
+      operationId: getReviewUsername
       x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-key
-      responses:
-        200:
-          description: OK
-  /get-review-text:
-    get:
-      summary: Returns the specified user review
-      operationId: getReviewText
-      x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-text
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-username
       responses:
         200:
           description: OK
@@ -143,6 +143,76 @@ paths:
       responses:
         200:
           description: OK
+  /ingredients:
+    post:
+      summary: Create the ingredient
+      operationId: createIngredient
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-ingredient
+      responses:
+        201:
+          description: Ingredient created
+    delete:
+      summary: Deletes the Ingredient if it exists
+      operationId: deleteIngredient
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-ingredient
+      responses:
+        200:
+          description: Ingredient deleted
+  /ingredients/edit:
+    post:
+      summary: Edits the ingredient
+      operationId: editIngredient
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-edit-ingredient
+      responses:
+        200:
+          description: Ingredient edited
+  /reviews:
+    post:
+      summary: Create a review
+      operationId: createReview
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-create-review
+      responses:
+        201:
+          description: Review created
+    delete:
+      summary: Deletes the review if it exists
+      operationId: deleteReview
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-delete-review
+      responses:
+        200:
+          description: Review deleted
+  /reviews/product:
+    get:
+      summary: Returns the specified user review
+      operationId: getReviewKey
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-key
+      responses:
+        200:
+          description: OK
+  /reviews/text:
+    get:
+      summary: Returns the specified user review
+      operationId: getReviewText
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-get-review-text
+      responses:
+        200:
+          description: OK
+  /reviews/update:
+    put:
+      summary: Updates the review if it exists
+      operationId: updateReview
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-update-review
+      responses:
+        200:
+          description: Review updated
   /reviews-adv-query:
     get:
       summary: Returns advanced query of reviews.
@@ -152,17 +222,8 @@ paths:
       responses:
         200:
           description: OK
-  /update-review:
-    put:
-      summary: Updates the review if it exists
-      operationId: updateReview
-      x-google-backend:
-        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-update-review
-      responses:
-        200:
-          description: Review updated
   /update-ingredient:
-    put:
+    post:
       summary: Updates the Ingredient if it exists
       operationId: updateIngredient
       x-google-backend:
@@ -170,6 +231,15 @@ paths:
       responses:
         200:
           description: Ingredient updated
+  /update-product:
+    post:
+      summary: Updates the Product if it exists
+      operationId: updateProduct
+      x-google-backend:
+        address: https://us-central1-ice-cream-project-308820.cloudfunctions.net/function-update-product
+      responses:
+        200:
+          description: Product updated
   /user-search:
     get:
       summary: Returns users that match search query

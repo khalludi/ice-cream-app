@@ -7,7 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:ice_cream_social/backend_data.dart';
-
+import 'Products.dart';
 
 void main() {
   runApp(new MyApp());
@@ -16,7 +16,6 @@ void main() {
 class FilterPage extends StatefulWidget {
   BuildContext context;
   FilterPage({ this.context });
-
   _FilterPageState createState() => new _FilterPageState();
 }
 
@@ -27,8 +26,15 @@ class _FilterPageState extends State<FilterPage> {
   bool _hasBeenPressed3 = false;
   bool _hasBeenPressed4 = false;
 
+  double filterRating;
+  List<String> filterBrand;
+
   BackendData providerBackendData;
   String url;
+  String username;
+  String password;
+  List<Products> productsFiltered;
+
   @override
   void initState() {
     providerBackendData = Provider.of<BackendData>(
@@ -36,10 +42,57 @@ class _FilterPageState extends State<FilterPage> {
         listen: false
     );
     url = providerBackendData.url;
+    username = providerBackendData.username;
+    password = providerBackendData.password;
+
+    filterRating = 0.0;
+    filterBrand = [];
+  }
+
+   void filterProducts(double filterRating, List<String> filterBrand) async {
+    String brand_cols = "";
+    int first = 1;
+    for (String val in filterBrand) {
+      if (first == 1) {
+        brand_cols += val;
+        first = 0;
+      } else {
+        brand_cols += ',';
+        brand_cols += val;
+      }
+    }
+
+    var queryParameters = {"filter_rating": filterRating.toString(), "filter_brand": brand_cols};
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await http.get(Uri.https(url, "filter-product", queryParameters), headers: {
+      "Accept": "application/json",
+      'authorization': basicAuth,
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+    print(Uri.https(url, "filter-product", queryParameters));
+    print(queryParameters);
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<Products> products =
+      (data).map((i) => Products.fromJson(i)).toList();
+      //return products;
+      setState(() {
+        productsFiltered = products;
+      });
+      for(Products p in productsFiltered){
+        print(p.brand_name);
+      }
+      print("*****************************");
+      Navigator.pop(context, productsFiltered);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      print("Fail");
+    }
   }
 
   Widget build(BuildContext context) {
-    // var myModel = Provider.of<HomePage>(context); // A
     return Scaffold(
       appBar: _buildBar(context),
       body: Center(
@@ -56,7 +109,7 @@ class _FilterPageState extends State<FilterPage> {
 
             /**Feature to allow users to filter by rating.**/
             RatingBar.builder(
-              initialRating: 3,
+              initialRating: 0,
               minRating: 1,
               //direction: Axis.horizontal,
               allowHalfRating: true,
@@ -68,7 +121,8 @@ class _FilterPageState extends State<FilterPage> {
                     color: Colors.amber,
                   ),
               onRatingUpdate: (rating) {
-                print(rating);
+                filterRating = rating;
+                print(filterRating);
               },
             ),
             SizedBox(height: 100),  //used to space out components
@@ -90,6 +144,9 @@ class _FilterPageState extends State<FilterPage> {
                 {
                   setState(() {
                     _hasBeenPressed1 = !_hasBeenPressed1;
+                    if (_hasBeenPressed1 == true){
+                      filterBrand.add('bj');
+                    }
                   }),
                 },
                 padding: EdgeInsets.all(0.0),
@@ -116,6 +173,9 @@ class _FilterPageState extends State<FilterPage> {
                 {
                   setState(() {
                     _hasBeenPressed2 = !_hasBeenPressed2;
+                    if (_hasBeenPressed2 == true){
+                      filterBrand.add('breyers');
+                    }
                   }),
                 },
                 padding: EdgeInsets.all(0.0),
@@ -139,6 +199,9 @@ class _FilterPageState extends State<FilterPage> {
                 {
                   setState(() {
                     _hasBeenPressed3 = !_hasBeenPressed3;
+                    if (_hasBeenPressed3 == true){
+                      filterBrand.add('hd');
+                    }
                   }),
                 },
                 padding: EdgeInsets.all(0.0),
@@ -162,6 +225,9 @@ class _FilterPageState extends State<FilterPage> {
                 {
                   setState(() {
                     _hasBeenPressed4 = !_hasBeenPressed4;
+                    if (_hasBeenPressed4 == true){
+                      filterBrand.add('talenti');
+                    }
                   }),
                 },
                 padding: EdgeInsets.all(0.0),
@@ -185,7 +251,8 @@ class _FilterPageState extends State<FilterPage> {
             Container(
               child: RaisedButton(
                 onPressed: (){
-                  navigateToHome(context);
+                  print(filterRating);
+                  filterProducts(filterRating, filterBrand);
                 },
                 padding: EdgeInsets.all(0.0),
                 shape: StadiumBorder(),
