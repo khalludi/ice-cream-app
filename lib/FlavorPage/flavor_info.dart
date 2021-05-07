@@ -8,6 +8,7 @@ import 'review.dart';
 import 'review_card.dart';
 import 'flavor_description.dart';
 import 'search_reviews.dart';
+import 'dart:developer';
 
 /// The [FlavorInfo] widget consists of the specific ice cream flavor's name, brand, image,
 /// average rating, and reviews. These items are laid out as a column and the

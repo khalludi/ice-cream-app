@@ -107,7 +107,6 @@ class _FlavorPageState extends State<FlavorPage> {
       List<dynamic> data = json.decode(response.body);
       List<Review> reviews = (data).map((i) => Review.fromJson(i)).toList();
       for (Review review in reviews) {
-        print(review);
         if (review.author == currentAuthor) {
           hasAddedReview = true;
           review.is_editable = true;
@@ -205,7 +204,6 @@ class _FlavorPageState extends State<FlavorPage> {
   }
 
   void deleteReviewFromDatabase(Review review) async {
-    // print("product_id="+review.product_id.toString()+", brand="+review.brand+ "currentAuthor="+currentAuthor);
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     http.Response response = await http.delete(

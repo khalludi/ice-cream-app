@@ -13,6 +13,7 @@ class SearchReviews extends StatefulWidget {
   int productId;
   String brandId;
   BuildContext context;
+
   SearchReviews({
     Key key,
     @required this.productId,
@@ -36,6 +37,7 @@ class _SearchReviewsState extends State<SearchReviews> {
   void initState() {
     brandId = widget.brandId;
     productId = widget.productId;
+    log("initState productId=" + productId.toString());
     providerBackendData = Provider.of<BackendData>(
       context,
       listen: false,
@@ -64,6 +66,7 @@ class _SearchReviewsState extends State<SearchReviews> {
       ),
       headers: {
         "Accept": "application/json",
+        'Content-Type': 'application/json; charset=UTF-8',
         'authorization': basicAuth,
       },
     );

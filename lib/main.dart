@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:ice_cream_social/HomePage/search.dart';
-import 'package:ice_cream_social/backend_data.dart';
-import 'package:ice_cream_social/login/authentication.dart';
 import 'package:ice_cream_social/login/login_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'HomePage/Products.dart';
 import 'HomePage/filter.dart';
 import 'FlavorPage/flavor_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ice_cream_social/login/authentication.dart';
+import 'package:ice_cream_social/backend_data.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(new MyApp());
@@ -66,12 +68,14 @@ class _HomePageState extends State<HomePage> {
     toProfile = 0;
     super.initState();
   }
+
   int _selectedIndex = 0;
   int loginChanged = 0;
   int toProfile;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Lato');
 
+  /**Bottom navigation drawer.**/
   List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
@@ -293,8 +297,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
+
         ),
-    );
+      );
   }
 
   void routeFlavorPage(BuildContext context, Products product) {
