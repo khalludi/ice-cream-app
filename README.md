@@ -1,6 +1,12 @@
 # ice_cream_social
 
-Explore different ice creams with this app.
+Explore different ice creams with this Flutter app that connects to a Google Cloud SQL Database and interacts with a cloud-focused API using a combination of an API Gateway and Google Cloud Functions. The full backend infrastructure is managed using Terraform. For authentication, we use the Firebase Auth.
+
+## View the App!
+
+See the app in action here: https://youtu.be/82-ZFmCACcs
+
+Or checkout the wiki to see images of the UI Mockups.
 
 ## Getting Started
 
